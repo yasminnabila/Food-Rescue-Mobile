@@ -14,7 +14,7 @@ const RestoNFoodCard = () => {
     <>
       {/* RESTO n FOOD CARD */}
       <Pressable
-        className='bg-red-200 mb-[10]'
+        className='bg-red-200 my-[10]'
         onPress={() => navigation.navigate('Test Detail Resto')}
       >
 

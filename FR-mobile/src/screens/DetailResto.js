@@ -1,5 +1,3 @@
-
-
 import { StatusBar } from 'expo-status-bar';
 import { FlatList, Pressable, ScrollView, Text, TouchableOpacity, View, Image, ActivityIndicator } from 'react-native';
 import FoodCard from '../components/FoodCard';
@@ -7,6 +5,9 @@ import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native'
+
+import { Octicons } from '@expo/vector-icons';
+import { currencyFormat } from 'simple-currency-format';
 
 import * as Animatable from 'react-native-animatable';
 
@@ -18,34 +19,56 @@ import RestoDetailHeaders from '../components/RestoDetailHeaders';
 import { useEffect } from 'react';
 import FoodList from '../components/FoodList';
 import { useSelector } from 'react-redux';
+import LoadingScreen from './LoadingScreen';
 
+//! debounce flatlist listheadercomponent apus category/ coba search beneran pake debaounce
 
 const DetailResto = () => {
   const navigation = useNavigation()
   const stickyHeaderShown = useRef(false)
 
   const basket = useSelector(state => state.user.basket)
-  console.log(basket, "1")
+
+  // basket?.forEach((el, i) => {
+  //   console.log(el.name, i, "<<<<")
+  // })
+  // console.log("+++++++++++++++++++++++++++++++++++")
+  // console.log(basket, "<<<<<< di Detail Resto")
 
   let qtyFood = 0
+  let totalMoney = 0
 
   if (basket.length > 0) {
-    console.log(basket, "2")
-    basket?.forEach((el) => { qtyFood += el.qty })
-
+    // console.log(basket, "2")
+    basket?.forEach((el) => { qtyFood += el.qty; totalMoney += el.price * el.qty })
   }
 
+  // if (basket.length === 1) {
+  //   setText('Item')
+  // } else {
+  //   setText("Items")
+  // }
+  const [text, setText] = useState(null)
 
   const [showStickyHead, setShowStickyHead] = useState(false)
   const [mainAnimation, setMainAnimation] = useState("fadeIn")
   const [secondAnimation, setSecondAnimation] = useState("fadeIn")
-  const [basetAnimation, setBasketAnimation] = useState("bounceIn")
+  const [basketAnimation, setBasketAnimation] = useState("bounceIn")
+
 
   useEffect(() => {
-    fetch("https://savvie.herokuapp.com/restaurants/2")
+    fetch("https://savvie.herokuapp.com/restaurants/7")
       .then(res => res.json())
       .then(data => setRestoNFoods(data))
   }, [])
+
+  useEffect(() => {
+    if (basket[0]?.qty === 1) {
+      setText("Item")
+    } else {
+      setText("Items")
+    }
+  }, [basket])
 
 
   function setRestoNFoods(data) {
@@ -56,6 +79,7 @@ const DetailResto = () => {
   const [foods, setFoods] = useState()
   const [resto, setResto] = useState()
 
+  console.log(JSON.stringify(foods))
   // console.log(foods)
   // console.log(resto?.name, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
@@ -89,7 +113,7 @@ const DetailResto = () => {
   //   }
   // ]
 
-  if (!foods) return <ActivityIndicator size="large" color="#EE6221" className='flex-1' />
+  if (!foods) return <LoadingScreen />
 
 
   return (
@@ -101,14 +125,12 @@ const DetailResto = () => {
         scrollEventThrottle={16}
 
         onMomentumScrollEnd={(evt) => {
-          // console.log(evt.nativeEvent.contentOffset.y, "< momentum End")
           const { y } = evt.nativeEvent.contentOffset
           if (y == 0 || y) {
             setBasketAnimation("bounceIn")
           }
         }}
         onMomentumScrollBegin={(evt) => {
-          // console.log(evt, "< momentum Start")
           evt.nativeEvent.contentOffset.y ? setBasketAnimation("bounceOut") : null
         }}
 
@@ -117,8 +139,6 @@ const DetailResto = () => {
           const { y } = evt.nativeEvent.contentOffset
           if (y >= 330 && !stickyHeaderShown.current) {
             stickyHeaderShown.current = true
-            // mainHeaderRef.current.transitionTo({ opacity: 0 })
-            // stickyHeaderRef.current.transitionTo({ opacity: 1 })
 
             setShowStickyHead(true)
             setMainAnimation("fadeOut")
@@ -130,75 +150,15 @@ const DetailResto = () => {
             setShowStickyHead(false)
             setMainAnimation("fadeIn")
             setSecondAnimation("fadeOut")
-
-            // mainHeaderRef.current.transitionTo({ opacity: 1 })
-            // stickyHeaderRef.current.transitionTo({ opacity: 0 })
           }
         }}>
 
         {!showStickyHead &&
           <Animatable.View animation={mainAnimation} className='bg-red-200 h-[300] top-5'>
             <Image
-              source={{ uri: "https://blog.meyerfood.id/wp-content/uploads/2021/02/bisnis-ayam-gepuk-pak-gembus.jpg" }}
+              source={{ uri: resto?.logoUrl }}
               className='h-full w-full'
             />
-
-            {/* DETAIL RESTO */}
-            {/* <View className='h-[150] bg-blue-300 rounded-2xl mx-2'>
-              <View className='ml-6'>
-                <Text className='text-2xl font-semibold mt-3'>
-                  Ayam Pak Gembus
-                </Text>
-
-                <View className='flex-row'>
-                  <Ionicons name="pin" size={15} color="black" />
-
-                  <Text className='mr-2'>
-                    Jl.Pondok indah
-                  </Text>
-                </View>
-
-                <Text>10:00 - 22:00</Text>
-              </View>
-
-              <View className='flex-row mt-2 bg-red-400 space-x-6 justify-center items-center'>
-
-                <View>
-                  <View className='flex-row bg-gray-300 items-center'>
-                    <FontAwesome name="star" size={20} color="orange" />
-                    <Text className='text-lg'>4.5</Text>
-                  </View>
-                </View>
-
-                <View>
-                  <View className='flex-row bg-green-300 items-center'>
-                    <Feather name="thumbs-up" size={24} color="black" />
-                    <Text className='text-lg'>123+</Text>
-                  </View>
-                </View>
-
-                <View>
-                  <View className='bg-green-300 items-center'>
-                    <Text className='text-lg'>Restoran</Text>
-                  </View>
-                </View>
-
-                <View>
-                  <View className='bg-green-300 items-center'>
-                    <View className='flex-row'>
-                      <Entypo name="location-pin" size={24} color="black" />
-                      <Text className='text-lg'>2.0km</Text>
-                    </View>
-                    <Text>Distance</Text>
-                  </View>
-                </View>
-
-              </View>
-
-            </View> */}
-            {/* END DETAIL RESTO */}
-
-
 
           </Animatable.View>
         }
@@ -206,28 +166,15 @@ const DetailResto = () => {
         {/* END HEADERS */}
 
         {showStickyHead &&
-          <Animatable.View animation={secondAnimation} className='h-[130] bg-green-200 mb-[170] rounded-b-3xl'>
+          <Animatable.View animation={secondAnimation} duration={900} className='h-[130] bg-gray-500 mb-[170] rounded-b-3xl'>
 
             <Text>Bounce me!</Text>
 
           </Animatable.View>
         }
 
-        {/* <FlatList
-          data={foodList}
-          horizontal={false}
-          renderItem={({ item }) => {
-            return <FoodCard food={item} />
-          }}
-          keyExtractor={(item) => item.id}
-          className='bg-slate-300 mt-[180]'
-        /> */}
-
-
-
-
         {/* DETAIL RESTO */}
-        <Animatable.View animation={mainAnimation} duration={2000} className='h-[150] bg-blue-300 rounded-2xl mx-2'>
+        <Animatable.View animation={mainAnimation} className='h-[150] bg-blue-300 rounded-2xl mx-2'>
           <View className='ml-6'>
             <Text className='text-2xl font-semibold mt-3'>
               {resto?.name}
@@ -281,89 +228,40 @@ const DetailResto = () => {
         </Animatable.View>
         {/* END DETAIL RESTO */}
 
+        <View>
+          {
+            foods.map((el) => {
+              return (
+                <>
+                  <FoodList foodFromRestoDetail={el} />
+                </>
+              )
+            })
+          }
+        </View>
 
-
-
-        {/* {
-          foodList.map((el) => {
-            return (
-              <FoodCard />
-            )
-          })
-        } */}
-
-        {
-          foods.map((el) => {
-            return (
-
-              <FoodList foodFromRestoDetail={el} />
-
-
-              // <Pressable
-              //   onPress={() => navigation.navigate('Test Food Detail')}
-              // >
-              //   <View className='h-[130] bg-red-300 mt-3'>
-              //     <View className='flex-row'>
-              //       <View className='bg-yellow-300 h-full w-[132] p-3'>
-              //         <Image
-              //           source={{ uri: "https://assets-pergikuliner.com/uploads/image/picture/590086/picture-1497521885.JPG" }}
-              //           className='h-full w-full rounded-lg'
-              //         />
-
-              //       </View>
-              //       <View className='bg-green-300 flex-1'>
-              //         <Text className='text-lg font-semibold'>
-              //           {el.name}
-              //         </Text>
-              //         <Text className='text-xs'>
-              //           Desc asdak jnaskjndaks ksandkajsnd kajsndakdn jkasndkasjndkajn kjansdkajsnd kjas dnkd njakj nas n
-              //         </Text>
-              //         <Text className='font-semibold'>
-              //           {el.price}
-              //         </Text>
-              //       </View>
-              //     </View>
-              //   </View>
-              // </Pressable>
-
-            )
-          })
-        }
-
-        {/* <Pressable
-          onPress={() => navigation.navigate('Test Food Detail')}
-        >
-          <View className='h-[130] bg-red-300 mt-3'>
-            <View className='flex-row'>
-              <View className='bg-yellow-300 h-full w-[132] p-3'>
-                <Image
-                  source={{ uri: "https://assets-pergikuliner.com/uploads/image/picture/590086/picture-1497521885.JPG" }}
-                  className='h-full w-full rounded-lg'
-                />
-
-              </View>
-              <View className='bg-green-300 flex-1'>
-                <Text className='text-lg font-semibold'>
-                  Paket ayam lengkap
-                </Text>
-                <Text className='text-xs'>
-                  Desc asdak jnaskjndaks ksandkajsnd kajsndakdn jkasndkasjndkajn kjansdkajsnd kjas dnkd njakj nas n
-                </Text>
-                <Text className='font-semibold'>
-                  46.000
-                </Text>
-              </View>
-            </View>
-          </View>
-        </Pressable> */}
       </ScrollView >
 
       {
         basket.length > 0 ?
-          <Animatable.View animation={basetAnimation} duration={700} className='bg-red-300 h-[70] absolute inset-x-[0] bottom-2 z-50 mx-5 rounded-lg'>
-            <Text className='self-center text-3xl'>
-              {qtyFood}
-            </Text>
+          <Animatable.View animation={basketAnimation} duration={700} className='bg-red-300 h-[50] absolute inset-x-[0] bottom-2 z-50 mx-5 rounded-lg items-start justify-center'>
+            <View className='flex-row justify-center items-center'>
+              <Text className='text-xl font-semibold pl-2'>
+                Basket
+              </Text>
+              <View className='pl-2'>
+                <Octicons name="dot-fill" size={15} color="black" />
+              </View>
+              <Text className='text-xl pl-2'>
+                {qtyFood}
+              </Text>
+              <Text className='text-xl pl-1'>
+                {text}
+              </Text>
+              <Text className='pl-[50] text-lg font-semibold'>
+                {currencyFormat(totalMoney, "id-ID", "IDR")}
+              </Text>
+            </View>
           </Animatable.View> : null
       }
 

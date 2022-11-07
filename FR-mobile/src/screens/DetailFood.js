@@ -4,25 +4,102 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Octicons } from '@expo/vector-icons';
+import { currencyFormat } from 'simple-currency-format';
+
+
+
+import { AntDesign } from '@expo/vector-icons';
 
 import { dec_basket, inc_basket, addBasket } from "../store/slices/userSlice";
 
+import LottieView from 'lottie-react-native';
+import LoadingScreen from "./LoadingScreen";
+
 const DetailFood = ({ route }) => {
-  const navigation = useNavigation()
+
   // console.log(route.params)
+
   const { id } = route.params
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
 
   const basket = useSelector(state => state.user.basket)
-  console.log(basket)
+  // console.log(basket)
 
-  const dispatch = useDispatch()
+  const AnimationRef = useRef(null);
+  const lottieAnimation = useRef(null);
 
-  const [animation, setAnimation] = useState(null)
+
+  const _onPress = () => {
+    if (AnimationRef) {
+      AnimationRef.current?.flash()
+    }
+  }
+
+
+  const [buttonAnimation, setButtonAnimation] = useState("bounceIn")
+
+  const [addToBasketAnimation, setAddToBasketAnimation] = useState("bounceIn")
+
+  const [basketAnimation, setBasketAnimation] = useState("bounceIn")
+
+
+  const [qtyAnimation, setQtyAnimation] = useState(null)
+
+  const [foodInBasket, setFoodInBasket] = useState(false)
+
+  const [currentQty, setCurrentQty] = useState(null)
+  const [currentPrice, setCurrentPrice] = useState(null)
+
+
+  let totalPrice = currentPrice * currentQty
+
+  const [currenIdx, setCurrentIdx] = useState(null)
+
+  const checkId = basket.map((el) => el.id)
 
   const [food, setFood] = useState(null)
+
+  function basketChecker() {
+    basket.forEach((el, i) => {
+      if (id == el.id) {
+        setFoodInBasket(true)
+        setCurrentQty(el.qty)
+        setCurrentPrice(el.price)
+      }
+    })
+    if (!checkId.includes(id)) {
+      setFoodInBasket(false)
+      setCurrentQty(0)
+    }
+  }
+
+
+
+  function decHandler() {
+    dispatch(dec_basket(currenIdx))
+    _onPress()
+  }
+  function incHandler() {
+    dispatch(inc_basket(currenIdx))
+    lottieAnimation.current?.play();
+  }
+
+  function idxChecker() {
+    const idx = basket.findIndex(el => el.id === id)
+    setCurrentIdx(+idx)
+    console.log(idx, "<<< di func")
+  }
+
+  function addToBasket() {
+    lottieAnimation.current?.play();
+    setFoodInBasket(true)
+    dispatch(addBasket({ ...food, qty: 1 }))
+  }
 
   useEffect(() => {
     fetch(`https://savvie.herokuapp.com/food/${id}`)
@@ -30,7 +107,33 @@ const DetailFood = ({ route }) => {
       .then(data => setFood(data))
   }, [])
 
-  if (!food) return <ActivityIndicator size="large" color="#EE6221" className='flex-1' />
+  useEffect(() => {
+    basketChecker()
+    idxChecker()
+  }, [basket])
+
+
+
+  console.log("------- DI FOOD DETAIL -----------")
+
+  console.log(inc_basket)
+
+  console.log(currentQty, "<< qty state CRNT")
+  console.log(currenIdx, "<< IDX state IDX <<")
+  console.log(currentPrice, "<< Price CRNT")
+
+  basket?.forEach((el, i) => {
+    console.log("id :|", el.id, "|name :", el.name, "|qty :", el.qty, "|price", el.price, "|idx :", i, "<< isi basket")
+  })
+
+  // console.log(basket, "<<<<<< di Detail Food")
+
+  console.log("+++++++++++ DI FOOD DETAIL ++++++++++++++++++++++++")
+
+
+
+
+  if (!food) return <LoadingScreen />
 
   return (
     <View className='flex-1'>
@@ -46,7 +149,7 @@ const DetailFood = ({ route }) => {
           className='top-[60] left-2 absolute'
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="chevron-back-circle-outline" size={40} color="white" />
+          <Ionicons name="chevron-back-circle-outline" size={40} color="black" />
         </TouchableOpacity>
 
         <View className='absolute bottom-2 right-2 bg-red-400 w-[70]'>
@@ -94,13 +197,63 @@ const DetailFood = ({ route }) => {
       </View>
       {/* END FOOD DESC */}
 
-      <TouchableOpacity onPress={() => dispatch(addBasket({ ...food, qty: 1 }))}>
-        <Animatable.View animation={"bounceIn"} className='bg-green-600 h-[60] mx-[30] mt-7 rounded-lg justify-center'>
-          <Text className='text-lg font-semibold self-center'>
-            Add To Basket
-          </Text>
+      {foodInBasket &&
+        <Animatable.View animation={buttonAnimation} className='flex-row justify-center items-end h-[70] space-x-5'>
+
+          <TouchableOpacity onPress={() => decHandler()}>
+            <AntDesign name="minussquareo" size={35} color="black" />
+          </TouchableOpacity>
+
+          <Animatable.Text ref={AnimationRef} className='text-3xl'>{currentQty}</Animatable.Text>
+
+          <TouchableOpacity onPress={() => incHandler()}>
+            <AntDesign name="plussquareo" size={35} color="black" />
+          </TouchableOpacity>
+
         </Animatable.View>
-      </TouchableOpacity>
+      }
+
+      {
+        !currentQty &&
+
+        <TouchableOpacity onPress={() => addToBasket()}>
+          <Animatable.View animation={addToBasketAnimation} className='bg-green-600 h-[60] mx-[30] mt-7 rounded-lg justify-center'>
+            <Text className='text-lg font-semibold self-center'>
+              Add To Basket
+            </Text>
+          </Animatable.View>
+        </TouchableOpacity>
+
+
+      }
+
+      {
+        currentQty ?
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            className="absolute inset-x-[0] bottom-2 "
+          >
+
+            <Animatable.View animation={basketAnimation} duration={1000} className='bg-red-300 h-[50] mx-5 rounded-lg items-center justify-center'>
+              <View className='flex-row justify-center items-center'>
+                <Text className='text-xl font-semibold pl-2'>
+                  Add To Basket
+                </Text>
+                <View className='pl-2'>
+                  <Octicons name="dash" size={15} color="black" />
+                </View>
+                <Text className='pl-2 text-lg font-semibold'>
+                  {currencyFormat(totalPrice, "id-ID", "IDR")}
+                </Text>
+              </View>
+
+              <LottieView source={require('../lottie/cart.json')} className='w-[200] mr-2 h-[150] absolute -inset-x-[21] -bottom-[17] z-50 ' loop={false} duration={2000} ref={lottieAnimation} />
+            </Animatable.View>
+          </TouchableOpacity>
+          : null
+      }
+
+
 
     </View>
   )

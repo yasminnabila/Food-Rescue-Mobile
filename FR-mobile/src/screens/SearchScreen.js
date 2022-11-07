@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Animated, {
   useSharedValue,
@@ -16,7 +16,7 @@ import { DetailsHeaderScrollView, StickyHeaderScrollView, TabbedHeaderPager } fr
 
 
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, ScrollView, Text, TextInput, View, Image, Pressable } from 'react-native';
+import { FlatList, ScrollView, Text, TextInput, View, Image, Pressable, TouchableOpacity } from 'react-native';
 import FoodCard from '../components/FoodCard';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -31,18 +31,74 @@ import { useNavigation } from '@react-navigation/native'
 import * as Animatable from 'react-native-animatable';
 import RestoNFoodCard from '../components/RestoNFoodCard';
 
+import LottieView from 'lottie-react-native';
+import useDebounce from '../useDebounce/hook';
+import { searchCharacters } from '../useDebounce/fetchFunction';
 
 const SearchScreen = () => {
 
+
   const navigation = useNavigation()
+  const animation = useRef(null);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  console.log(searchTerm)
+
+  const [results, setResults] = useState([]);
+  console.log(results)
+
+  const [isSearching, setIsSearching] = useState(false);
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(
+    () => {
+      if (debouncedSearchTerm) {
+        setIsSearching(true);
+        searchCharacters(debouncedSearchTerm).then((results) => {
+          setIsSearching(false);
+          setResults(results);
+        });
+      } else {
+        setResults([]);
+        setIsSearching(false);
+      }
+    },
+    [debouncedSearchTerm] // Only call effect if debounced search term changes
+  );
+
+  const foodList = [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    },
+    {
+      "id": 4
+    },
+    {
+      "id": 5
+    }
+  ]
+
 
   return (
     <>
       <View className='flex-1'>
 
-        <View className='bg-red-200 h-[120] justify-between mt-[50]'>
+        {/* HEADER */}
+        {/* <View className='bg-red-200 h-[120] justify-between mt-[50]'>
 
-          <View className='bg-yellow-300 h-[50] flex-row justify-around gap-x-[100] items-center'>
+          <View className='bg-yellow-300 h-[50] flex-row justify-around gap-x-[80] items-center'>
+            <Animatable.View className='absolute -top-[0] -right-0'>
+              <Pressable onPress={() => { console.warn("test") }}>
+                <LottieView source={require('../lottie/cart.json')} className='w-[200] h-[140] absolute -top-[15] -right-2' ref={animation} loop={false} duration={1300} />
+              </Pressable>
+            </Animatable.View>
 
             <View className='bg-red-300'>
               <View className='flex-row items-center'>
@@ -56,39 +112,39 @@ const SearchScreen = () => {
               </Text>
             </View>
 
-            <AntDesign name="heart" size={24} color="red" />
+            <View className='flex-row space-x-5'>
+              <TouchableOpacity>
+                <AntDesign name="heart" size={24} color="red" />
+              </TouchableOpacity>
+            </View>
 
 
           </View>
-
 
           <TextInput
             className='bg-gray-200 border border-gray-400 h-[50] text-gray-500 rounded-2xl text-left mx-4 mb-2 pl-5'
             placeholder='What would you like to eat?'
+            onChangeText={setSearchTerm}
           />
-        </View>
-
-        <ScrollView>
-
-
-          {/* HEADERS */}
+        </View> */}
+        {/* END HEADER */}
 
 
+        {/* <ScrollView> */}
 
-          {/* END HEADERS */}
-
-
-          {/* CAROUSEL */}
-          <View className='bg-blue-200 h-[200] mt-[10]'>
+        {/* CAROUSEL */}
+        {/* <TouchableOpacity className='bg-blue-200 h-[200] mt-[10]' onPress={() => {
+            animation.current?.play();
+          }}>
             <Text className='text-2xl m-auto'>
               CAROUSEL
             </Text>
-          </View>
-          {/* END CAROUSEL */}
+          </TouchableOpacity> */}
+        {/* END CAROUSEL */}
 
 
-          {/* CATEGORY */}
-          <View className='bg-green-300  mt-4 py-2 mb-5'>
+        {/* CATEGORY */}
+        {/* <View className='bg-green-300  mt-4 py-2 mb-5'>
 
             <View className='flex-row justify-between'>
               <Text className='bg-red-300 text-2xl mt-1 ml-5'>
@@ -127,16 +183,68 @@ const SearchScreen = () => {
               </View>
 
             </View>
-          </View>
-          {/* END CATEGORY */}
+
+          </View> */}
+        {/* END CATEGORY */}
+
+        <FlatList
+          data={foodList}
+          ListHeaderComponent={
+            <>
+              <View className='bg-red-200 h-[120] justify-between mt-[50]'>
+                <View className='bg-yellow-300 h-[50] flex-row justify-around gap-x-[80] items-center'>
+                  <Animatable.View className='absolute -top-[0] -right-0'>
+                    <Pressable onPress={() => { console.warn("test") }}>
+                      <LottieView source={require('../lottie/cart.json')} className='w-[200] h-[140] absolute -top-[15] -right-2' ref={animation} loop={false} duration={1300} />
+                    </Pressable>
+                  </Animatable.View>
+
+                  <View className='bg-red-300'>
+                    <View className='flex-row items-center'>
+                      <Text className='mr-2'>
+                        Your Location
+                      </Text>
+                      <AntDesign name="down" size={15} color="red" />
+                    </View>
+                    <Text className='text-lg'>
+                      Jl. Alam Permai IX No.68
+                    </Text>
+                  </View>
+
+                  <View className='flex-row space-x-5'>
+                    <TouchableOpacity>
+                      <AntDesign name="heart" size={24} color="red" />
+                    </TouchableOpacity>
+                  </View>
 
 
-          <RestoNFoodCard />
+                </View>
+
+                <TextInput
+                  className='bg-gray-200 border border-gray-400 h-[50] text-gray-500 rounded-2xl text-left mx-4 mb-2 pl-5'
+                  placeholder='What would you like to eat?'
+                  onChangeText={(text) => setSearchTerm(text)}
+                />
+              </View>
+              <View>
+                <TouchableOpacity className='bg-blue-200 h-[200] mt-[10]' onPress={() => {
+                  animation.current?.play();
+                }}>
+                  <Text className='text-2xl m-auto'>
+                    CAROUSEL
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          }
+          renderItem={({ item }) => {
+            return <RestoNFoodCard />
+          }}
+          keyExtractor={(item) => item.id}
+        />
 
 
-
-
-        </ScrollView>
+        {/* </ScrollView> */}
       </View >
       <StatusBar style='auto' />
     </>

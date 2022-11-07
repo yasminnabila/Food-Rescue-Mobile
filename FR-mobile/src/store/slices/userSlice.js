@@ -43,18 +43,32 @@ export const userSlice = createSlice({
         state.basket = [...state.basket, action.payload]
       }
     },
+    // removeBasket: (state, action) => {
+    //   // console.log(action)
+    //   const item = state.basket.filter(el => el.id === action.payload.id)
+    //   if (item.length > 0) {
+    //     const idx = state.basket.findIndex(el => el.id === action.payload.id)
+    //     // state.basket = [...state.basket, action.payload]
+    //     state.basket[idx].qty--
+    //   } else {
+    //     state.basket = [...state.basket, action.payload]
+    //   }
+    // },
     inc_basket: (state, action) => {
+      console.log(action, "<<< di slice")
       state.basket[action.payload].qty++
     },
     dec_basket: (state, action) => {
       const item = { ...state.basket[action.payload] }
       item.qty--
+      console.log(item.qty, "<<<<<<< ini di slice >>>>>>")
+      state.basket[action.payload].qty--
       if (item.qty < 1) {
         // filter
+        state.basket = state.basket.filter(el => el.id !== item.id)
         console.log("filter di sini")
-      } else {
-        state.basket[action.payload].qty--
       }
+
     },
 
   },
