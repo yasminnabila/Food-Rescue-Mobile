@@ -23,7 +23,9 @@ import LoadingScreen from './LoadingScreen';
 
 //! debounce flatlist listheadercomponent apus category/ coba search beneran pake debaounce
 
-const DetailResto = () => {
+const DetailResto = ({ route }) => {
+  const { id } = route.params
+
   const navigation = useNavigation()
   const stickyHeaderShown = useRef(false)
 
@@ -57,7 +59,7 @@ const DetailResto = () => {
 
 
   useEffect(() => {
-    fetch("https://savvie.herokuapp.com/restaurants/7")
+    fetch(`https://savvie.herokuapp.com/restaurants/${id}`)
       .then(res => res.json())
       .then(data => setRestoNFoods(data))
   }, [])
@@ -79,7 +81,7 @@ const DetailResto = () => {
   const [foods, setFoods] = useState()
   const [resto, setResto] = useState()
 
-  console.log(JSON.stringify(foods))
+  // console.log(JSON.stringify(foods))
   // console.log(foods)
   // console.log(resto?.name, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
@@ -245,23 +247,25 @@ const DetailResto = () => {
       {
         basket.length > 0 ?
           <Animatable.View animation={basketAnimation} duration={700} className='bg-red-300 h-[50] absolute inset-x-[0] bottom-2 z-50 mx-5 rounded-lg items-start justify-center'>
-            <View className='flex-row justify-center items-center'>
-              <Text className='text-xl font-semibold pl-2'>
-                Basket
-              </Text>
-              <View className='pl-2'>
-                <Octicons name="dot-fill" size={15} color="black" />
+            <TouchableOpacity onPress={() => navigation.navigate("Test basket")}>
+              <View className='flex-row justify-center items-center'>
+                <Text className='text-xl font-semibold pl-2'>
+                  Basket
+                </Text>
+                <View className='pl-2'>
+                  <Octicons name="dot-fill" size={15} color="black" />
+                </View>
+                <Text className='text-xl pl-2'>
+                  {qtyFood}
+                </Text>
+                <Text className='text-xl pl-1'>
+                  {text}
+                </Text>
+                <Text className='pl-[50] text-lg font-semibold'>
+                  {currencyFormat(totalMoney, "id-ID", "IDR")}
+                </Text>
               </View>
-              <Text className='text-xl pl-2'>
-                {qtyFood}
-              </Text>
-              <Text className='text-xl pl-1'>
-                {text}
-              </Text>
-              <Text className='pl-[50] text-lg font-semibold'>
-                {currencyFormat(totalMoney, "id-ID", "IDR")}
-              </Text>
-            </View>
+            </TouchableOpacity>
           </Animatable.View> : null
       }
 

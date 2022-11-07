@@ -6,16 +6,27 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native'
 
+import { currencyFormat } from 'simple-currency-format';
+import { useEffect, useState } from 'react';
 
 
-const RestoNFoodCard = () => {
+const RestoNFoodCard = ({ resto }) => {
+
   const navigation = useNavigation()
   return (
     <>
       {/* RESTO n FOOD CARD */}
+
       <Pressable
         className='bg-red-200 my-[10]'
-        onPress={() => navigation.navigate('Test Detail Resto')}
+
+        // onPress={() => navigation.navigate('Test Detail Resto'),{
+        //   id: foodFromRestoDetail?.id
+        // }}
+
+        onPress={() => navigation.navigate('Test Detail Resto', {
+          id: resto?.id
+        })}
       >
 
         {/* RESTORAN */}
@@ -25,7 +36,7 @@ const RestoNFoodCard = () => {
               <View className='bg-green-200 w-full h-full rounded-2xl'>
                 <Image
                   source={{
-                    uri: "https://blog.meyerfood.id/wp-content/uploads/2021/02/bisnis-ayam-gepuk-pak-gembus.jpg"
+                    uri: resto?.logoUrl
                   }}
                   className='h-full w-full rounded-2xl'
 
@@ -33,7 +44,7 @@ const RestoNFoodCard = () => {
               </View>
               <View className='bg-red-700 h-[25] -top-[13] w-[55] self-center rounded-md flex-row justify-center items-center'>
                 <FontAwesome name="star" size={15} color="orange" />
-                <Text className='font-bold'>4.5</Text>
+                <Text className='font-bold ml-1'>{resto?.rate}</Text>
               </View>
             </View>
 
@@ -42,19 +53,19 @@ const RestoNFoodCard = () => {
           <View className='bg-yellow-300 flex-1 pl-3 justify-center'>
             <View className='bg-red-200 -top-4'>
               <Text className='text-lg'>
-                Ayam Gepuk Pak Gembus
+                {resto?.name}
               </Text>
               <View className='flex-row items-end mb-1 '>
                 <Ionicons name="pin" size={15} color="black" />
                 <Text className='mr-1'>
-                  Jl.pondok indah
+                  {resto?.address}
                 </Text>
                 <Text className='text-xs'>
                   0.2Km
                 </Text>
               </View>
               <Text>
-                10:00 - 20:00
+                {resto?.open_time} - {resto?.close_time}
               </Text>
             </View>
           </View>
@@ -62,21 +73,24 @@ const RestoNFoodCard = () => {
         {/* END RESTO */}
 
         {/* MENU */}
-        <View className='bg-green-300 h-[65] flex-row-reverse justify-between'>
-          <View className='bg-red-700 h-full w-[140] p-1'>
-            <View className='bg-yellow-200 h-full w-[70] self-center rounded-lg'>
-              <Image
-                source={{ uri: "https://assets-pergikuliner.com/uploads/image/picture/590086/picture-1497521885.JPG" }}
-                className='h-full w-full rounded-lg'
-              />
+
+        {
+          resto.Food &&
+          <View className='bg-green-300 h-[65] flex-row-reverse justify-between'>
+            <View className='bg-red-700 h-full w-[140] p-1'>
+              <View className='bg-yellow-200 h-full w-[70] self-center rounded-lg'>
+                <Image
+                  source={{ uri: resto?.Food[0]?.imageUrl }}
+                  className='h-full w-full rounded-lg'
+                />
+              </View>
+            </View>
+            <View className='bg-blue-100 flex-1 pl-3'>
+              <Text className='text-base'>{resto?.Food[0]?.name}</Text>
+              <Text className='text-lg'>{currencyFormat(resto?.Food[0]?.price, "id-ID", "IDR")}</Text>
             </View>
           </View>
-          <View className='bg-blue-100 flex-1 pl-3'>
-            <Text className='text-base'>Ayam geprek</Text>
-            <Text className='text-lg'>30.000</Text>
-          </View>
-        </View>
-
+        }
         {/* END MENU */}
 
       </Pressable>

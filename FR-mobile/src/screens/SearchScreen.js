@@ -34,9 +34,9 @@ import RestoNFoodCard from '../components/RestoNFoodCard';
 import LottieView from 'lottie-react-native';
 import useDebounce from '../useDebounce/hook';
 import { searchCharacters } from '../useDebounce/fetchFunction';
+import LoadingScreen from './LoadingScreen';
 
 const SearchScreen = () => {
-
 
   const navigation = useNavigation()
   const animation = useRef(null);
@@ -45,7 +45,7 @@ const SearchScreen = () => {
   console.log(searchTerm)
 
   const [results, setResults] = useState([]);
-  console.log(results)
+  // console.log(results, "<<< di search")
 
   const [isSearching, setIsSearching] = useState(false);
 
@@ -188,13 +188,13 @@ const SearchScreen = () => {
         {/* END CATEGORY */}
 
         <FlatList
-          data={foodList}
+          data={results}
           ListHeaderComponent={
             <>
               <View className='bg-red-200 h-[120] justify-between mt-[50]'>
                 <View className='bg-yellow-300 h-[50] flex-row justify-around gap-x-[80] items-center'>
                   <Animatable.View className='absolute -top-[0] -right-0'>
-                    <Pressable onPress={() => { console.warn("test") }}>
+                    <Pressable onPress={() => navigation.navigate('Test basket')}>
                       <LottieView source={require('../lottie/cart.json')} className='w-[200] h-[140] absolute -top-[15] -right-2' ref={animation} loop={false} duration={1300} />
                     </Pressable>
                   </Animatable.View>
@@ -238,8 +238,14 @@ const SearchScreen = () => {
             </>
           }
           renderItem={({ item }) => {
-            return <RestoNFoodCard />
+            return <RestoNFoodCard resto={item} />
           }}
+          ListEmptyComponent={() => {
+            if (isSearching) return <LottieView source={require('../lottie/skeleton.json')} autoPlay loop className='h-[220] w-[100] ' />
+            if (debouncedSearchTerm !== "" && results.length === 0) return <Text>TIdak ada data</Text>
+            return null
+          }
+          }
           keyExtractor={(item) => item.id}
         />
 

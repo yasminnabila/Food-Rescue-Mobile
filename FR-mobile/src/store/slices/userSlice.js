@@ -6,7 +6,8 @@ const initialState = {
   basket: [
     // { name: "coca-cola", qty: 1, id: 1 },
     // { name: "Fanta", qty: 1, id: 2 }
-  ]
+  ],
+  delivery: "Delivery"
 }
 
 export const userSlice = createSlice({
@@ -33,50 +34,41 @@ export const userSlice = createSlice({
       state.isLogin = action.payload
     },
     addBasket: (state, action) => {
-      // console.log(action)
       const item = state.basket.filter(el => el.id === action.payload.id)
       if (item.length > 0) {
         const idx = state.basket.findIndex(el => el.id === action.payload.id)
-        // state.basket = [...state.basket, action.payload]
         state.basket[idx].qty++
       } else {
         state.basket = [...state.basket, action.payload]
       }
     },
-    // removeBasket: (state, action) => {
-    //   // console.log(action)
-    //   const item = state.basket.filter(el => el.id === action.payload.id)
-    //   if (item.length > 0) {
-    //     const idx = state.basket.findIndex(el => el.id === action.payload.id)
-    //     // state.basket = [...state.basket, action.payload]
-    //     state.basket[idx].qty--
-    //   } else {
-    //     state.basket = [...state.basket, action.payload]
-    //   }
-    // },
     inc_basket: (state, action) => {
-      console.log(action, "<<< di slice")
       state.basket[action.payload].qty++
     },
     dec_basket: (state, action) => {
       const item = { ...state.basket[action.payload] }
       item.qty--
-      console.log(item.qty, "<<<<<<< ini di slice >>>>>>")
       state.basket[action.payload].qty--
       if (item.qty < 1) {
-        // filter
         state.basket = state.basket.filter(el => el.id !== item.id)
-        console.log("filter di sini")
       }
-
     },
-
+    setDelivery: (state, action) => {
+      state.delivery = action.payload
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, setIsLogin, inc_basket, dec_basket, addBasket } = userSlice.actions
+export const { increment, decrement, incrementByAmount, setIsLogin, inc_basket, dec_basket, addBasket, setDelivery } = userSlice.actions
+
+export const checkOut = ({ totalMoney, basket, delivery }) => (dispatch) => {
+  setTimeout(() => {
+    console.log({ totalMoney, order: basket, delivery })
+  }, 1000)
+}
 
 export const selectIsLogin = (state) => state.user.isLogin
+export const selectDelivery = (state) => state.user.delivery
 
 export default userSlice.reducer

@@ -59,9 +59,7 @@ const Navigation = () => {
             }} />
             <Stack.Screen name="LoginREgis" component={LoginRegisScreen} options={{
               headerShown: false,
-
             }} />
-
           </>
           :
           <Stack.Screen name="MainNavigation" component={TabNavigation} />

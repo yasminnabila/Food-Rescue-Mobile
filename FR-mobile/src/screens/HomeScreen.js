@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FoodCard from '../components/FoodCard';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native'
 
 import * as Animatable from 'react-native-animatable';
@@ -15,12 +15,22 @@ const HomeScreen = () => {
 
   const navigation = useNavigation()
 
-
   const [scrollY, setSrollY] = useState(0)
 
   const [showStickyHead, setShowStickyHead] = useState(false)
   const [mainAnimation, setMainAnimation] = useState("slideInDown")
   const [secondAnimation, setSecondAnimation] = useState("slideInDown")
+
+  const [categories, setCategories] = useState()
+
+  console.log("=========================")
+  // {
+  //   categories.forEach((el) => {
+  //     console.log(el.name)
+  //   })
+  // }
+  console.log("=========================")
+
 
   const foodList = [
     {
@@ -40,20 +50,13 @@ const HomeScreen = () => {
     }
   ]
 
-  const zoomOut = {
-    0: {
-      opacity: 1,
-      scale: 1,
-    },
-    0.5: {
-      opacity: 1,
-      scale: 0.3,
-    },
-    1: {
-      opacity: 0,
-      scale: 0,
-    },
-  };
+  useEffect(() => {
+    fetch("https://savvie.herokuapp.com/categories")
+      .then(res => res.json())
+      .then(data => setCategories(data))
+  }, [])
+
+
   return (
     <>
       <View className='flex-1 '>
@@ -152,43 +155,29 @@ const HomeScreen = () => {
               </Text>
             </View>
 
-            <ScrollView className='bg-yellow-200 ' horizontal showsHorizontalScrollIndicator='false'>
 
-              <Pressable
-                className='bg-gray-200 w-[100] h-[70%] self-center ml-5 rounded-3xl'
-                onPress={() => navigation.navigate('Test2')}>
-                <Text>
-                  TEST PINDAH CATEGORY
-                </Text>
-
-              </Pressable>
-
-              <View className='bg-gray-200 w-[100] h-[70%] self-center ml-5 rounded-3xl'>
-
-
-              </View>
-
-              <View className='bg-gray-200 w-[100] h-[70%] self-center ml-5 rounded-3xl'>
-
-
-              </View>
-
-              <View className='bg-gray-200 w-[100] h-[70%] self-center ml-5 rounded-3xl'>
-
-
-              </View>
-
-              <View className='bg-gray-200 w-[100] h-[70%] self-center ml-5 rounded-3xl'>
-
-
-              </View>
-
-              <View className='bg-gray-200 w-[100] h-[70%] self-center ml-5 mr-5 rounded-3xl'>
-
-
-              </View>
+            <ScrollView className='bg-yellow-200' horizontal showsHorizontalScrollIndicator='false'>
+              {
+                categories?.map((el) => {
+                  return (
+                    <Pressable
+                      className='bg-gray-200 w-[80] h-[80] mt-[20] mx-3 rounded-3xl'
+                      onPress={() => navigation.navigate('Test2')}>
+                      <Image
+                        source={{
+                          uri: el.imageUrl
+                        }}
+                        className='h-full w-full rounded-2xl'
+                        resizeMode='cover'
+                      />
+                      <Text className='self-center mt-3 text-xs font-semibold text-center'>{el.name}</Text>
+                    </Pressable>
+                  )
+                })
+              }
 
             </ScrollView>
+
           </View>
           {/* END CATEGORY */}
 
