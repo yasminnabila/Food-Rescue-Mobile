@@ -1,92 +1,83 @@
-import React, { useRef } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, TouchableOpacity, Image, TextInput } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Modalize, useModalize } from 'react-native-modalize';
 
+import { FloatingLabelInput } from 'react-native-floating-label-input';
+import { useDispatch } from 'react-redux';
+
 const HistoryScreen = () => {
 
-  // const dispatch = useDispatch()
-  const modalizeRef = useRef(null);
-  const { ref, open, close } = useModalize();
+  const dispatch = useDispatch()
 
+  const modalizeRef = useRef(null);
+
+  const { ref, open, close } = useModalize();
 
   const onOpen = () => {
     modalizeRef.current?.open();
   };
 
+  const [topUp, setTop] = useState()
+
+  console.log(topUp)
+
+
   return (
-    <GestureHandlerRootView className='flex-1 justify-center items-center'>
+    <View className='flex-1'>
 
-      {/* content */}
-      <View
-        className='h-[80] w-[350] justify-between rounded-xl flex-row items-center border-2 border-gray-300'
-      >
-        <View className='flex-row space-x-2 items-center ml-3'>
-          <View className='h-[60] bg-yellow-600 w-[60] rounded-full'>
-            {/* <Text>test</Text> */}
-          </View>
-          <View>
-            <Text className='text-base font-semibold'>PickUp</Text>
-          </View>
-        </View>
 
-        <TouchableOpacity
-          onPress={() => open('dest')}
-          className='h-[40] w-[95] mr-3 border-2 border-green-600 rounded-3xl items-center justify-center'>
-          <Text className='text-base font-semibold'>
-            Change
-          </Text>
-        </TouchableOpacity>
+      <View className='h-[300] bg-red-400'>
 
       </View>
 
+      <View style={{ backgroundColor: '#fff' }}>
+        <FloatingLabelInput
+          label={'Savvie Pay'}
+          value={topUp}
+          onChangeText={value => setTop(value)}
+        />
+      </View>
+
+
       <Modalize
-        childrenStyle={{ flex: 1 }}
-        modalHeight={200}
+        modalHeight={490}
         ref={ref}
       >
-        <Text className='mt-7 text-2xl font-bold ml-3'>
-          Select order type
-        </Text>
 
-        <View className='h-[60] flex-row justify-between mt-2 mx-2'>
 
-          <View className='flex-row space-x-2 items-center ml-3'>
-            <View className='h-[50] bg-yellow-600 w-[50] rounded-full'>
-
-            </View>
-            <View>
-              <Text className='text-base font-semibold'>Delivery</Text>
-            </View>
-          </View>
-
-          <TouchableOpacity className='h-[30] w-[30] mr-3 rounded-full border-2 border-gray self-center'>
-
-          </TouchableOpacity>
-
-        </View>
-        <View className='h-[60] flex-row justify-between mt-2 border-t border-gray-200 mx-2'>
-
-          <View className='flex-row space-x-2 items-center ml-3'>
-            <View className='h-[50] bg-yellow-600 w-[50] rounded-full'>
-
-            </View>
-            <View>
-              <Text className='text-base font-semibold'>PickUp</Text>
-            </View>
-          </View>
-
-          <TouchableOpacity className='h-[30] w-[30] mr-3 rounded-full border-2 border-gray self-center'>
-
-          </TouchableOpacity>
+        <View className='bg-red-300 h-[220] w-[340] rounded-3xl mt-10 self-center'>
 
         </View>
 
 
+
+        <View className='self-center mt-2'>
+          <Text className='text-2xl text-center font-bold tracking-normal w-[300]'>
+            Want to order from this resto instead?
+          </Text>
+        </View>
+        <View className='self-center mt-2'>
+          <Text className='text-base text-center font-normal tracking-normal mx-6'>
+            Sure thing, but we'll need to clear the items in your current cart from the previous resto first.
+          </Text>
+        </View>
+        <View className='flex-row space-x-5 items-center justify-center mt-5'>
+          <TouchableOpacity className='border-2 border-green-300 h-[55] w-[170] rounded-3xl items-center justify-center'>
+            <Text className='text-lg font-semibold'>
+              Cancel
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity className='bg-yellow-300 h-[55] w-[170] rounded-3xl items-center justify-center'>
+            <Text className='text-lg font-semibold'>
+              Yes, go ahead
+            </Text>
+          </TouchableOpacity>
+        </View>
 
       </Modalize>
 
-    </GestureHandlerRootView>
+    </View>
 
   )
 }

@@ -14,24 +14,28 @@ import { currencyFormat } from 'simple-currency-format';
 
 import { AntDesign } from '@expo/vector-icons';
 
-import { dec_basket, inc_basket, addBasket } from "../store/slices/userSlice";
+import { dec_basket, inc_basket, addBasket, clearBasket } from "../store/slices/userSlice";
 
 import LottieView from 'lottie-react-native';
 import LoadingScreen from "./LoadingScreen";
+import { Modalize, useModalize } from "react-native-modalize";
 
 const DetailFood = ({ route }) => {
 
-  // console.log(route.params)
+
 
   const { id } = route.params
   const dispatch = useDispatch()
   const navigation = useNavigation()
 
   const basket = useSelector(state => state.user.basket)
-  // console.log(basket)
+
 
   const AnimationRef = useRef(null);
   const lottieAnimation = useRef(null);
+
+  const modalizeRef = useRef(null);
+  const { ref, open, close } = useModalize();
 
 
   const _onPress = () => {
@@ -39,7 +43,6 @@ const DetailFood = ({ route }) => {
       AnimationRef.current?.flash()
     }
   }
-
 
   const [buttonAnimation, setButtonAnimation] = useState("bounceIn")
 
@@ -55,12 +58,16 @@ const DetailFood = ({ route }) => {
   const [currentQty, setCurrentQty] = useState(null)
   const [currentPrice, setCurrentPrice] = useState(null)
 
+  const [isSameResto, setIsSameResto] = useState(true)
+
 
   let totalPrice = currentPrice * currentQty
 
   const [currenIdx, setCurrentIdx] = useState(null)
 
   const checkId = basket.map((el) => el.id)
+
+  const checkRestoId = basket.map((el) => console.log(el.RestaurantId))
 
   const [food, setFood] = useState(null)
 
@@ -78,8 +85,6 @@ const DetailFood = ({ route }) => {
     }
   }
 
-
-
   function decHandler() {
     dispatch(dec_basket(currenIdx))
     _onPress()
@@ -92,13 +97,34 @@ const DetailFood = ({ route }) => {
   function idxChecker() {
     const idx = basket.findIndex(el => el.id === id)
     setCurrentIdx(+idx)
-    console.log(idx, "<<< di func")
   }
+
 
   function addToBasket() {
     lottieAnimation.current?.play();
-    setFoodInBasket(true)
+    if (!isSameResto) {
+      open()
+    } else {
+      setFoodInBasket(true)
+      dispatch(addBasket({ ...food, qty: 1 }))
+    }
+  }
+
+  function clearBasketHandler() {
+    dispatch(clearBasket())
+    close()
+    setIsSameResto(true)
     dispatch(addBasket({ ...food, qty: 1 }))
+  }
+
+  function sameRestoChecker() {
+    if (basket.length === 0) {
+      setIsSameResto(true)
+    } else if (basket[0]?.RestaurantId && basket[0]?.RestaurantId === food?.RestaurantId) {
+      setIsSameResto(true)
+    } else {
+      setIsSameResto(false)
+    }
   }
 
   useEffect(() => {
@@ -112,15 +138,20 @@ const DetailFood = ({ route }) => {
     idxChecker()
   }, [basket])
 
+  useEffect(() => {
+    sameRestoChecker()
+  }, [food])
 
 
   console.log("------- DI FOOD DETAIL -----------")
 
-  console.log(inc_basket)
+  console.log(isSameResto)
+  console.log(basket[0]?.RestaurantId, food?.RestaurantId, "<<<<<<<< check resto id")
 
   console.log(currentQty, "<< qty state CRNT")
   console.log(currenIdx, "<< IDX state IDX <<")
   console.log(currentPrice, "<< Price CRNT")
+
 
   basket?.forEach((el, i) => {
     console.log("id :|", el.id, "|name :", el.name, "|qty :", el.qty, "|price", el.price, "|idx :", i, "<< isi basket")
@@ -231,7 +262,7 @@ const DetailFood = ({ route }) => {
         currentQty ?
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            className="absolute inset-x-[0] bottom-2 "
+            className="absolute inset-x-[0] bottom-[65] "
           >
 
             <Animatable.View animation={basketAnimation} duration={1000} className='bg-red-300 h-[50] mx-5 rounded-lg items-center justify-center'>
@@ -252,6 +283,49 @@ const DetailFood = ({ route }) => {
           </TouchableOpacity>
           : null
       }
+
+      <Modalize
+        modalHeight={490}
+        ref={ref}
+      >
+
+        {/* ICON / PNG */}
+        <View className='h-[220] w-[340] rounded-3xl mt-10 self-center'>
+          <Image
+            className='h-full w-full'
+            source={{ uri: "https://media.discordapp.net/attachments/1035762335383552128/1039374828077072465/GOJEK1.png" }} />
+        </View>
+        {/* ICON / PNG */}
+
+
+        <View className='self-center mt-2'>
+          <Text className='text-2xl text-center font-bold tracking-normal w-[300]'>
+            Want to order from this resto instead?
+          </Text>
+        </View>
+        <View className='self-center mt-2'>
+          <Text className='text-base text-center font-normal tracking-normal mx-6'>
+            Sure thing, but we'll need to clear the items in your current cart from the previous resto first.
+          </Text>
+        </View>
+        <View className='flex-row space-x-5 items-center justify-center mt-5'>
+          <TouchableOpacity
+            onPress={() => close()}
+            className='border-2 border-green-300 h-[55] w-[170] rounded-3xl items-center justify-center'>
+            <Text className='text-lg font-semibold'>
+              Cancel
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => clearBasketHandler()}
+            className='bg-yellow-300 h-[55] w-[170] rounded-3xl items-center justify-center'>
+            <Text className='text-lg font-semibold'>
+              Yes, go ahead
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+      </Modalize>
 
 
 

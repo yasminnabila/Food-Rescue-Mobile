@@ -25,11 +25,10 @@ const BasketScreen = () => {
   const delivery = useSelector(selectDelivery)
   const { ref, open, close } = useModalize();
 
-  let totalMoney = 0
+  let total = 0
 
   if (basket.length > 0) {
-
-    basket?.forEach((el) => { totalMoney += el.price * el.qty })
+    basket?.forEach((el) => { total += el.price * el.qty })
   }
 
   // console.log("=========================")
@@ -39,6 +38,12 @@ const BasketScreen = () => {
   //   })
   // }
   // console.log("=========================")
+
+  useEffect(() => {
+    if (basket.length == 0) {
+      navigation.goBack()
+    }
+  }, [basket])
 
   function deliveryHandler() {
     dispatch(setDelivery("Delivery"))
@@ -50,8 +55,8 @@ const BasketScreen = () => {
     close()
   }
 
-  function checkOutHanlder(totalMoney) {
-    dispatch(checkOut({ totalMoney, basket, delivery }))
+  function checkOutHanlder(total) {
+    dispatch(checkOut({ total, basket, delivery }))
   }
 
 
@@ -111,7 +116,7 @@ const BasketScreen = () => {
         ListFooterComponent={
 
           (basket.length > 0 &&
-            <View className='mt-10 bg-white border border-y-1 border-gray-200 my-1 shadow-lg mx-4 rounded-lg p-4'>
+            <View className='mt-10 bg-white border border-y-1 border-gray-200 my-4 shadow-lg mx-4 rounded-lg p-4'>
 
               <Text className='text-xl font-semibold'>
                 Payment summary
@@ -122,7 +127,7 @@ const BasketScreen = () => {
                   Price
                 </Text>
                 <Text className='text-base'>
-                  {currencyFormat(totalMoney, "id-ID", "IDR")}
+                  {currencyFormat(total, "id-ID", "IDR")}
                 </Text>
               </View>
 
@@ -152,7 +157,7 @@ const BasketScreen = () => {
       />
 
 
-      <View className='bg-blue-300'>
+      <View className='bg-blue-300 h-[170] border-t-2 border-gray-100'>
 
         <View className='ml-7 mt-2'>
           <Text className='text-[500]'>
@@ -164,7 +169,7 @@ const BasketScreen = () => {
         </View>
 
         <TouchableOpacity
-          onPress={() => checkOutHanlder(totalMoney)}
+          onPress={() => checkOutHanlder(total)}
           className='bg-red-200 h-[50] mx-4 rounded-3xl justify-center items-center my-3'>
           <Text className='text-lg font-semibold'>
             Place delivery order
@@ -175,14 +180,14 @@ const BasketScreen = () => {
       {/* MODAL PICK DELIVERY OPTION */}
       <Modalize
         childrenStyle={{ flex: 1 }}
-        modalHeight={200}
+        modalHeight={300}
         ref={ref}
       >
         <Text className='mt-7 text-2xl font-bold ml-3'>
           Select order type
         </Text>
 
-        <View className='h-[60] flex-row justify-between mt-2 mx-2'>
+        <View className='h-[60] flex-row justify-between my-2 mx-2'>
 
           <View className='flex-row space-x-2 items-center ml-3'>
             <View className='h-[50] bg-yellow-600 w-[50] rounded-full'>
@@ -201,7 +206,8 @@ const BasketScreen = () => {
           </TouchableOpacity>
 
         </View>
-        <View className='h-[60] flex-row justify-between mt-2 border-t border-gray-200 mx-2'>
+        <View className='bg-gray-200 h-[1] mx-4'></View>
+        <View className='h-[60] flex-row justify-between mt-2  mx-2'>
 
           <View className='flex-row space-x-2 items-center ml-3'>
             <View className='h-[50] bg-yellow-600 w-[50] rounded-full'>

@@ -56,15 +56,18 @@ export const userSlice = createSlice({
     setDelivery: (state, action) => {
       state.delivery = action.payload
     },
+    clearBasket: (state, action) => {
+      state.basket = []
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, setIsLogin, inc_basket, dec_basket, addBasket, setDelivery } = userSlice.actions
+export const { increment, decrement, incrementByAmount, setIsLogin, inc_basket, dec_basket, addBasket, setDelivery, clearBasket } = userSlice.actions
 
-export const checkOut = ({ totalMoney, basket, delivery }) => (dispatch) => {
+export const checkOut = ({ total, basket, delivery }) => (dispatch) => {
   setTimeout(() => {
-    console.log({ totalMoney, order: basket, delivery })
+    console.log({ total, order: basket, is_delivery: delivery })
   }, 1000)
 }
 

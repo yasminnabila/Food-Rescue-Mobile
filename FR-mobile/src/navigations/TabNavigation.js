@@ -9,7 +9,7 @@ import SearchStacks from './SearchStacks';
 
 const Tab = createBottomTabNavigator();
 
-const tabNavigation = () => {
+const TabNavigation = () => {
 
   return (
 
@@ -31,4 +31,4 @@ const tabNavigation = () => {
   )
 }
 
-export default tabNavigation
+export default TabNavigation

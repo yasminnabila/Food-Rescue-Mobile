@@ -1,7 +1,7 @@
 import { Text, View, Dimensions, TextInput, Pressable, ScrollView, TouchableOpacity } from "react-native"
 import Svg, { Image, Ellipse, ClipPath } from "react-native-svg"
 import Animated, { useSharedValue, useAnimatedStyle, interpolate, withTiming, withDelay } from "react-native-reanimated"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { BlurView } from 'expo-blur';
 import { useDispatch } from 'react-redux'
 
@@ -99,6 +99,20 @@ const LoginRegisScreen = () => {
       console.log(e)
     }
   }
+
+
+  useEffect(() => {
+    fetch("https://savvie.herokuapp.com/signin", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formInput)
+    })
+      .then(res => res.json())
+      .then(data => console.log(data))
+
+  }, [])
 
   return (
 

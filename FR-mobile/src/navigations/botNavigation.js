@@ -7,6 +7,9 @@ import LoginRegisScreen from '../screens/LoginRegisScreen';
 import TabNavigation from './TabNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { selectIsLogin } from '../store/slices/userSlice';
+import DetailResto from '../screens/DetailResto';
+import DetailFood from '../screens/DetailFood';
+import BasketScreen from '../screens/BasketScreen';
 
 // const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -60,11 +63,22 @@ const Navigation = () => {
             <Stack.Screen name="LoginREgis" component={LoginRegisScreen} options={{
               headerShown: false,
             }} />
+
           </>
           :
           <Stack.Screen name="MainNavigation" component={TabNavigation} />
-        }
 
+        }
+        <Stack.Screen name="Test Detail Resto" component={DetailResto} options={{
+          headerShown: false,
+        }} />
+        <Stack.Screen name='Test Food Detail' component={DetailFood} options={{
+          headerShown: false,
+        }} />
+        <Stack.Screen name='Test basket' component={BasketScreen} options={{
+          // presentation: "fade",
+          animation: "slide_from_bottom"
+        }} />
       </Stack.Navigator>
 
     </NavigationContainer>

@@ -26,8 +26,10 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native'
+import { currencyFormat } from 'simple-currency-format';
 
 
+import { Octicons } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import RestoNFoodCard from '../components/RestoNFoodCard';
 
@@ -35,14 +37,36 @@ import LottieView from 'lottie-react-native';
 import useDebounce from '../useDebounce/hook';
 import { searchCharacters } from '../useDebounce/fetchFunction';
 import LoadingScreen from './LoadingScreen';
+import { useSelector } from 'react-redux';
 
 const SearchScreen = () => {
 
   const navigation = useNavigation()
   const animation = useRef(null);
 
+  const basket = useSelector(state => state.user.basket)
+  console.log(basket)
+
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(searchTerm)
+  // console.log(searchTerm)
+
+  let qtyFood = 0
+  let totalMoney = 0
+
+  if (basket.length > 0) {
+    // console.log(basket, "2")
+    basket?.forEach((el) => { qtyFood += el.qty; totalMoney += el.price * el.qty })
+  }
+
+  const [text, setText] = useState(null)
+  useEffect(() => {
+    if (basket[0]?.qty === 1) {
+      setText("Item")
+    } else {
+      setText("Items")
+    }
+  }, [basket])
+
 
   const [results, setResults] = useState([]);
   // console.log(results, "<<< di search")
@@ -193,11 +217,6 @@ const SearchScreen = () => {
             <>
               <View className='bg-red-200 h-[120] justify-between mt-[50]'>
                 <View className='bg-yellow-300 h-[50] flex-row justify-around gap-x-[80] items-center'>
-                  <Animatable.View className='absolute -top-[0] -right-0'>
-                    <Pressable onPress={() => navigation.navigate('Test basket')}>
-                      <LottieView source={require('../lottie/cart.json')} className='w-[200] h-[140] absolute -top-[15] -right-2' ref={animation} loop={false} duration={1300} />
-                    </Pressable>
-                  </Animatable.View>
 
                   <View className='bg-red-300'>
                     <View className='flex-row items-center'>
@@ -248,6 +267,32 @@ const SearchScreen = () => {
           }
           keyExtractor={(item) => item.id}
         />
+
+        {
+          basket.length > 0 ?
+            <View className='bg-red-300 h-[50] absolute inset-x-[0] bottom-[20] z-50 mx-5 rounded-lg items-start justify-center'>
+              <TouchableOpacity onPress={() => navigation.navigate("Test basket")}>
+                <View className='flex-row justify-center items-center'>
+                  <Text className='text-xl font-semibold pl-2'>
+                    Basket
+                  </Text>
+                  <View className='pl-2'>
+                    <Octicons name="dot-fill" size={14} color="black" />
+                  </View>
+                  <Text className='text-xl pl-2'>
+                    {qtyFood}
+                  </Text>
+                  <Text className='text-xl pl-1'>
+                    {text}
+                  </Text>
+                  <Text className='pl-[50] text-lg font-semibold'>
+                    {currencyFormat(totalMoney, "id-ID", "IDR")}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View> : null
+        }
+
 
 
         {/* </ScrollView> */}

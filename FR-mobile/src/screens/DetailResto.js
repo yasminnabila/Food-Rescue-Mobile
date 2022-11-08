@@ -50,13 +50,13 @@ const DetailResto = ({ route }) => {
   // } else {
   //   setText("Items")
   // }
-  const [text, setText] = useState(null)
 
   const [showStickyHead, setShowStickyHead] = useState(false)
   const [mainAnimation, setMainAnimation] = useState("fadeIn")
   const [secondAnimation, setSecondAnimation] = useState("fadeIn")
   const [basketAnimation, setBasketAnimation] = useState("bounceIn")
 
+  const [text, setText] = useState(null)
 
   useEffect(() => {
     fetch(`https://savvie.herokuapp.com/restaurants/${id}`)
@@ -230,30 +230,34 @@ const DetailResto = ({ route }) => {
         </Animatable.View>
         {/* END DETAIL RESTO */}
 
-        <View>
-          {
-            foods.map((el) => {
-              return (
-                <>
-                  <FoodList foodFromRestoDetail={el} />
-                </>
-              )
-            })
-          }
+
+        {
+          foods.map((el) => {
+            return (
+              <>
+                <FoodList foodFromRestoDetail={el} />
+              </>
+            )
+          })
+        }
+
+        <View className='h-[100] mt-[30]'>
+
         </View>
+
 
       </ScrollView >
 
       {
         basket.length > 0 ?
-          <Animatable.View animation={basketAnimation} duration={700} className='bg-red-300 h-[50] absolute inset-x-[0] bottom-2 z-50 mx-5 rounded-lg items-start justify-center'>
+          <Animatable.View animation={basketAnimation} duration={700} className='bg-red-300 h-[50] absolute inset-x-[0] bottom-[65] z-50 mx-5 rounded-lg items-start justify-center'>
             <TouchableOpacity onPress={() => navigation.navigate("Test basket")}>
               <View className='flex-row justify-center items-center'>
                 <Text className='text-xl font-semibold pl-2'>
                   Basket
                 </Text>
                 <View className='pl-2'>
-                  <Octicons name="dot-fill" size={15} color="black" />
+                  <Octicons name="dot-fill" size={14} color="black" />
                 </View>
                 <Text className='text-xl pl-2'>
                   {qtyFood}
