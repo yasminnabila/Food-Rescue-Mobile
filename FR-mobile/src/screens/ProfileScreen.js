@@ -52,7 +52,7 @@ const ProfileScreen = () => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Track");
+          navigation.navigate("TrackKurir");
           dispatch(
             setDestination({
               location: latlong,

@@ -23,6 +23,7 @@ import { setOrigin, setDestination } from "../store/slices/userSlice";
 const HomeScreen = () => {
   const [location, setLocation] = useState("Waiting...");
   const dispatch = useDispatch();
+  const [errorMsg, setErrorMsg] = useState("");
   const [latlong, setLatlong] = useState("waiting....");
   const stickyHeaderShown = useRef(false);
   const mainHeaderRef = useRef();
@@ -30,6 +31,7 @@ const HomeScreen = () => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
+      console.log(status, "status///");
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
@@ -193,7 +195,7 @@ const HomeScreen = () => {
             <ScrollView
               className="bg-yellow-200"
               horizontal
-              showsHorizontalScrollIndicator="false"
+              // showsHorizontalScrollIndicator="false"
             >
               {categories?.map((el) => {
                 return (
@@ -234,7 +236,7 @@ const HomeScreen = () => {
               keyExtractor={(item) => item.id}
               className="bg-slate-300"
               horizontal
-              showsHorizontalScrollIndicator="false"
+              // showsHorizontalScrollIndicator="false"
             />
 
             {/* <ScrollView className='bg-slate-300' horizontal showsHorizontalScrollIndicator='false'>
@@ -274,7 +276,7 @@ const HomeScreen = () => {
             <ScrollView
               className="bg-yellow-200 "
               horizontal
-              showsHorizontalScrollIndicator="false"
+              // showsHorizontalScrollIndicator="false"
             >
               <View className="items-center justify-center bg-blue-400 ml-5">
                 <View className="bg-gray-200 w-[100] h-[100] rounded-full"></View>
@@ -324,7 +326,7 @@ const HomeScreen = () => {
               keyExtractor={(item) => item.id}
               className="bg-slate-300"
               horizontal
-              showsHorizontalScrollIndicator="false"
+              // showsHorizontalScrollIndicator="false"
             />
           </View>
           {/* END Popular Foods */}
@@ -345,7 +347,7 @@ const HomeScreen = () => {
               keyExtractor={(item) => item.id}
               className="bg-slate-300"
               horizontal
-              showsHorizontalScrollIndicator="false"
+              // showsHorizontalScrollIndicator="false"
             />
           </View>
           {/* END Makanan Hemat */}
@@ -366,7 +368,7 @@ const HomeScreen = () => {
               keyExtractor={(item) => item.id}
               className="bg-slate-300"
               horizontal
-              showsHorizontalScrollIndicator="false"
+              // showsHorizontalScrollIndicator="false"
             />
           </View>
           {/* END Kamu melewatkan ini */}

@@ -48,7 +48,7 @@ const BasketScreen = () => {
   const delivery = useSelector(selectDelivery);
   const { ref, open, close } = useModalize();
   console.log(information, "??????");
-  console.log(basket[0].Restaurant.address, "<<<<----get resto address");
+  console.log(basket[0].Restaurant.location.coordinates[0], "<<<<----get resto address");
   let totalMoney = 0;
 
   if (basket.length > 0) {
@@ -61,7 +61,7 @@ const BasketScreen = () => {
     if (!origin || !basket.length) return;
     const getTravelTime = async () => {
       fetch(
-        `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.description}&destinations=${basket[0].Restaurant.address}&key=${GOOGLE_MAPS_APIKEY}`
+        `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.location.lat}%2C${origin.location.lng}&destinations=${basket[0].Restaurant.location.coordinates[0]}%2C${basket[0].Restaurant.location.coordinates[1]}&key=${GOOGLE_MAPS_APIKEY}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -70,7 +70,6 @@ const BasketScreen = () => {
     };
     getTravelTime();
   }, [origin, GOOGLE_MAPS_APIKEY]);
-
   // console.log("=========================")
   // {
   //   basket.forEach((el) => {
