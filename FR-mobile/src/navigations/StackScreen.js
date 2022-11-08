@@ -18,8 +18,6 @@ const StackScreen = () => {
       <Stack.Screen name="Test1" component={HomeScreen} options={{
         headerShown: false,
       }} />
-      <Stack.Screen name="Test2" component={CategoryScreen} />
-
       <Stack.Screen name="Test3" component={LoginRegisScreen} options={{
         headerShown: false,
       }} />

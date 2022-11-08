@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getData, storeData } from '../../asyncStorage'
 
 const initialState = {
   isLogin: false,
@@ -7,7 +8,9 @@ const initialState = {
     // { name: "coca-cola", qty: 1, id: 1 },
     // { name: "Fanta", qty: 1, id: 2 }
   ],
-  delivery: "Delivery"
+  delivery: "Delivery",
+  userData: {},
+  isPaid: false
 }
 
 export const userSlice = createSlice({
@@ -58,20 +61,116 @@ export const userSlice = createSlice({
     },
     clearBasket: (state, action) => {
       state.basket = []
+    },
+    setUser: (state, action) => {
+      state.user = action.payload
+    },
+    setUserData: (state, action) => {
+      state.userData = action.payload
+    },
+    clearUser: (state) => {
+      state.user = {}
+    },
+    setIsPaid: (state, action) => {
+      state.isPaid = action.payload
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, setIsLogin, inc_basket, dec_basket, addBasket, setDelivery, clearBasket } = userSlice.actions
+export const { increment, decrement, incrementByAmount, setIsLogin, inc_basket, dec_basket, addBasket, setDelivery, clearBasket, setUser, clearUser, setUserData, setIsPaid } = userSlice.actions
 
-export const checkOut = ({ total, basket, delivery }) => (dispatch) => {
-  setTimeout(() => {
-    console.log({ total, order: basket, is_delivery: delivery })
-  }, 1000)
+
+
+export const checkOut = ({ total, basket, delivery, access_token }) => async (dispatch) => {
+  console.log("MASUK ACT")
+
+  const totalPrice = +Number(total)
+  console.log(totalPrice)
+
+  const order = basket.map((el) => {
+    return { qty: el.qty, FoodId: el.id, itemPrice: el.price * el.qty * el.discount / 100 }
+  })
+  console.log(order)
+
+  try {
+    const { access_token } = await getData()
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        access_token: access_token
+      },
+      body: JSON.stringify({ total: totalPrice, order, is_delivery: delivery })
+    };
+
+    let response = await fetch(`https://savvie.herokuapp.com/checkout`, requestOptions)
+
+    let res = await response.json()
+
+    dispatch(setIsPaid(true))
+
+  } catch (error) {
+    console.log(error)
+  }
+
+  // setTimeout(() => {
+  //   console.log({ total, order: basket, is_delivery: delivery })
+  // }, 1000)
+}
+
+export const login = (data) => async dispatch => {
+  try {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    };
+
+    let response = await fetch(`https://savvie.herokuapp.com/signIn`, requestOptions)
+
+    let res = await response.json()
+    console.log(res)
+    storeData(res)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getUserData = () => async dispatch => {
+  try {
+    const { access_token } = await getData()
+    console.log(access_token, "ini di slice ")
+    const response = await fetch("https://savvie.herokuapp.com/", {
+      headers: {
+        access_token: access_token
+      }
+    })
+    const res = await response.json()
+
+    dispatch(setUserData(res))
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getUserHistory = () => async dispatch => {
+  try {
+    const response = await fetch("https://savvie.herokuapp.com/history", {
+      headers: {
+        access_token: access_token
+      }
+    })
+  } catch (error) {
+
+  }
 }
 
 export const selectIsLogin = (state) => state.user.isLogin
 export const selectDelivery = (state) => state.user.delivery
+export const selectUser = (state) => state.user.user
+export const selectUserData = (state) => state.user.userData
+export const selectIsPaid = (state) => state.user.isPaid
 
 export default userSlice.reducer

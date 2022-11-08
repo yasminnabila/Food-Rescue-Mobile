@@ -45,7 +45,7 @@ const SearchScreen = () => {
   const animation = useRef(null);
 
   const basket = useSelector(state => state.user.basket)
-  console.log(basket)
+  // console.log(basket)
 
   const [searchTerm, setSearchTerm] = useState("");
   // console.log(searchTerm)

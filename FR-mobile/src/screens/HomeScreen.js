@@ -7,11 +7,18 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native'
 
 import * as Animatable from 'react-native-animatable';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserData, selectUser, setUser } from '../store/slices/userSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = () => {
   const stickyHeaderShown = useRef(false)
   const mainHeaderRef = useRef()
   const stickyHeaderRef = useRef()
+
+  const dispatch = useDispatch()
+
+  const user = useSelector(selectUser)
 
   const navigation = useNavigation()
 
@@ -22,15 +29,6 @@ const HomeScreen = () => {
   const [secondAnimation, setSecondAnimation] = useState("slideInDown")
 
   const [categories, setCategories] = useState()
-
-  console.log("=========================")
-  // {
-  //   categories.forEach((el) => {
-  //     console.log(el.name)
-  //   })
-  // }
-  console.log("=========================")
-
 
   const foodList = [
     {
@@ -55,6 +53,20 @@ const HomeScreen = () => {
       .then(res => res.json())
       .then(data => setCategories(data))
   }, [])
+
+
+  useEffect(() => {
+    dispatch(getUserData())
+  }, [])
+
+  console.log("=========================")
+  // {
+  //   categories.forEach((el) => {
+  //     console.log(el.name)
+  //   })
+  // }
+  console.log(user.access_token, "<<<<<<<<<<<<<")
+  console.log("=========================")
 
 
   return (
@@ -162,7 +174,9 @@ const HomeScreen = () => {
                   return (
                     <Pressable
                       className='bg-gray-200 w-[80] h-[80] mt-[20] mx-3 rounded-3xl'
-                      onPress={() => navigation.navigate('Test2')}>
+                      onPress={() => navigation.navigate('Category', {
+                        id: el.id
+                      })}>
                       <Image
                         source={{
                           uri: el.imageUrl

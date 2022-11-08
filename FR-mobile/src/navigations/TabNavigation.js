@@ -19,12 +19,15 @@ const TabNavigation = () => {
       <Tab.Screen name="Home" component={StackScreen} options={{
         headerShown: false
       }} />
-      <Tab.Screen name="Track" component={TrackScreen} />
+      <Tab.Screen name="Track" component={TrackScreen} options={{
+        headerShown: false
+      }} />
       <Tab.Screen name="Search" component={SearchStacks} options={{
         headerShown: false
       }} />
-      <Tab.Screen name="History" component={HistoryScreen} options={{ headerShown: false }} />
-
+      <Tab.Screen name="History" component={HistoryScreen} options={{
+        headerShown: false
+      }} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
 
     </Tab.Navigator>

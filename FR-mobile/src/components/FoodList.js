@@ -10,8 +10,6 @@ import { useState } from 'react';
 const FoodList = ({ foodFromRestoDetail }) => {
   const navigation = useNavigation()
 
-
-
   // console.log(foodFromRestoDetail, " <<<<<<<<<<<< di FoodList comp")
 
   return (

@@ -5,12 +5,15 @@ import { Modalize, useModalize } from 'react-native-modalize';
 
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { useNavigation } from '@react-navigation/native';
+import { getData, storeData } from '../asyncStorage';
+import { useDispatch } from 'react-redux';
+import { login } from '../store/slices/userSlice';
 
-const HistoryScreen = () => {
+const LoginRegis = () => {
 
   const navigation = useNavigation()
 
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const modalizeRef = useRef(null);
   const { ref, open, close } = useModalize();
 
@@ -20,19 +23,49 @@ const HistoryScreen = () => {
     modalizeRef.current?.open();
   };
 
-  const basketCheck = () => {
-    test.length == 0 && open()
-  }
+  const [loginForm, setLoginForm] = useState({
+    email: "",
+    password: ""
+  })
 
-  // useEffect(() => {
-  //   basketCheck()
-  // }, [test])
+  function loginHandler() {
+    console.log(loginForm)
+    dispatch(login(loginForm))
+    setLoginForm({
+      email: "",
+      password: ""
+    })
+  }
 
   return (
     <GestureHandlerRootView className='flex-1 justify-center items bg-center'>
 
+      <View className='h-[60] mx-5'>
+        <FloatingLabelInput
+          label={'Email'}
+          value={loginForm.email}
+          autoCapitalize={false}
+          onChangeText={value => setLoginForm({ ...loginForm, email: value })}
+        />
+      </View>
+      <View className='h-[60] mx-5 mt-2'>
+        <FloatingLabelInput
+          label={'Password'}
+          value={loginForm.password}
+          autoCapitalize={false}
+          onChangeText={value => setLoginForm({ ...loginForm, password: value })}
+        />
+      </View>
       <TouchableOpacity
-        onPress={() => navigation.navigate("screen 2")}
+        onPress={() => loginHandler()}
+        className='h-[50] bg-yellow-500 my-3 rounded-2xl w-[200] self-center items-center justify-center'>
+        <Text className='text-lg'>
+          LOGIN
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("MainNavigation")}
         className='h-[100] bg-red-200'>
         <Text>
           screen 1
@@ -79,4 +112,4 @@ const HistoryScreen = () => {
   )
 }
 
-export default HistoryScreen
+export default LoginRegis

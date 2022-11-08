@@ -1,4 +1,4 @@
-import { Button, FlatList, SafeAreaView, ScrollView, Switch, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { Button, FlatList, Image, SafeAreaView, ScrollView, Switch, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { DetailsHeaderScrollView, StickyHeaderScrollView } from 'react-native-sticky-parallax-header'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { FontAwesome } from '@expo/vector-icons';
@@ -10,11 +10,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Modalize, useModalize } from 'react-native-modalize';
 
 import { useSelector, useDispatch } from 'react-redux'
-import { dec_basket, inc_basket, addBasket, selectDelivery, setDelivery, checkOut } from "../store/slices/userSlice";
+import { dec_basket, inc_basket, addBasket, selectDelivery, setDelivery, checkOut, selectUser, selectIsPaid, clearBasket } from "../store/slices/userSlice";
 import BasketCard from "./BasketCard";
 import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { currencyFormat } from 'simple-currency-format';
+import Success from "./Success";
 
 
 
@@ -24,6 +25,8 @@ const BasketScreen = () => {
   const basket = useSelector(state => state.user.basket)
   const delivery = useSelector(selectDelivery)
   const { ref, open, close } = useModalize();
+
+  const isPaid = useSelector(selectIsPaid)
 
   let total = 0
 
@@ -59,7 +62,7 @@ const BasketScreen = () => {
     dispatch(checkOut({ total, basket, delivery }))
   }
 
-
+  if (isPaid) return <Success />
 
   return (
     <GestureHandlerRootView className='flex-1 bg-white'>
@@ -78,8 +81,10 @@ const BasketScreen = () => {
                   className='h-[80] justify-between flex-row items-center border-b-2 border-gray-300'
                 >
                   <View className='flex-row space-x-2 items-center ml-3'>
-                    <View className='h-[60] bg-yellow-600 w-[60] rounded-full'>
-                      {/* <Text>test</Text> */}
+                    <View className='h-[60] bg-yellow-600 w-[60] rounded-full justify-center items-center'>
+                      <Image
+                        className='h-full w-full'
+                        source={{ uri: "https://cdn.discordapp.com/attachments/1035762335383552128/1039374758552285194/Delivery.png" }} />
                     </View>
                     <View>
                       <Text className='text-base font-semibold'>{delivery}</Text>

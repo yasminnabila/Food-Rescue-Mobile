@@ -10,6 +10,9 @@ import { selectIsLogin } from '../store/slices/userSlice';
 import DetailResto from '../screens/DetailResto';
 import DetailFood from '../screens/DetailFood';
 import BasketScreen from '../screens/BasketScreen';
+import Login from '../screens/Login';
+import CategoryScreen from '../screens/CategoryScreen';
+import OnBoardScreen from '../screens/OnBoardScreen';
 
 // const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -35,6 +38,7 @@ const Navigation = () => {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@storage_Key')
+      // console.log(value)
       if (value !== null) {
         // value previously stored
 
@@ -57,6 +61,12 @@ const Navigation = () => {
 
         {!isLogin ?
           <>
+            {/* <Stack.Screen name='OnBoardScreem' component={OnBoardScreen} options={{
+              headerShown: false
+            }} /> */}
+            <Stack.Screen name="LOGIN REGIS" component={Login} options={{
+              headerShown: false
+            }} />
             <Stack.Screen name="MainNavigation" component={TabNavigation} options={{
               headerShown: false,
             }} />
@@ -69,6 +79,7 @@ const Navigation = () => {
           <Stack.Screen name="MainNavigation" component={TabNavigation} />
 
         }
+
         <Stack.Screen name="Test Detail Resto" component={DetailResto} options={{
           headerShown: false,
         }} />
@@ -77,8 +88,13 @@ const Navigation = () => {
         }} />
         <Stack.Screen name='Test basket' component={BasketScreen} options={{
           // presentation: "fade",
-          animation: "slide_from_bottom"
+          animation: "slide_from_bottom",
+          headerShown: false
         }} />
+        <Stack.Screen name="Category" component={CategoryScreen} options={{
+          headerShown: false
+        }} />
+
       </Stack.Navigator>
 
     </NavigationContainer>

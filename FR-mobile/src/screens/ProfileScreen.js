@@ -1,7 +1,7 @@
 import { Text, TouchableOpacity, View } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux'
-import { setIsLogin } from "../store/slices/userSlice";
+import { useDispatch, useSelector } from 'react-redux'
+import { clearUser, selectUserData, setIsLogin } from "../store/slices/userSlice";
 import { Modalize, useModalize } from "react-native-modalize";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { currencyFormat } from 'simple-currency-format';
@@ -10,6 +10,8 @@ import { currencyFormat } from 'simple-currency-format';
 import { useEffect, useRef, useState } from "react";
 const ProfileScreen = () => {
 
+
+  const userData = useSelector(selectUserData)
   const dispatch = useDispatch()
 
   const clearAll = async () => {
@@ -23,6 +25,7 @@ const ProfileScreen = () => {
     console.log('Done.')
   }
 
+  console.log(userData)
 
   const { ref, open, close } = useModalize();
 
@@ -37,8 +40,13 @@ const ProfileScreen = () => {
 
   function logOutHandler() {
     clearAll()
+    dispatch(clearUser())
     dispatch(setIsLogin(false))
   }
+
+  useEffect(() => {
+
+  }, [])
 
   return (
     <View className='flex-1'>
@@ -100,7 +108,7 @@ const ProfileScreen = () => {
             Savvie pay
           </Text>
           <Text className='text-2xl'>
-            10.000.000
+            {currencyFormat(userData?.Balance?.balance, "id-ID", "IDR")}
           </Text>
         </View>
 

@@ -19,6 +19,7 @@ import { dec_basket, inc_basket, addBasket, clearBasket } from "../store/slices/
 import LottieView from 'lottie-react-native';
 import LoadingScreen from "./LoadingScreen";
 import { Modalize, useModalize } from "react-native-modalize";
+import { getData } from "../asyncStorage";
 
 const DetailFood = ({ route }) => {
 
@@ -141,7 +142,6 @@ const DetailFood = ({ route }) => {
   useEffect(() => {
     sameRestoChecker()
   }, [food])
-
 
   console.log("------- DI FOOD DETAIL -----------")
 
