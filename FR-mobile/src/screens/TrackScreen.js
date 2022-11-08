@@ -18,9 +18,7 @@ const TrackScreen = () => {
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
   useEffect(() => {
-    console.log("masuk create room");
     socket.emit("create-room", "makan");
-    console.log("after jmasuk create room");
     socket.on("locationDriver", (data) => {
       console.log(data, "Sockettt");
       dispatch(
@@ -69,7 +67,7 @@ const TrackScreen = () => {
       </View> */}
       {origin && destination && (
         <>
-          {/* <View className="bg-white mt-[16%] flex flex-row mx-7 p-3 items-center border-2 border-green-600 rounded-sm">
+          <View className="bg-white mt-[16%] flex flex-row mx-7 p-3 items-center border-2 border-green-600 rounded-sm">
             <View className="border-r h-[40] justify-center mr-1 pr-2">
               <MaterialIcons name="delivery-dining" size={24} color="black" />
             </View>
@@ -79,7 +77,7 @@ const TrackScreen = () => {
               </Text>
               <Text className="text-black">arrived in 20 menit</Text>
             </View>
-          </View> */}
+          </View>
           <MapViewDirections
             origin={{
               latitude: origin.location.lat,
