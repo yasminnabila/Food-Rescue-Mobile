@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLogin: false,
@@ -7,11 +7,11 @@ const initialState = {
     // { name: "coca-cola", qty: 1, id: 1 },
     // { name: "Fanta", qty: 1, id: 2 }
   ],
-  delivery: "Delivery"
-}
+  delivery: "Delivery",
+};
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     increment: (state) => {
@@ -19,19 +19,19 @@ export const userSlice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.value += 1
+      state.value += 1;
     },
     decrement: (state) => {
-      state.value -= 1
+      state.value -= 1;
     },
     incrementByAmount: (state, action) => {
-      state.value += action.payload
+      state.value += action.payload;
     },
     setTodos: (state, action) => {
-      state.todos = action.payload
+      state.todos = action.payload;
     },
     setIsLogin: (state, action) => {
-      state.isLogin = action.payload
+      state.isLogin = action.payload;
     },
     addBasket: (state, action) => {
       const item = state.basket.filter(el => el.id === action.payload.id)
@@ -39,7 +39,7 @@ export const userSlice = createSlice({
         const idx = state.basket.findIndex(el => el.id === action.payload.id)
         state.basket[idx].qty++
       } else {
-        state.basket = [...state.basket, action.payload]
+        state.basket = [...state.basket, action.payload];
       }
     },
     inc_basket: (state, action) => {
@@ -53,14 +53,40 @@ export const userSlice = createSlice({
         state.basket = state.basket.filter(el => el.id !== item.id)
       }
     },
+    setOrigin: (state, action) => {
+      state.origin = action.payload;
+    },
+    setDestination: (state, action) => {
+      state.destination = action.payload;
+    },
+    setTravelTimeInformation: (state, action) => {
+      state.travelTimeInformation = action.payload;
+    },
     setDelivery: (state, action) => {
       state.delivery = action.payload
     },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, setIsLogin, inc_basket, dec_basket, addBasket, setDelivery } = userSlice.actions
+export const {
+  increment,
+  decrement,
+  incrementByAmount,
+  setIsLogin,
+  inc_basket,
+  dec_basket,
+  addBasket, setDelivery,
+  setOrigin,
+  setDestination,
+  setTravelTimeInformation,
+} = userSlice.actions;
+
+export const selectIsLogin = (state) => state.user.isLogin;
+export const selectOrigin = (state) => state.user.origin;
+export const selectDestination = (state) => state.user.destination;
+export const selectTravelTimeInformation = (state) =>
+  state.user.travelTimeInformation;
 
 export const checkOut = ({ totalMoney, basket, delivery }) => (dispatch) => {
   setTimeout(() => {
@@ -68,7 +94,5 @@ export const checkOut = ({ totalMoney, basket, delivery }) => (dispatch) => {
   }, 1000)
 }
 
-export const selectIsLogin = (state) => state.user.isLogin
+export default userSlice.reducer;
 export const selectDelivery = (state) => state.user.delivery
-
-export default userSlice.reducer
