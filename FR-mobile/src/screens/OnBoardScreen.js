@@ -1,38 +1,39 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { StatusBar, Animated, Text, Image, View, StyleSheet, Dimensions } from 'react-native';
-import { FlatList, TouchableOpacity, } from 'react-native-gesture-handler';
+import { StatusBar, Animated, Text, Image, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { FlatList, } from 'react-native-gesture-handler';
 const { width, height } = Dimensions.get('screen');
 
 // https://www.flaticon.com/packs/retro-wave
 // inspiration: https://dribbble.com/shots/11164698-Onboarding-screens-animation
 // https://twitter.com/mironcatalin/status/1321180191935373312
 
-const bgs = ['#A5BBFF', '#DDBEFE', '#FF63ED', '#B98EFF'];
+const bgs = ['#08415c', '#08415c', '#08415c', '#08415c', '#08415c'];
 const DATA = [
-  {
-    "key": "3571572",
-    "title": "Multi-lateral intermediate moratorium",
-    "description": "I'll back up the multi-byte XSS matrix, that should feed the SCSI application!",
-    "image": "https://cdn-icons-png.flaticon.com/512/3571/3571572.png"
-  },
+
   {
     "key": "3571747",
-    "title": "Automated radical data-warehouse",
-    "description": "Use the optical SAS system, then you can navigate the auxiliary alarm!",
-    "image": "https://cdn-icons-png.flaticon.com/512/3571/3571572.png"
+    "title": "The more you eat, the more you save",
+    "description": "Discover delicious surplus food at a great discount around you",
+    "image": "https://media.discordapp.net/attachments/1037950269922754673/1039829986883936277/onboarding1.png"
+  },
+  {
+    "key": "3571572",
+    "title": "Choose your pick up method",
+    "description": "You are free to choose any pick-up methods,whether self-pick-up or delivered to your place",
+    "image": "https://cdn.discordapp.com/attachments/1037950269922754673/1039829987282386974/onboarding2.png"
   },
   {
     "key": "3571680",
-    "title": "Inverse attitude-oriented system engine",
-    "description": "The ADP array is down, compress the online sensor so we can input the HTTP panel!",
-    "image": "https://cdn-icons-png.flaticon.com/512/3571/3571572.png"
+    "title": "Easy payment",
+    "description": "Purchase your desired meal easily using Savvie Pay!",
+    "image": "https://cdn.discordapp.com/attachments/1037950269922754673/1039829987794108498/onboarding3.png"
   },
   {
     "key": "3571603",
-    "title": "Monitored global data-warehouse",
-    "description": "We need to program the open-source IB interface!",
-    "image": "https://cdn-icons-png.flaticon.com/512/3571/3571572.png"
+    "title": "Enjoy a tasty meal that helps the planet",
+    "description": "Doing good has never tasted as delicious as it is with Savvie!",
+    "image": "https://cdn.discordapp.com/attachments/1037950269922754673/1039829988553261056/onboarding5.png"
   }
 ]
 
@@ -145,36 +146,47 @@ export default function OnBoardScreen() {
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.key}
         ListFooterComponent={
-          <View style={{ width: width, alignItems: "center", padding: 20, }}>
-            <View style={{
-              flex: 0.7,
-              justifyContent: "start",
-              top: 34
-            }}>
-              <Image
-                source={{ uri: "https://cdn-icons-png.flaticon.com/512/3571/3571572.png" }}
-                style={{
-                  width: width / 2,
-                  height: height / 2,
-                  resizeMode: "contain"
-                }}
-              />
+          <>
+            <View style={{ width: width, alignItems: "center", padding: 20, }}>
+              <View style={{
+                flex: 0.7,
+                justifyContent: "start",
+                top: 34
+              }}>
+                <Image
+                  source={{ uri: "https://cdn-icons-png.flaticon.com/512/3571/3571572.png" }}
+                  style={{
+                    width: width / 2,
+                    height: height / 2,
+                    resizeMode: "contain"
+                  }}
+                />
+              </View>
             </View>
+
             <TouchableOpacity
-              onPress={() => navigation.navigate("LOGIN REGIS")}
-              className='bg-red-300 h-[300] mt-[400] '>
+              onPress={() => navigation.navigate("LOGIN_REGIS")}
+              className='bg-red-300 h-[80] w-[300] absolute top-[480] self-center'
+            >
               <Text
                 style={{ color: "#fff", fontWeight: "800", fontSize: 28, marginBottom: 10 }}
               >
-                TESTjahsbdjahsdbashd
-              </Text>
-              <Text
-                style={{ color: "#fff", fontWeight: "300" }}
-              >
-                TEST
+                Login / Regis
               </Text>
             </TouchableOpacity>
-          </View>
+
+            <TouchableOpacity
+              className='bg-yellow-300 h-[80] w-[300] absolute top-[600] self-center'
+              onPress={() => navigation.navigate("MainNavigation")}
+            >
+              <Text
+                style={{ color: "#fff", fontWeight: "800", fontSize: 28, marginBottom: 10 }}
+              >
+                NEXT
+              </Text>
+            </TouchableOpacity>
+
+          </>
         }
         renderItem={({ item }) => {
           return (
@@ -186,7 +198,7 @@ export default function OnBoardScreen() {
                 <Image
                   source={{ uri: item.image }}
                   style={{
-                    width: width / 2,
+                    width: width / 0.5,
                     height: height / 2,
                     resizeMode: "contain"
                   }}
@@ -199,7 +211,7 @@ export default function OnBoardScreen() {
                   {item.title}
                 </Text>
                 <Text
-                  style={{ color: "#fff", fontWeight: "300" }}
+                  style={{ color: "#fff", fontWeight: "400", fontSize: "20" }}
                 >{item.description}</Text>
               </View>
             </View>

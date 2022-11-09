@@ -1,12 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import LoginRegisScreen from '../screens/LoginRegisScreen';
 import TabNavigation from './TabNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { selectIsLogin } from '../store/slices/userSlice';
+import { selectIsLogin, setIsLogin, setUser } from '../store/slices/userSlice';
 import DetailResto from '../screens/DetailResto';
 import DetailFood from '../screens/DetailFood';
 import BasketScreen from '../screens/BasketScreen';
@@ -14,33 +14,23 @@ import Login from '../screens/Login';
 import CategoryScreen from '../screens/CategoryScreen';
 import OnBoardScreen from '../screens/OnBoardScreen';
 
-// const Tab = createBottomTabNavigator();
+
 const Stack = createNativeStackNavigator();
 
-// function HomeStack() {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="LoginREgis" component={LoginRegisScreen} options={{
-//         headerShown: false,
-//       }} />
-//     </Stack.Navigator>
-//   );
-// }
-
 const Navigation = () => {
-
+  const dispatch = useDispatch()
   const isLogin = useSelector(selectIsLogin)
 
-
-  // AsyncStorage.getItem('@storage_Key').then(data => {
-  //   console.log(data)
-  // })
   const getData = async () => {
     try {
-      const value = await AsyncStorage.getItem('@storage_Key')
+      const value = await AsyncStorage.getItem('user')
       // console.log(value)
       if (value !== null) {
         // value previously stored
+        const user = JSON.parse(value)
+        console.log({ user }, "yg lg login")
+        dispatch(setIsLogin(true))
+        dispatch(setUser(user))
 
       }
     } catch (e) {
@@ -51,7 +41,7 @@ const Navigation = () => {
 
   useEffect(() => {
     getData()
-  }, [isLogin])
+  }, [])
 
   return (
     <NavigationContainer>
@@ -64,24 +54,18 @@ const Navigation = () => {
             <Stack.Screen name='OnBoardScreem' component={OnBoardScreen} options={{
               headerShown: false
             }} />
-            <Stack.Screen name="LOGIN REGIS" component={Login} options={{
+            <Stack.Screen name="LOGIN_REGIS" component={Login} options={{
               headerShown: false,
               animation: "simple_push",
               // presentation: "modal"
             }} />
-            <Stack.Screen name="MainNavigation" component={TabNavigation} options={{
-              headerShown: false,
-            }} />
-            <Stack.Screen name="LoginREgis" component={LoginRegisScreen} options={{
-              headerShown: false,
-            }} />
-
           </>
           :
-          <Stack.Screen name="MainNavigation" component={TabNavigation} />
-
+          null
         }
-
+        <Stack.Screen name="MainNavigation" component={TabNavigation} options={{
+          headerShown: false,
+        }} />
         <Stack.Screen name="Test Detail Resto" component={DetailResto} options={{
           headerShown: false,
         }} />

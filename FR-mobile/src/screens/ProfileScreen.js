@@ -1,19 +1,31 @@
 import { Text, TouchableOpacity, View } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux'
-import { clearUser, getUserData, selectUserData, setIsLogin, topUp } from "../store/slices/userSlice";
+import { clearUser, getUserData, selectIsLogin, selectUserData, setIsLogin, topUp } from "../store/slices/userSlice";
 import { Modalize, useModalize } from "react-native-modalize";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { currencyFormat } from 'simple-currency-format';
 
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
+
 
 
   const userData = useSelector(selectUserData)
+  const isLogin = useSelector(selectIsLogin)
+
   const dispatch = useDispatch()
+
+  useFocusEffect(useCallback(() => {
+    if (isLogin) {
+      dispatch(getUserData())
+    } else {
+      navigation.navigate("LOGIN_REGIS")
+    }
+  }, [isLogin]))
 
   // console.log(userData.email)
 
@@ -22,7 +34,7 @@ const ProfileScreen = () => {
       await AsyncStorage.clear()
     } catch (e) {
       // clear error
-      console.log(e)
+      console.log(e, '======')
     }
     console.log('Done.')
   }
@@ -45,12 +57,8 @@ const ProfileScreen = () => {
     clearAll()
     dispatch(clearUser())
     dispatch(setIsLogin(false))
+    navigation.navigate("Home")
   }
-
-  useEffect(() => {
-    dispatch(getUserData())
-  }, [userData])
-
 
   return (
     <View className='flex-1'>

@@ -14,7 +14,7 @@ import { currencyFormat } from 'simple-currency-format';
 
 import { AntDesign } from '@expo/vector-icons';
 
-import { dec_basket, inc_basket, addBasket, clearBasket } from "../store/slices/userSlice";
+import { dec_basket, inc_basket, addBasket, clearBasket, selectIsLogin } from "../store/slices/userSlice";
 
 import LottieView from 'lottie-react-native';
 import LoadingScreen from "./LoadingScreen";
@@ -23,7 +23,7 @@ import { getData } from "../asyncStorage";
 
 const DetailFood = ({ route }) => {
 
-
+  const isLogin = useSelector(selectIsLogin)
 
   const { id } = route.params
   const dispatch = useDispatch()
@@ -31,6 +31,14 @@ const DetailFood = ({ route }) => {
 
   const basket = useSelector(state => state.user.basket)
 
+
+  const modalIsLogin = useRef(null)
+
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     modalIsLogin.current.open()
+  //   }
+  // }, [])
 
   const AnimationRef = useRef(null);
   const lottieAnimation = useRef(null);
@@ -103,7 +111,9 @@ const DetailFood = ({ route }) => {
 
   function addToBasket() {
     lottieAnimation.current?.play();
-    if (!isSameResto) {
+    if (!isLogin) {
+      modalIsLogin.current.open()
+    } else if (!isSameResto) {
       open()
     } else {
       setFoodInBasket(true)
@@ -262,7 +272,6 @@ const DetailFood = ({ route }) => {
             onPress={() => navigation.goBack()}
             className="absolute inset-x-[0] bottom-[65] "
           >
-
             <Animatable.View animation={basketAnimation} duration={1000} className='bg-red-300 h-[50] mx-5 rounded-lg items-center justify-center'>
               <View className='flex-row justify-center items-center'>
                 <Text className='text-xl font-semibold pl-2'>
@@ -304,6 +313,52 @@ const DetailFood = ({ route }) => {
         <View className='self-center mt-2'>
           <Text className='text-base text-center font-normal tracking-normal mx-6'>
             Sure thing, but we'll need to clear the items in your current cart from the previous resto first.
+          </Text>
+        </View>
+        <View className='flex-row space-x-5 items-center justify-center mt-5'>
+          <TouchableOpacity
+            onPress={() => close()}
+            className='border-2 border-green-300 h-[55] w-[170] rounded-3xl items-center justify-center'>
+            <Text className='text-lg font-semibold'>
+              Cancel
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => clearBasketHandler()}
+            className='bg-yellow-300 h-[55] w-[170] rounded-3xl items-center justify-center'>
+            <Text className='text-lg font-semibold'>
+              Yes, go ahead
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+      </Modalize>
+
+
+
+      {/* MODAL SURUH LOGIN DULU */}
+      <Modalize
+        modalHeight={490}
+        ref={modalIsLogin}
+      >
+
+        {/* ICON / PNG */}
+        <View className='h-[220] w-[340] rounded-3xl mt-10 self-center'>
+          <Image
+            className='h-full w-full'
+            source={{ uri: "https://media.discordapp.net/attachments/1035762335383552128/1039374828077072465/GOJEK1.png" }} />
+        </View>
+        {/* ICON / PNG */}
+
+
+        <View className='self-center mt-2'>
+          <Text className='text-2xl text-center font-bold tracking-normal w-[300]'>
+            GAK BISA PESEN BRO
+          </Text>
+        </View>
+        <View className='self-center mt-2'>
+          <Text className='text-base text-center font-normal tracking-normal mx-6'>
+            LOGIN DULU BRO
           </Text>
         </View>
         <View className='flex-row space-x-5 items-center justify-center mt-5'>

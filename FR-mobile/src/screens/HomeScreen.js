@@ -55,18 +55,13 @@ const HomeScreen = () => {
       .then(data => setCategories(data))
   }, [])
 
-
-  useEffect(() => {
-    dispatch(getUserData())
-  }, [])
-
   console.log("=========================")
   // {
   //   categories.forEach((el) => {
   //     console.log(el.name)
   //   })
   // }
-  console.log(user.access_token, "<<<<<<<<<<<<<")
+  // console.log(user.access_token, "<<<<<<<<<<<<<")
   console.log("=========================")
 
 
@@ -241,7 +236,6 @@ const HomeScreen = () => {
      
               </ScrollView> */
             }
-
           </View>
           {/* END NEARME */}
 

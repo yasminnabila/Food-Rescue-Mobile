@@ -10,7 +10,8 @@ const initialState = {
   ],
   delivery: "Delivery",
   userData: {},
-  isPaid: false
+  isPaid: false,
+  registerStatus: false
 }
 
 export const userSlice = createSlice({
@@ -73,12 +74,30 @@ export const userSlice = createSlice({
     },
     setIsPaid: (state, action) => {
       state.isPaid = action.payload
+    },
+    setRegisterStatus: (state, action) => {
+      state.registerStatus = action.payload
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, setIsLogin, inc_basket, dec_basket, addBasket, setDelivery, clearBasket, setUser, clearUser, setUserData, setIsPaid } = userSlice.actions
+export const {
+  increment,
+  decrement,
+  incrementByAmount,
+  setIsLogin,
+  inc_basket,
+  dec_basket,
+  addBasket,
+  setDelivery,
+  clearBasket,
+  setUser,
+  clearUser,
+  setUserData,
+  setIsPaid,
+  setRegisterStatus
+} = userSlice.actions
 
 
 
@@ -109,7 +128,6 @@ export const checkOut = ({ total, basket, delivery, access_token }) => async (di
     let res = await response.json()
 
     dispatch(setIsPaid(true))
-
   } catch (error) {
     console.log(error)
   }
@@ -123,7 +141,9 @@ export const login = (data) => async dispatch => {
   try {
     const requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     };
 
@@ -131,14 +151,28 @@ export const login = (data) => async dispatch => {
 
     let res = await response.json()
     console.log(res)
+
+    dispatch(setIsLogin(true))
+    dispatch(setUser(res))
     storeData(res)
+
   } catch (error) {
     console.log(error)
   }
 }
 
-export const getUserData = () => async dispatch => {
+export const register = (data) => async dispatch => {
   try {
+    console.log(data)
+  } catch (error) {
+
+  }
+}
+
+export const getUserData = () => async (dispatch, getState) => {
+  try {
+    console.log(getState())
+    if (!getState().user.isLogin) return
     const { access_token } = await getData()
     // console.log(access_token, "ini di slice ")
     const response = await fetch("https://savvie.herokuapp.com/", {
@@ -157,11 +191,11 @@ export const getUserData = () => async dispatch => {
 
 
 export const topUp = (topUpAmount) => async dispatch => {
-
   try {
     const { access_token } = await getData()
     console.log(access_token, "ini di slice ")
     console.log(topUpAmount, "sampe di sini")
+
     const requestOptions = {
       method: 'POST',
       headers: {
