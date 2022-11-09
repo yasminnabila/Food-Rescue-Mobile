@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { useEffect, useState } from "react"
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native"
+import { ScrollView } from "react-native-gesture-handler"
 import FoodList from "../components/FoodList"
 import LoadingScreen from "./LoadingScreen"
 
@@ -29,17 +30,29 @@ const CategoryScreen = ({ route }) => {
             className='h-full w-full rounded-2xl'
             source={{ uri: category?.imageUrl }} />
         </View>
+        <Text className='text-xl'>
+          {category.name}
+        </Text>
       </View>
 
-      <TouchableOpacity className='h-[200] bg-blue-300'
+      {/* <TouchableOpacity className='h-[200] bg-blue-300'
         onPress={() => navigation.navigate("Test Detail Resto", {
           id: category?.Food?.RestaurantId
         })}
       >
         <Image source={{ uri: category?.Food?.imageUrl }} className='h-[200] w-[200]' />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
-      {/* <FoodList foodFromCategory={}/> */}
+      <ScrollView>
+        {
+          category?.Food?.map((el) => {
+            return (
+              <FoodList foodFromCategory={el} />
+            )
+          })
+        }
+        <View className='h-[100]'></View>
+      </ScrollView>
 
       <View />
     </View>

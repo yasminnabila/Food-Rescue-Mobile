@@ -10,6 +10,7 @@ import * as Animatable from 'react-native-animatable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserData, selectUser, setUser } from '../store/slices/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CarouselCard from '../components/CarouselCard';
 
 const HomeScreen = () => {
   const stickyHeaderShown = useRef(false)
@@ -148,10 +149,11 @@ const HomeScreen = () => {
 
 
           {/* CAROUSEL */}
-          <View className='bg-blue-200 h-[200] mt-[50]'>
-            <Text className='text-2xl m-auto'>
+          <View className='h-[200] mt-[50] p-4'>
+            <CarouselCard />
+            {/* <Text className='text-2xl m-auto'>
               CAROUSEL {showStickyHead ? "muncul" : "tidak"}
-            </Text>
+            </Text> */}
           </View>
           {/* END CAROUSEL */}
 
@@ -161,9 +163,6 @@ const HomeScreen = () => {
             <View className='flex-row justify-between'>
               <Text className='bg-red-300 text-2xl mt-1 ml-5'>
                 CATEGORY
-              </Text>
-              <Text className='bg-red-300 text-lg mt-1 mr-2'>
-                View all
               </Text>
             </View>
 

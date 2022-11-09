@@ -254,8 +254,6 @@ const DetailFood = ({ route }) => {
             </Text>
           </Animatable.View>
         </TouchableOpacity>
-
-
       }
 
       {

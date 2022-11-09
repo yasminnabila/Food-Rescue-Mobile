@@ -38,6 +38,7 @@ import useDebounce from '../useDebounce/hook';
 import { searchCharacters } from '../useDebounce/fetchFunction';
 import LoadingScreen from './LoadingScreen';
 import { useSelector } from 'react-redux';
+import CarouselCard from '../components/CarouselCard';
 
 const SearchScreen = () => {
 
@@ -245,14 +246,11 @@ const SearchScreen = () => {
                   onChangeText={(text) => setSearchTerm(text)}
                 />
               </View>
+
               <View>
-                <TouchableOpacity className='bg-blue-200 h-[200] mt-[10]' onPress={() => {
-                  animation.current?.play();
-                }}>
-                  <Text className='text-2xl m-auto'>
-                    CAROUSEL
-                  </Text>
-                </TouchableOpacity>
+                <View className='h-[200] mt-[10] p-4'>
+                  <CarouselCard />
+                </View>
               </View>
             </>
           }
@@ -262,7 +260,7 @@ const SearchScreen = () => {
           ListEmptyComponent={() => {
             if (isSearching) return <LottieView source={require('../lottie/skeleton.json')} autoPlay loop className='h-[220] w-[100] ' />
             if (debouncedSearchTerm !== "" && results.length === 0) return <Text>TIdak ada data</Text>
-            return null
+            return <Text>TEST</Text>
           }
           }
           keyExtractor={(item) => item.id}

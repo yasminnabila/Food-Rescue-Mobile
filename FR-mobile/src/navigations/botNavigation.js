@@ -61,11 +61,13 @@ const Navigation = () => {
 
         {!isLogin ?
           <>
-            {/* <Stack.Screen name='OnBoardScreem' component={OnBoardScreen} options={{
+            <Stack.Screen name='OnBoardScreem' component={OnBoardScreen} options={{
               headerShown: false
-            }} /> */}
+            }} />
             <Stack.Screen name="LOGIN REGIS" component={Login} options={{
-              headerShown: false
+              headerShown: false,
+              animation: "simple_push",
+              // presentation: "modal"
             }} />
             <Stack.Screen name="MainNavigation" component={TabNavigation} options={{
               headerShown: false,

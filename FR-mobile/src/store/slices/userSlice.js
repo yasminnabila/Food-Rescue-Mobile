@@ -140,7 +140,7 @@ export const login = (data) => async dispatch => {
 export const getUserData = () => async dispatch => {
   try {
     const { access_token } = await getData()
-    console.log(access_token, "ini di slice ")
+    // console.log(access_token, "ini di slice ")
     const response = await fetch("https://savvie.herokuapp.com/", {
       headers: {
         access_token: access_token
