@@ -6,7 +6,7 @@ import { BlurView } from 'expo-blur';
 import { useDispatch } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { setIsLogin } from "../store/slices/userSlice";
+import { setIsLogin, setRole } from "../store/slices/userSlice";
 
 const LoginRegisScreen = () => {
 
@@ -82,10 +82,11 @@ const LoginRegisScreen = () => {
   //   )
   // }
 
-  const submitHandler = (data) => {
+  const submitHandler = (data, role="customer") => {
     console.log(data)
     // setForminput(defaultForm)
     dispatch(setIsLogin(true))
+    dispatch(setRole(role))
     storeData(data)
   }
 
@@ -94,6 +95,9 @@ const LoginRegisScreen = () => {
       const jsonValue = JSON.stringify(value)
       console.log(jsonValue)
       await AsyncStorage.setItem('@storage_Key', jsonValue)
+      await AsyncStorage.setItem('username', "test1")
+      await AsyncStorage.setItem('role', "customer")
+
     } catch (e) {
       // saving error
       console.log(e)
@@ -223,6 +227,8 @@ const LoginRegisScreen = () => {
             <TouchableOpacity onPress={() => submitHandler(formInput)} className='text-white font-bold text-xl tracking-wider'>
               <Text>{isRegister ? "REGISTER" : "LOGIN"}</Text></TouchableOpacity>
           </View>
+              <TouchableOpacity onPress={() => submitHandler(formInput,"kurir")} className='text-white font-bold text-xl tracking-wider'>
+              <Text>Kurir</Text></TouchableOpacity>
         </Animated.View>
 
 
