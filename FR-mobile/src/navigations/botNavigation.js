@@ -13,6 +13,7 @@ import BasketScreen from '../screens/BasketScreen';
 import Login from '../screens/Login';
 import CategoryScreen from '../screens/CategoryScreen';
 import OnBoardScreen from '../screens/OnBoardScreen';
+import StoreDashboard from '../screens/StoreDashboard';
 
 // const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -81,7 +82,9 @@ const Navigation = () => {
           <Stack.Screen name="MainNavigation" component={TabNavigation} />
 
         }
-
+        <Stack.Screen name="storeDashboard" component={StoreDashboard} options={{
+          headerShown: false,
+        }}/>
         <Stack.Screen name="Test Detail Resto" component={DetailResto} options={{
           headerShown: false,
         }} />
