@@ -54,9 +54,17 @@ const TabNavigation = () => {
         }}
       />
       {role === "customer" ? (
-        <Tab.Screen name="Track" component={TrackScreen} />
+        <Tab.Screen
+          name="Track"
+          component={TrackScreen}
+          options={{ headerShown: false }}
+        />
       ) : (
-        <Tab.Screen name="TrackKurir" component={TrackKurirScreen} />
+        <Tab.Screen
+          name="TrackKurir"
+          component={TrackKurirScreen}
+          options={{ headerShown: false }}
+        />
       )}
       <Tab.Screen
         name="Search"

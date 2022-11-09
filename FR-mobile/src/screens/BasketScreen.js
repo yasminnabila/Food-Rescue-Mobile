@@ -45,6 +45,7 @@ const BasketScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const basket = useSelector((state) => state.user.basket);
+  console.log(basket, "basket bang");
   const delivery = useSelector(selectDelivery);
   const { ref, open, close } = useModalize();
   console.log(information, "??????");
