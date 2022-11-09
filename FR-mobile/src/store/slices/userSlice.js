@@ -89,7 +89,7 @@ export const checkOut = ({ total, basket, delivery, access_token }) => async (di
   console.log(totalPrice)
 
   const order = basket.map((el) => {
-    return { qty: el.qty, FoodId: el.id, itemPrice: el.price * el.qty * el.discount / 100 }
+    return { qty: el.qty, FoodId: el.id, itemPrice: el.newPrice * el.qty }
   })
   console.log(order)
 
@@ -155,17 +155,45 @@ export const getUserData = () => async dispatch => {
   }
 }
 
-export const getUserHistory = () => async dispatch => {
-  try {
-    const response = await fetch("https://savvie.herokuapp.com/history", {
-      headers: {
-        access_token: access_token
-      }
-    })
-  } catch (error) {
 
+export const topUp = (topUpAmount) => async dispatch => {
+
+  try {
+    const { access_token } = await getData()
+    console.log(access_token, "ini di slice ")
+    console.log(topUpAmount, "sampe di sini")
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        access_token: access_token
+
+      },
+      body: JSON.stringify({ balance: topUpAmount })
+    };
+
+    let response = await fetch(`https://savvie.herokuapp.com/xendit/topUp`, requestOptions)
+
+    let res = await response.json()
+    console.log(res)
+
+  } catch (error) {
+    console.log()
   }
 }
+
+
+// export const getUserHistory = () => async dispatch => {
+//   try {
+//     const response = await fetch("https://savvie.herokuapp.com/history", {
+//       headers: {
+//         access_token: access_token
+//       }
+//     })
+//   } catch (error) {
+
+//   }
+// }
 
 export const selectIsLogin = (state) => state.user.isLogin
 export const selectDelivery = (state) => state.user.delivery

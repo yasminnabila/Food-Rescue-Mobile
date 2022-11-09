@@ -23,16 +23,21 @@ const BasketScreen = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const basket = useSelector(state => state.user.basket)
+
   const delivery = useSelector(selectDelivery)
+
   const { ref, open, close } = useModalize();
 
   const isPaid = useSelector(selectIsPaid)
 
   let total = 0
 
+  const paymentModal = useRef(null)
+
   if (basket.length > 0) {
     basket?.forEach((el) => { total += el.price * el.qty })
   }
+
 
   // console.log("=========================")
   // {
@@ -61,6 +66,14 @@ const BasketScreen = () => {
   function checkOutHanlder(total) {
     dispatch(checkOut({ total, basket, delivery }))
   }
+
+
+  const modalizeRef = useRef(null);
+
+  const onOpen = () => {
+    console.log("MASUK")
+    modalizeRef.current?.open();
+  };
 
   if (isPaid) return <Success />
 
@@ -174,6 +187,14 @@ const BasketScreen = () => {
         </View>
 
         <TouchableOpacity
+          onPress={onOpen}
+          className='h-[30] w-10 bg-red-200 self-center'>
+          <Text>
+            tet
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           onPress={() => checkOutHanlder(total)}
           className='bg-red-200 h-[50] mx-4 rounded-3xl justify-center items-center my-3'>
           <Text className='text-lg font-semibold'>
@@ -236,6 +257,20 @@ const BasketScreen = () => {
       {/* END MODAL PICK DELIVERY OPTION */}
 
 
+
+      {/* TEST MODAL TOP UP */}
+      <Modalize
+        childrenStyle={{ flex: 1 }}
+        modalHeight={300}
+        ref={modalizeRef}
+      >
+        <Text className='mt-7 text-2xl font-bold ml-3'>
+          TOP UP
+        </Text>
+
+
+
+      </Modalize>
 
     </GestureHandlerRootView>
   )

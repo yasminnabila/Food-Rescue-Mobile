@@ -1,18 +1,21 @@
 import { Text, TouchableOpacity, View } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux'
-import { clearUser, selectUserData, setIsLogin } from "../store/slices/userSlice";
+import { clearUser, getUserData, selectUserData, setIsLogin, topUp } from "../store/slices/userSlice";
 import { Modalize, useModalize } from "react-native-modalize";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { currencyFormat } from 'simple-currency-format';
 
 
 import { useEffect, useRef, useState } from "react";
+
 const ProfileScreen = () => {
 
 
   const userData = useSelector(selectUserData)
   const dispatch = useDispatch()
+
+  // console.log(userData.email)
 
   const clearAll = async () => {
     try {
@@ -21,19 +24,19 @@ const ProfileScreen = () => {
       // clear error
       console.log(e)
     }
-
     console.log('Done.')
   }
 
-  console.log(userData)
+  // console.log(userData)
 
   const { ref, open, close } = useModalize();
 
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
 
 
   function topUpHandler() {
-    console.log(price.split('.').join())
+    // console.log(typeof (+price.split('.').join("")))
+    dispatch(topUp(+price.split('.').join("")))
     close()
     setPrice('')
   }
@@ -45,8 +48,9 @@ const ProfileScreen = () => {
   }
 
   useEffect(() => {
+    dispatch(getUserData())
+  }, [userData])
 
-  }, [])
 
   return (
     <View className='flex-1'>
@@ -64,13 +68,13 @@ const ProfileScreen = () => {
         {/* NAME */}
         <View className='bg-blue-300 items-center mt-5'>
           <Text className='text-2xl font-semibold'>
-            Annashka Gioia
+            {userData.fullName}
           </Text>
           <Text className='mt-1'>
-            annashkagioia24@gmail.com
+            {userData.email}
           </Text>
           <Text className='mt-1'>
-            081237192312
+            {userData.phoneNumber}
           </Text>
         </View>
         {/* NAME */}
@@ -79,7 +83,7 @@ const ProfileScreen = () => {
 
           <View className='h-[90] w-[170] rounded-3xl items-center justify-center border border-green-700'>
             <Text className='font-semibold'>
-              Kamu menelamatkan
+              Kamu menyelamatkan
             </Text>
             <Text className='mt-1'>
               0 Makanan
