@@ -13,36 +13,41 @@ import BasketScreen from '../screens/BasketScreen';
 import Login from '../screens/Login';
 import CategoryScreen from '../screens/CategoryScreen';
 import OnBoardScreen from '../screens/OnBoardScreen';
+import XenditScreen from '../screens/XenditScreen';
 import StoreDashboard from '../screens/StoreDashboard';
 
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const isLogin = useSelector(selectIsLogin)
+  console.log(isLogin, "login");
 
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('user')
-      // console.log(value)
-      if (value !== null) {
-        // value previously stored
-        const user = JSON.parse(value)
-        console.log({ user }, "yg lg login")
-        dispatch(setIsLogin(true))
-        dispatch(setUser(user))
 
-      }
-    } catch (e) {
-      console.log(e)
-      // error reading value
-    }
-  }
+  // const getData = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('user')
+  //     console.log(value, "makan")
+  //     if (value !== null) {
+  //       // value previously stored
+  //       const user = JSON.parse(value)
+  //       console.log({ user }, "yg lg login")
+  //       dispatch(setIsLogin(true))
+  //       dispatch(setUser(user))
 
-  useEffect(() => {
-    getData()
-  }, [])
+  //     }
+  //   } catch (e) {
+  //     console.log(e)
+  //     // error reading value
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   console.log('masuk jugaaaa');
+
+  //   getData()
+  // }, [])
 
   return (
     <NavigationContainer>
@@ -83,6 +88,10 @@ const Navigation = () => {
         }} />
         <Stack.Screen name="Category" component={CategoryScreen} options={{
           headerShown: false
+        }} />
+        <Stack.Screen name='Xendit' component={XenditScreen} options={{
+          headerShown: false,
+          presentation: "modal"
         }} />
 
       </Stack.Navigator>

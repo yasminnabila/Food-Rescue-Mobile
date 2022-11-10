@@ -1,20 +1,20 @@
-import { View, Text } from "react-native";
 import MapViewDirections from "react-native-maps-directions";
 import MapView, { Marker } from "react-native-maps";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import socket from "../config/socket";
 import {
   selectDestination,
   selectOrigin,
-  setDestination,
-  setTravelTimeInformation,
+  selectUserLocation,
 } from "../store/slices/userSlice";
 import { GOOGLE_MAPS_APIKEY } from "@env";
 import * as Location from "expo-location";
 
 const TrackKurirScreen = () => {
+  const userLocation = useSelector(selectUserLocation);
   const origin = useSelector(selectOrigin);
+  console.log(userLocation, "VVVVVVVVV", origin);
   const destination = useSelector(selectDestination);
   const dispatch = useDispatch();
   const mapRef = useRef(null);
@@ -38,8 +38,8 @@ const TrackKurirScreen = () => {
         }
       );
     };
-    if (destination) {
-      console.log(destination);
+    if (origin) {
+      console.log(origin);
       let interval = setInterval(() => {
         _getLocationAsync();
       }, 5000);
@@ -47,11 +47,11 @@ const TrackKurirScreen = () => {
     }
   }, []);
   useEffect(() => {
-    if (!origin || !destination) return;
-    mapRef.current.fitToSuppliedMarkers(["origin", "destination"], {
+    if (!userLocation || !origin) return;
+    mapRef.current.fitToSuppliedMarkers(["userLocation", "destination"], {
       edgePadding: { top: 50, right: 50, left: 50, bottom: 50 },
     });
-  }, [origin, destination]);
+  }, [userLocation, origin]);
   // useEffect(() => {
   //   if (!origin || !destination) return;
   //   const getTravelTime = async () => {
@@ -106,7 +106,7 @@ const TrackKurirScreen = () => {
           <Text className="text-black">arrived in 20 menit</Text>
         </View>
       </View> */}
-      {origin && destination && (
+      {userLocation && origin && (
         <>
           {/* <View className="bg-white mt-[16%] flex flex-row mx-7 p-3 items-center border-2 border-green-600 rounded-sm">
             <View className="border-r h-[40] justify-center mr-1 pr-2">
@@ -121,12 +121,12 @@ const TrackKurirScreen = () => {
           </View> */}
           <MapViewDirections
             origin={{
-              latitude: origin.location.lat,
-              longitude: origin.location.lng,
+              latitude: origin?.location.lat,
+              longitude: origin?.location.lng,
             }}
             destination={{
-              latitude: destination?.location.lat,
-              longitude: destination?.location.lng,
+              latitude: "-6.2608206",
+              longitude: "106.7770521",
             }}
             apikey={GOOGLE_MAPS_APIKEY}
             strokeWidth={5}
@@ -145,19 +145,19 @@ const TrackKurirScreen = () => {
           title="Origin"
           description={origin.description}
           identifier="origin"
-          image={require("../../assets/images/greenMarker.png")}
+          image={require("../../assets/images/bike.png")}
         />
       )}
-      {destination && (
+      {userLocation && (
         <Marker
           coordinate={{
-            latitude: destination?.location.lat,
-            longitude: destination?.location.lng,
+            latitude: "-6.2608206",
+            longitude: "106.7770521",
           }}
           title="Destination"
-          description={destination.description}
+          description={userLocation.description}
           identifier="destination"
-          image={require("../../assets/images/bike2.png")}
+          image={require("../../assets/images/greenMarker.png")}
         />
       )}
     </MapView>

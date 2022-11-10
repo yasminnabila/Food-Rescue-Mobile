@@ -4,12 +4,16 @@ import tw from "twrnc";
 import AddressMap from "../components/AddressMap";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import { selectOrigin } from "../store/slices/userSlice";
+import {
+  selectOrigin,
+  selectTravelTimeInformation,
+} from "../store/slices/userSlice";
 import Geocoder from "react-native-geocoding";
 import { useState, useEffect } from "react";
 
 const AddressScreen = () => {
   const origin = useSelector(selectOrigin);
+  const travelTimeInformation = useSelector(selectTravelTimeInformation);
   const [address, setAddress] = useState({
     name: "",
     street: "",
@@ -36,7 +40,7 @@ const AddressScreen = () => {
     <View>
       <View style={tw`h-full`}>
         <AddressMap />
-        <View className="mr-2" >
+        <View className="mr-2">
           <View style={tw`flex flex-row h-[20] justify-between m-4`}>
             <View>
               <Text style={tw`text-xl mb-3 font-medium`}>
@@ -52,11 +56,17 @@ const AddressScreen = () => {
               <AntDesign name="close" size={24} color="gray" />
             </TouchableOpacity>
           </View>
-          <View style={tw`mb-4 mt-2 bg-black p-4 rounded-3xl mx-5`}>
-            <Text style={tw`text-white font-bold text-center`}>
-              Confirmation
-            </Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Test1");
+            }}
+          >
+            <View style={tw`mb-4 mt-2 bg-black p-4 rounded-3xl mx-5`}>
+              <Text style={tw`text-white font-bold text-center`}>
+                Confirmation
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

@@ -7,7 +7,7 @@ import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { useNavigation } from '@react-navigation/native';
 import { getData, storeData } from '../asyncStorage';
 import { useDispatch } from 'react-redux';
-import { login, register } from '../store/slices/userSlice';
+import { login, register, setIsLogin, setUser } from '../store/slices/userSlice';
 
 import { useForm, Controller } from "react-hook-form";
 
@@ -17,14 +17,8 @@ const LoginRegis = () => {
   const navigation = useNavigation()
 
   const dispatch = useDispatch()
-  const modalizeRef = useRef(null);
+
   const { ref, open, close } = useModalize();
-
-  const [test, setTest] = useState([])
-
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
 
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -49,11 +43,22 @@ const LoginRegis = () => {
       phoneNumber: "",
       address: "",
     })
+    close()
   }
 
   function loginHandler() {
     // console.log(loginForm)
-    dispatch(login({ email: "rescuefood@gmail.com", password: "1234" }))
+    dispatch(login(loginForm)).then((res) => res.json())
+      .then((data) => {
+        storeData(data)
+        return data
+
+      }).then((data) => {
+        console.log(data, "dataaaaa");
+        dispatch(setIsLogin(true))
+        dispatch(setUser(data))
+        navigation.navigate("Test1")
+      })
     setLoginForm({
       email: "",
       password: ""

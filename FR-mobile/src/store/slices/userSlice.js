@@ -11,11 +11,13 @@ const initialState = {
   delivery: "Delivery",
   userData: {},
   isPaid: false,
+  xenditPay: null,
   registerStatus: false,
   origin: null,
   destination: null,
   travelTimeInformation: null,
   userLocation: null,
+  userCurrentLocation: null
 }
 
 export const userSlice = createSlice({
@@ -82,6 +84,9 @@ export const userSlice = createSlice({
     setRegisterStatus: (state, action) => {
       state.registerStatus = action.payload
     },
+    setXenditPay: (state, action) => {
+      state.xenditPay = action.payload
+    },
     setOrigin: (state, action) => {
       state.origin = action.payload;
     },
@@ -93,10 +98,15 @@ export const userSlice = createSlice({
     },
     setRole: (state, action) => {
       state.role = action.payload;
+      console.log(action.payload, "action payload");
+
     },
     setUserLocation: (state, action) => {
       state.userLocation = action.payload;
     },
+    setUserCurrentLocation: (state, action) => {
+      state.userLocation = action.payload
+    }
   },
 })
 
@@ -116,11 +126,13 @@ export const {
   setUserData,
   setIsPaid,
   setRegisterStatus,
+  setXenditPay,
   setOrigin,
   setDestination,
   setTravelTimeInformation,
   setRole,
   setUserLocation,
+  setUserCurrentLocation
 } = userSlice.actions
 
 
@@ -161,8 +173,34 @@ export const checkOut = ({ total, basket, delivery, access_token }) => async (di
   // }, 1000)
 }
 
-export const login = (data) => async dispatch => {
+export const login = (data) => dispatch => {
+  // try {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  };
+
+  return fetch(`https://savvie.herokuapp.com/signIn`, requestOptions)
+
+  //   let res = await response.json()
+  //   console.log(res)
+
+  //   await storeData(res)
+  //   dispatch(setIsLogin(true))
+  //   dispatch(setUser(res))
+  //   return 
+
+  // // } catch (error) {
+  //   console.log(error)
+  // }
+}
+
+export const register = (data) => async dispatch => {
   try {
+    console.log(data)
     const requestOptions = {
       method: 'POST',
       headers: {
@@ -171,25 +209,13 @@ export const login = (data) => async dispatch => {
       body: JSON.stringify(data)
     };
 
-    let response = await fetch(`https://savvie.herokuapp.com/signIn`, requestOptions)
-
+    let response = await fetch(`https://savvie.herokuapp.com/signUp`, requestOptions)
     let res = await response.json()
-    console.log(res)
 
-    dispatch(setIsLogin(true))
-    dispatch(setUser(res))
-    storeData(res)
+    dispatch(login({ email: data.email, password: data.password }))
 
   } catch (error) {
     console.log(error)
-  }
-}
-
-export const register = (data) => async dispatch => {
-  try {
-    console.log(data)
-  } catch (error) {
-
   }
 }
 
@@ -233,7 +259,9 @@ export const topUp = (topUpAmount) => async dispatch => {
     let response = await fetch(`https://savvie.herokuapp.com/xendit/topUp`, requestOptions)
 
     let res = await response.json()
-    console.log(res)
+
+    console.log(res.data)
+    dispatch(setXenditPay(res.data))
 
   } catch (error) {
     console.log()
@@ -258,6 +286,7 @@ export const selectDelivery = (state) => state.user.delivery
 export const selectUser = (state) => state.user.user
 export const selectUserData = (state) => state.user.userData
 export const selectIsPaid = (state) => state.user.isPaid
+export const selectXenditPay = (state) => state.user.xenditPay
 export const selectRole = (state) => state.user.role;
 export const selectOrigin = (state) => state.user.origin;
 export const selectDestination = (state) => state.user.destination;
@@ -265,5 +294,5 @@ export const selectUserLocation = (state) => state.user.userLocation;
 export const selectTravelTimeInformation = (state) =>
   state.user.travelTimeInformation;
 
-
+export const selectUserCurrentLocation = (state) => state.user.userCurrentLocation
 export default userSlice.reducer

@@ -10,10 +10,7 @@ import { useState } from 'react';
 const FoodList = ({ foodFromRestoDetail, foodFromCategory }) => {
   const navigation = useNavigation()
 
-
-
-  console.log(foodFromRestoDetail, foodFromCategory, " <<<<<<<<<<<< di FoodList comp")
-
+  // console.log(foodFromRestoDetail, foodFromCategory, " <<<<<<<<<<<< di FoodList comp")
   if (foodFromRestoDetail) {
     return (
       <>
@@ -29,7 +26,6 @@ const FoodList = ({ foodFromRestoDetail, foodFromCategory }) => {
                   source={{ uri: foodFromRestoDetail?.imageUrl }}
                   className='h-full w-full rounded-lg'
                 />
-
               </View>
               <View className='bg-green-300 flex-1'>
                 <Text className='text-lg font-semibold'>

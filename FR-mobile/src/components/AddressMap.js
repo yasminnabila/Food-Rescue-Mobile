@@ -49,13 +49,9 @@ const AddressMap = () => {
                   lat: e.nativeEvent.coordinate.latitude,
                   lng: e.nativeEvent.coordinate.longitude,
                 },
-                description: "makan",
+                description: "Address",
               })
             );
-            // setPin({
-            //   latitude: e.nativeEvent.coordinate.latitude,
-            //   longitude: e.nativeEvent.coordinate.longitude,
-            // });
           }}
           image={require("../../assets/images/greenMarker.png")}
         />

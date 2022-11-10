@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
-import { selectUser } from "../store/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setUserLocation } from "../store/slices/userSlice";
 import { AntDesign } from "@expo/vector-icons";
 
 const StoreDashboard = () => {
@@ -18,6 +18,7 @@ const StoreDashboard = () => {
   const { access_token } = useSelector(selectUser);
   const [orders, setOrders] = useState([]);
   const [resto, setResto] = useState(null);
+  const dispatch = useDispatch();
   useEffect(() => {
     fetch("https://savvie.herokuapp.com/resto/order/food", {
       headers: {
@@ -33,6 +34,7 @@ const StoreDashboard = () => {
   }, []);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
+  console.log(orders, "??????????>>>><<<<<");
   return (
     <View className="flex-1">
       <View className="bg-[#77aa97] rounded-b-3xl">
@@ -78,6 +80,48 @@ const StoreDashboard = () => {
                   <Text className="text-emerald-600">{item.status}</Text>
                 </View>
               </TouchableOpacity>
+              <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert("Modal has been closed.");
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <View className="flex-1 items-center justify-center">
+                  <View className="bg-white rounded-md shadow-lg">
+                    <View className="ml-[72%]">
+                      <TouchableOpacity
+                        onPress={() => {
+                          setModalVisible(!modalVisible);
+                        }}
+                      >
+                        <AntDesign name="close" size={24} color="gray" />
+                      </TouchableOpacity>
+                    </View>
+                    <Image
+                      className="h-80 w-80"
+                      source={require("../../assets/images/driver.png")}
+                    />
+                    <Pressable
+                      onPress={() => {
+                        setModalVisible(!modalVisible);
+                        dispatch(
+                          setUserLocation({
+                            location: { lat: item.User.location.coordinates[0], lng: item.User.location.coordinates[0] },
+                            description: item.User.address,
+                          })
+                        );
+                        navigation.navigate("TrackKurir");
+                      }}
+                      className="justify-center items-center bg-emerald-600 mx-20 py-3 mb-3 rounded-md"
+                    >
+                      <Text className="font-bold text-white">Deliver It!</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </Modal>
             </View>
           );
         }}
@@ -85,42 +129,6 @@ const StoreDashboard = () => {
         showsVerticalScrollIndicator="false"
         className="mt-3"
       />
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View className="flex-1 items-center justify-center">
-          <View className="bg-white rounded-md shadow-lg">
-            <View className="ml-[72%]">
-              <TouchableOpacity
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
-              >
-                <AntDesign name="close" size={24} color="gray" />
-              </TouchableOpacity>
-            </View>
-            <Image
-              className="h-80 w-80"
-              source={require("../../assets/images/driver.png")}
-            />
-            <Pressable
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                navigation.navigate("TrackKurir");
-              }}
-              className="justify-center items-center bg-emerald-600 mx-20 py-3 mb-3 rounded-md"
-            >
-              <Text className="font-bold text-white">Deliver It!</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };

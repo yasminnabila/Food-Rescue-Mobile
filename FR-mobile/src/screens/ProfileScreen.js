@@ -1,18 +1,19 @@
 import { Text, TouchableOpacity, View } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux'
-import { clearUser, getUserData, selectIsLogin, selectUserData, setIsLogin, topUp } from "../store/slices/userSlice";
+import { clearUser, getUserData, selectIsLogin, selectUserData, selectXenditPay, setIsLogin, setXenditPay, topUp } from "../store/slices/userSlice";
 import { Modalize, useModalize } from "react-native-modalize";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { currencyFormat } from 'simple-currency-format';
 
-
+import { WebView } from 'react-native-webview';
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import LoadingScreen from "./LoadingScreen";
 
 const ProfileScreen = ({ navigation }) => {
 
-
+  const xenditPay = useSelector(selectXenditPay)
 
   const userData = useSelector(selectUserData)
   const isLogin = useSelector(selectIsLogin)
@@ -60,9 +61,22 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate("Home")
   }
 
+  useEffect(() => {
+    if (xenditPay) {
+      navigation.navigate("Xendit")
+      // setTimeout(() => {
+      // }, 10000)
+    } else if (!xenditPay) {
+
+    }
+  }, [xenditPay])
+  console.log(xenditPay, "<<<<<<<")
+
   return (
     <View className='flex-1'>
-
+      {/* <WebView
+        source={{ uri: 'https://expo.dev' }}
+      /> */}
       <View className='h-[470] bg-red-200'>
 
         {/* IMAGE */}

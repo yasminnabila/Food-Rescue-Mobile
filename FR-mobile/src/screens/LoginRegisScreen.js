@@ -1,6 +1,6 @@
 import { Text, View, Dimensions, TextInput, Pressable, ScrollView, TouchableOpacity } from "react-native"
 import Svg, { Image, Ellipse, ClipPath } from "react-native-svg"
-import Animated, { useSharedValue, useAnimatedStyle, interpolate, withTiming, withDelay } from "react-native-reanimated"
+import Animated, { useSharedValue, useAnimatedStyle, interpolate, withTiming, withDelay, log } from "react-native-reanimated"
 import { useEffect, useState } from "react"
 import { BlurView } from 'expo-blur';
 import { useDispatch } from 'react-redux'

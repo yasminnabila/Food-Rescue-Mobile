@@ -54,26 +54,17 @@ const TrackScreen = () => {
       }}
       showsUserLocation={true}
     >
-      {/* <View className="bg-white mt-[120%] flex flex-row mx-1 p-5 items-center border-2 border-green-600 rounded-sm ">
-        <View className="border-r h-[40] justify-center mr-1 pr-2">
-          <MaterialIcons name="delivery-dining" size={24} color="black" />
-        </View>
-        <View className="ml-2">
-          <Text className="text-xl font-medium text-black">
-            Delivering to your door
-          </Text>
-          <Text className="text-black">arrived in 20 menit</Text>
-        </View>
-      </View> */}
-      <View className="bg-white mt-[16%] flex flex-row mx-20 p-2 items-center shadow-lg rounded-3xl">
-        <View className="border-r h-[30] justify-center mr-1 pr-2">
-          <MaterialIcons name="delivery-dining" size={24} color="black" />
-        </View>
-        <View className="ml-2">
-          <Text className="font-medium text-black">
-            Delivering to your door
-          </Text>
-          <Text className="text-gray-700 text-xs">arrived in 20 mins</Text>
+      <View className="absolute inset-x-0 top-0">
+        <View className="bg-white mt-[16%] flex flex-row mx-20 p-2 items-center shadow-lg rounded-3xl">
+          <View className="border-r h-[30] justify-center mr-1 pr-2">
+            <MaterialIcons name="delivery-dining" size={24} color="black" />
+          </View>
+          <View className="ml-2">
+            <Text className="font-medium text-black">
+              Delivering to your door
+            </Text>
+            <Text className="text-gray-700 text-xs">arrived in 20 mins</Text>
+          </View>
         </View>
       </View>
       {origin && destination && (
@@ -119,6 +110,17 @@ const TrackScreen = () => {
           image={require("../../assets/images/bike2.png")}
         />
       )}
+      <View className="bg-white mt-[120%] flex flex-row mx-1 p-5 items-center border-2 border-green-600 rounded-sm ">
+        <View className="border-r h-[40] justify-center mr-1 pr-2">
+          <MaterialIcons name="delivery-dining" size={24} color="black" />
+        </View>
+        <View className="ml-2">
+          <Text className="text-xl font-medium text-black">
+            Delivering to your door
+          </Text>
+          <Text className="text-black">arrived in 20 menit</Text>
+        </View>
+      </View>
     </MapView>
   );
 };

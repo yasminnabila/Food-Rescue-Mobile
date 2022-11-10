@@ -39,9 +39,10 @@ import { searchCharacters } from '../useDebounce/fetchFunction';
 import LoadingScreen from './LoadingScreen';
 import { useSelector } from 'react-redux';
 import CarouselCard from '../components/CarouselCard';
+import { selectOrigin } from '../store/slices/userSlice';
 
 const SearchScreen = () => {
-
+  const origin = useSelector(selectOrigin);
   const navigation = useNavigation()
   const animation = useRef(null);
 
@@ -91,24 +92,6 @@ const SearchScreen = () => {
     },
     [debouncedSearchTerm] // Only call effect if debounced search term changes
   );
-
-  const foodList = [
-    {
-      "id": 1
-    },
-    {
-      "id": 2
-    },
-    {
-      "id": 3
-    },
-    {
-      "id": 4
-    },
-    {
-      "id": 5
-    }
-  ]
 
 
   return (
@@ -216,51 +199,59 @@ const SearchScreen = () => {
           data={results}
           ListHeaderComponent={
             <>
-              <View className='bg-red-200 h-[120] justify-between mt-[50]'>
-                <View className='bg-yellow-300 h-[50] flex-row justify-around gap-x-[80] items-center'>
-
-                  <View className='bg-red-300'>
-                    <View className='flex-row items-center'>
-                      <Text className='mr-2'>
-                        Your Location
-                      </Text>
+              <View className="bg-[#77aa9c] h-[200] justify-between">
+                <View className=" h-[50] flex-row justify-between items-center mt-[80]">
+                  <View className="ml-4">
+                    <View className="flex-row items-center">
+                      <Text className="mr-2">Your Location</Text>
                       <AntDesign name="down" size={15} color="red" />
                     </View>
-                    <Text className='text-lg'>
-                      Jl. Alam Permai IX No.68
+                    <Text className="text-lg">
+                      {origin?.description.slice(0, 35) + "..."}
                     </Text>
                   </View>
 
-                  <View className='flex-row space-x-5'>
+                  <View className=" mr-4 flex-row space-x-5">
                     <TouchableOpacity>
                       <AntDesign name="heart" size={24} color="red" />
                     </TouchableOpacity>
                   </View>
-
-
                 </View>
 
                 <TextInput
-                  className='bg-gray-200 border border-gray-400 h-[50] text-gray-500 rounded-2xl text-left mx-4 mb-2 pl-5'
-                  placeholder='What would you like to eat?'
+                  className="bg-gray-200 border border-gray-400 h-[50] text-gray-500 rounded-2xl text-left mx-4 mb-2 pl-5"
+                  placeholder="What food do you want to save today?"
                   onChangeText={(text) => setSearchTerm(text)}
                 />
               </View>
-
-              <View>
-                <View className='h-[200] mt-[10] p-4'>
-                  <CarouselCard />
-                </View>
-              </View>
-            </>
-          }
+            </>}
           renderItem={({ item }) => {
             return <RestoNFoodCard resto={item} />
           }}
           ListEmptyComponent={() => {
             if (isSearching) return <LottieView source={require('../lottie/skeleton.json')} autoPlay loop className='h-[220] w-[100] ' />
-            if (debouncedSearchTerm !== "" && results.length === 0) return <Text>TIdak ada data</Text>
-            return <Text>TEST</Text>
+            if (debouncedSearchTerm !== "" && results.length === 0) return <View className='h-[300] w-[420] mt-[100] right-5'>
+              <Image
+                source={{
+                  uri: "https://media.discordapp.net/attachments/1035762335383552128/1039850200090554378/404.png?width=1138&height=1138"
+                }}
+                className="h-full w-full"
+              />
+              <View className='self-center'>
+                <Text className="text-lg font-semibold">No result found, let's try another word!</Text>
+              </View>
+            </View>
+            return <View className='h-[300] w-[420] mt-[110]'>
+              <Image
+                source={{
+                  uri: "https://media.discordapp.net/attachments/1035762335383552128/1039850179836260383/search.png"
+                }}
+                className="h-full w-full"
+              />
+              <View className='w-[360] self-center mr-[34]'>
+                <Text className="text-lg font-semibold text-center">What food do you want to save today?</Text>
+              </View>
+            </View>
           }
           }
           keyExtractor={(item) => item.id}

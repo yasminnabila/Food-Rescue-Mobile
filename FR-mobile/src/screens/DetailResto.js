@@ -168,9 +168,32 @@ const DetailResto = ({ route }) => {
         {/* END HEADERS */}
 
         {showStickyHead &&
-          <Animatable.View animation={secondAnimation} duration={900} className='h-[130] bg-gray-500 mb-[170] rounded-b-3xl'>
+          <Animatable.View
+            animation={secondAnimation}
+            duration={1000}
+            className='h-[130] bg-gray-500 mb-[170] rounded-b-xl justify-center'>
 
-            <Text>Bounce me!</Text>
+            <View className='flex-row mt-10'>
+              <View className='bg-white h-[70] w-[70] ml-3 p-2 rounded-md border border-gray-100'>
+                <View className='bg-red-300 rounded-full h-full w-full border border-gray-300'>
+                  <Image
+                    source={{
+                      uri: resto.logoUrl
+                    }}
+                    className='h-full w-fulls rounded-full'
+                  />
+                </View>
+
+              </View>
+              <View className='flex-1'>
+                <Text className='text-2xl font-semibold ml-2'>
+                  {resto.name}
+                </Text>
+                <Text className='text-[10px] mx-2'>
+                  {resto.address}
+                </Text>
+              </View>
+            </View>
 
           </Animatable.View>
         }
