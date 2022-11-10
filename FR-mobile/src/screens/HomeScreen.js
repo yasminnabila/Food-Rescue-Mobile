@@ -13,8 +13,10 @@ import {
   getUserData,
   selectOrigin,
   selectUser,
+  selectUserCurrentLocation,
   selectUserData,
   selectUserLocation,
+  setRole,
   setUser,
 } from "../store/slices/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,8 +24,8 @@ import { StatusBar } from "expo-status-bar";
 import FoodCard from "../components/FoodCard";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { useEffect, useRef, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import Geocoder from "react-native-geocoding";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,9 +43,12 @@ const HomeScreen = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [latlong, setLatlong] = useState("waiting....");
   const stickyHeaderShown = useRef(false);
+  const userCurrentLocation = useSelector(selectUserCurrentLocation)
   const mainHeaderRef = useRef();
   const stickyHeaderRef = useRef();
   const dispatch = useDispatch();
+
+
   useEffect(() => {
     console.log(origin, ",.,.,.,.");
     (async () => {
@@ -58,13 +63,13 @@ const HomeScreen = () => {
         language: "id",
       });
       Geocoder.from(latitude, longitude)
-      .then((json) => {
-        let address = json.results[0];
-        dispatch(
-          setOrigin({
-            location: { lat: latitude, lng: longitude },
-            description: address.formatted_address,
-          })
+        .then((json) => {
+          let address = json.results[0];
+          dispatch(
+            setOrigin({
+              location: { lat: latitude, lng: longitude },
+              description: address.formatted_address,
+            })
           );
         })
         .catch((error) => console.warn(error));
@@ -83,14 +88,16 @@ const HomeScreen = () => {
 
   const [categories, setCategories] = useState();
 
+  const [restoNearMe, setRestoNearMe] = useState()
+
   console.log("=========================");
   // {
   //   categories.forEach((el) => {
   //     console.log(el.name)
   //   })
   // }
-  // console.log(user.access_token, "<<<<<<<<<<<<<")
-  console.log("=========================");
+  console.log(user?.location, "<<<<<<<<<<<<<")
+  console.log(origin, '==============');
   console.log("=========================");
 
   const foodList = [
@@ -111,6 +118,25 @@ const HomeScreen = () => {
     },
   ];
 
+  const getData = async () => {
+    // await AsyncStorage.setItem("role", "customer");
+    try {
+      const value = await AsyncStorage.getItem("user");
+      console.log(value, "MMMMMMMMMMMMMM di home");
+      const newValue = JSON.parse(value)
+      if (newValue.role !== null) {
+        console.log("masuk if home")
+        // value previously stored
+        console.log(newValue, "new vLUE");
+
+        dispatch(setRole(newValue.role));
+      }
+    } catch (e) {
+      console.log(e);
+      // error reading value
+    }
+  };
+
   useEffect(() => {
     fetch("https://savvie.herokuapp.com/categories")
       .then((res) => res.json())
@@ -121,14 +147,25 @@ const HomeScreen = () => {
     dispatch(getUserData());
   }, []);
 
+  useEffect(() => {
+    fetch(`https://savvie.herokuapp.com/restaurants/search?distance=4000&lat=${origin?.location?.lat}&long=${origin?.location?.lng}`)
+      .then((res) => { if (!res.ok) setRestoNearMe(null); else return res.json() })
+      .then(data => setRestoNearMe(data))
+
+  }, [origin])
+
   console.log("=========================");
   // {
   //   categories.forEach((el) => {
   //     console.log(el.name)
   //   })
   // }
-  console.log(user.access_token, "<<<<<<<<<<<<<");
+  console.log(restoNearMe, "<<<<< foodnearme");
   console.log("=========================");
+
+  useFocusEffect(useCallback(() => {
+    getData()
+  }, []))
   return (
     <>
       <View className="flex-1 ">
@@ -170,19 +207,21 @@ const HomeScreen = () => {
                     navigation.navigate("LocationSrceen");
                   }}
                 >
-                  <View className="gap-y-1">
+                  <View className="gap-y-1 ml-4 w-[305]">
                     <View className="ml-1 flex-row items-center">
                       <Entypo name="location-pin" size={17} color="black" />
                       <Text className="text-sm">Your Location</Text>
                     </View>
-                    <Text className="ml-2">{origin?origin.description.slice(0, 50) + "...":location}</Text>
+                    <Text className="ml-2">{origin ? origin.description.slice(0, 50) + "..." : location}</Text>
                   </View>
                 </TouchableOpacity>
-                <AntDesign name="heart" size={24} color="red" />
+                <View className='mr-4'>
+                  <AntDesign name="heart" size={24} color="red" />
+                </View>
               </View>
 
               <Text className="text-xl self-center absolute bottom-7 mb-3">
-                Hi {user?user.fullName:"Savvie Friend"}!
+                Hi {user ? user.fullName : "Savvie Friend"}!
               </Text>
 
               <Pressable
@@ -265,7 +304,7 @@ const HomeScreen = () => {
             {/* END CAPTION */}
 
             <FlatList
-              data={foodList}
+              data={restoNearMe}
               renderItem={({ item }) => {
                 return <FoodCard food={item} />;
               }}
@@ -296,32 +335,33 @@ const HomeScreen = () => {
               horizontal
               showsHorizontalScrollIndicator="false"
             >
-              <View className="items-center justify-center bg-blue-400 ml-5">
-                <View className="bg-gray-200 w-[100] h-[100] rounded-full"></View>
+              {!restoNearMe ? <Text>LOADIN</Text> :
+                restoNearMe?.map((el) => {
+                  return (
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Test Detail Resto', {
+                        id: el.id
+                      })}
+                      className="items-center justify-center bg-blue-400 ml-5">
+                      <View className="bg-gray-200 w-[100] h-[100] rounded-full">
 
-                <Text className="mt-2">Pak gembus</Text>
-              </View>
+                        <Image
+                          source={{
+                            uri: el.logoUrl
+                          }}
+                          className='w-full h-full rounded-full'
+                          resizeMode="contain"
+                        />
+                      </View>
 
-              <View className="items-center justify-center bg-blue-400 ml-5">
-                <View className="bg-gray-200 w-[100] h-[100] rounded-full"></View>
+                      <Text className="mt-2">{el.name}</Text>
+                    </TouchableOpacity>
+                  )
+                })
 
-                <Text>NAMA RESTO</Text>
-              </View>
+              }
 
-              <View className="items-center justify-center bg-blue-400 ml-5">
-                <View className="bg-gray-200 w-[100] h-[100] rounded-full"></View>
-                <Text>NAMA RESTO</Text>
-              </View>
 
-              <View className="items-center justify-center bg-blue-400 ml-5">
-                <View className="bg-gray-200 w-[100] h-[100] rounded-full"></View>
-                <Text>NAMA RESTO</Text>
-              </View>
-
-              <View className="items-center justify-center bg-blue-400 ml-5">
-                <View className="bg-gray-200 w-[100] h-[100] rounded-full"></View>
-                <Text>NAMA RESTO</Text>
-              </View>
             </ScrollView>
           </View>
           {/* END CATEGORY */}

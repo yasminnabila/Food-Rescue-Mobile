@@ -20,30 +20,34 @@ import StoreDashboard from '../screens/StoreDashboard';
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const isLogin = useSelector(selectIsLogin)
+  console.log(isLogin, "login");
 
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('user')
-      // console.log(value)
-      if (value !== null) {
-        // value previously stored
-        const user = JSON.parse(value)
-        console.log({ user }, "yg lg login")
-        dispatch(setIsLogin(true))
-        dispatch(setUser(user))
 
-      }
-    } catch (e) {
-      console.log(e)
-      // error reading value
-    }
-  }
+  // const getData = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('user')
+  //     console.log(value, "makan")
+  //     if (value !== null) {
+  //       // value previously stored
+  //       const user = JSON.parse(value)
+  //       console.log({ user }, "yg lg login")
+  //       dispatch(setIsLogin(true))
+  //       dispatch(setUser(user))
 
-  useEffect(() => {
-    getData()
-  }, [])
+  //     }
+  //   } catch (e) {
+  //     console.log(e)
+  //     // error reading value
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   console.log('masuk jugaaaa');
+
+  //   getData()
+  // }, [])
 
   return (
     <NavigationContainer>
@@ -70,7 +74,7 @@ const Navigation = () => {
         }} />
         <Stack.Screen name="storeDashboard" component={StoreDashboard} options={{
           headerShown: false,
-        }}/>
+        }} />
         <Stack.Screen name="Test Detail Resto" component={DetailResto} options={{
           headerShown: false,
         }} />

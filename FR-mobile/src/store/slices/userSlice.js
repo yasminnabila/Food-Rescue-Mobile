@@ -17,6 +17,7 @@ const initialState = {
   destination: null,
   travelTimeInformation: null,
   userLocation: null,
+  userCurrentLocation: null
 }
 
 export const userSlice = createSlice({
@@ -97,10 +98,15 @@ export const userSlice = createSlice({
     },
     setRole: (state, action) => {
       state.role = action.payload;
+      console.log(action.payload, "action payload");
+
     },
     setUserLocation: (state, action) => {
       state.userLocation = action.payload;
     },
+    setUserCurrentLocation: (state, action) => {
+      state.userLocation = action.payload
+    }
   },
 })
 
@@ -126,6 +132,7 @@ export const {
   setTravelTimeInformation,
   setRole,
   setUserLocation,
+  setUserCurrentLocation
 } = userSlice.actions
 
 
@@ -166,28 +173,29 @@ export const checkOut = ({ total, basket, delivery, access_token }) => async (di
   // }, 1000)
 }
 
-export const login = (data) => async dispatch => {
-  try {
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    };
+export const login = (data) => dispatch => {
+  // try {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  };
 
-    let response = await fetch(`https://savvie.herokuapp.com/signIn`, requestOptions)
+  return fetch(`https://savvie.herokuapp.com/signIn`, requestOptions)
 
-    let res = await response.json()
-    console.log(res)
+  //   let res = await response.json()
+  //   console.log(res)
 
-    dispatch(setIsLogin(true))
-    dispatch(setUser(res))
-    storeData(res)
+  //   await storeData(res)
+  //   dispatch(setIsLogin(true))
+  //   dispatch(setUser(res))
+  //   return 
 
-  } catch (error) {
-    console.log(error)
-  }
+  // // } catch (error) {
+  //   console.log(error)
+  // }
 }
 
 export const register = (data) => async dispatch => {
@@ -286,5 +294,5 @@ export const selectUserLocation = (state) => state.user.userLocation;
 export const selectTravelTimeInformation = (state) =>
   state.user.travelTimeInformation;
 
-
+export const selectUserCurrentLocation = (state) => state.user.userCurrentLocation
 export default userSlice.reducer

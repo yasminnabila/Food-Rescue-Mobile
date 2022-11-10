@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   View,
+  Image
 } from "react-native";
 import {
   DetailsHeaderScrollView,
@@ -31,6 +32,7 @@ import {
   setDelivery,
   checkOut,
   selectOrigin,
+  selectIsPaid,
 } from "../store/slices/userSlice";
 import BasketCard from "./BasketCard";
 import { useEffect, useRef, useState } from "react";
@@ -38,8 +40,11 @@ import { useNavigation } from "@react-navigation/native";
 import { currencyFormat } from "simple-currency-format";
 import { Ionicons } from "@expo/vector-icons";
 import { GOOGLE_MAPS_APIKEY } from "@env";
+import Success from "./Success";
 
 const BasketScreen = () => {
+  const isPaid = useSelector(selectIsPaid)
+
   let [information, setInformation] = useState("loading...");
   const origin = useSelector(selectOrigin);
   const navigation = useNavigation();
@@ -49,13 +54,14 @@ const BasketScreen = () => {
   const delivery = useSelector(selectDelivery);
   const { ref, open, close } = useModalize();
   console.log(information, "??????");
-  console.log(basket[0].Restaurant.location.coordinates[0], "<<<<----get resto address");
+  // console.log(basket[0].Restaurant.location.coordinates[0], "<<<<----get resto address");
   let totalMoney = 0;
+  let total = 0
+
+  const paymentModal = useRef(null)
 
   if (basket.length > 0) {
-    basket?.forEach((el) => {
-      totalMoney += el.price * el.qty;
-    });
+    basket?.forEach((el) => { total += el.price * el.qty })
   }
 
   useEffect(() => {

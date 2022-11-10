@@ -8,38 +8,45 @@ import StackScreen from "./StackScreen";
 import SearchStacks from "./SearchStacks";
 import { selectRole, setRole } from "../store/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import TrackKurirScreen from "../screens/TrackKurirScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoginRegisScreen from "../screens/LoginRegisScreen";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
-  const role = useSelector(selectRole);
-  const dispatch = useDispatch();
-  console.log(role, "Role>>>>>>>");
+  const role = useSelector(state => state.user.role);
+  console.log(role, "role..... ");
 
-  // AsyncStorage.getItem('@storage_Key').then(data => {
-  //   console.log(data)
-  // })
-  const getData = async () => {
-    // await AsyncStorage.setItem("role", "customer");
-    try {
-      const value = await AsyncStorage.getItem("role");
-      if (value !== null) {
-        // value previously stored
-        dispatch(setRole(value));
-      }
-    } catch (e) {
-      console.log(e);
-      // error reading value
-    }
-  };
+  // const dispatch = useDispatch();
+  // console.log(role, "Role>>>>>>>");
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // // AsyncStorage.getItem('@storage_Key').then(data => {
+  // //   console.log(data)
+  // // })
+  // const getData = async () => {
+  //   // await AsyncStorage.setItem("role", "customer");
+  //   try {
+  //     const value = await AsyncStorage.getItem("user");
+  //     console.log(value, "MMMMMMMMMMMMMM");
+  //     if (value.role !== null) {
+  //       // value previously stored
+  //       dispatch(setRole(value.role));
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //     // error reading value
+  //   }
+  // };
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     console.log("masuk bangggg");
+  //     getData()
+  //   }, [])
+  // );
   return (
     <Tab.Navigator
       screenOptions={{

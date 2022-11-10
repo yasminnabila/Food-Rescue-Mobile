@@ -39,9 +39,10 @@ import { searchCharacters } from '../useDebounce/fetchFunction';
 import LoadingScreen from './LoadingScreen';
 import { useSelector } from 'react-redux';
 import CarouselCard from '../components/CarouselCard';
+import { selectOrigin } from '../store/slices/userSlice';
 
 const SearchScreen = () => {
-
+  const origin = useSelector(selectOrigin);
   const navigation = useNavigation()
   const animation = useRef(null);
 
@@ -198,38 +199,32 @@ const SearchScreen = () => {
           data={results}
           ListHeaderComponent={
             <>
-              <View className='bg-[#77aa9c] h-[200] justify-between'>
-                <View className=' h-[50] flex-row justify-around gap-x-[80] items-center mt-[80]'>
-
-                  <View className=''>
-                    <View className='flex-row items-center'>
-                      <Text className='mr-2'>
-                        Your Location
-                      </Text>
+              <View className="bg-[#77aa9c] h-[200] justify-between">
+                <View className=" h-[50] flex-row justify-between items-center mt-[80]">
+                  <View className="ml-4">
+                    <View className="flex-row items-center">
+                      <Text className="mr-2">Your Location</Text>
                       <AntDesign name="down" size={15} color="red" />
                     </View>
-                    <Text className='text-lg'>
-                      Jl. Alam Permai IX No.68
+                    <Text className="text-lg">
+                      {origin?.description.slice(0, 35) + "..."}
                     </Text>
                   </View>
 
-                  <View className='flex-row space-x-5'>
+                  <View className=" mr-4 flex-row space-x-5">
                     <TouchableOpacity>
                       <AntDesign name="heart" size={24} color="red" />
                     </TouchableOpacity>
                   </View>
-
-
                 </View>
 
                 <TextInput
-                  className='bg-gray-200 border border-gray-400 h-[50] text-gray-500 rounded-2xl text-left mx-4 mb-2 pl-5'
-                  placeholder='What food do you want to save today?'
+                  className="bg-gray-200 border border-gray-400 h-[50] text-gray-500 rounded-2xl text-left mx-4 mb-2 pl-5"
+                  placeholder="What food do you want to save today?"
                   onChangeText={(text) => setSearchTerm(text)}
                 />
               </View>
-            </>
-          }
+            </>}
           renderItem={({ item }) => {
             return <RestoNFoodCard resto={item} />
           }}
