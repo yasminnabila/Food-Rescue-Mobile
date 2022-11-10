@@ -10,11 +10,36 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { GOOGLE_MAPS_APIKEY } from "@env";
 import { useDispatch } from "react-redux";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import * as Location from "expo-location";
 
 const LocationSrceen = () => {
   const navigation = useNavigation();
+  const [latlong, setLatlong] = useState("waiting....");
+  const [location, setLocation] = useState("Waiting...");
   const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+      let { coords } = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = coords;
+      setLatlong({ lat: latitude, lng: longitude });
+      console.log(coords, "<><><><><><>");
+      Geocoder.init("AIzaSyAw99RzBxkw-upCWfK5gVURlEMRzTn3pOI", {
+        language: "id",
+      });
+      Geocoder.from(latitude, longitude)
+        .then((json) => {
+          let address = json.results[0];
+          setLocation(address.formatted_address);
+        })
+        .catch((error) => console.warn(error));
+    })();
+  }, []);
   return (
     <View className="mx-5">
       <View className="h-[70] mt-[40] flex-row items-center">
@@ -58,6 +83,7 @@ const LocationSrceen = () => {
               description: location,
             })
           );
+          navigation.navigate("AddressScreen");
         }}
       >
         <View className="flex-row items-center pt-3">

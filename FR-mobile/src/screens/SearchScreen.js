@@ -1,73 +1,86 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   interpolate,
-  Extrapolation
-} from 'react-native-reanimated';
+  Extrapolation,
+} from "react-native-reanimated";
 
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { DetailsHeaderScrollView, StickyHeaderScrollView, TabbedHeaderPager } from 'react-native-sticky-parallax-header'
-
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  DetailsHeaderScrollView,
+  StickyHeaderScrollView,
+  TabbedHeaderPager,
+} from "react-native-sticky-parallax-header";
 
 // export const HEADER_IMAGE_HEIGHT = Dimensions.get('window').width / 3;
 
+import { StatusBar } from "expo-status-bar";
+import {
+  FlatList,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
+import FoodCard from "../components/FoodCard";
+import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { useRef, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { currencyFormat } from "simple-currency-format";
 
-import { StatusBar } from 'expo-status-bar';
-import { FlatList, ScrollView, Text, TextInput, View, Image, Pressable, TouchableOpacity } from 'react-native';
-import FoodCard from '../components/FoodCard';
-import { AntDesign } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
-import { SimpleLineIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { useRef, useState } from 'react';
-import { useNavigation } from '@react-navigation/native'
-import { currencyFormat } from 'simple-currency-format';
+import { Octicons } from "@expo/vector-icons";
+import * as Animatable from "react-native-animatable";
+import RestoNFoodCard from "../components/RestoNFoodCard";
 
-
-import { Octicons } from '@expo/vector-icons';
-import * as Animatable from 'react-native-animatable';
-import RestoNFoodCard from '../components/RestoNFoodCard';
-
-import LottieView from 'lottie-react-native';
-import useDebounce from '../useDebounce/hook';
-import { searchCharacters } from '../useDebounce/fetchFunction';
-import LoadingScreen from './LoadingScreen';
-import { useSelector } from 'react-redux';
-import CarouselCard from '../components/CarouselCard';
+import LottieView from "lottie-react-native";
+import useDebounce from "../useDebounce/hook";
+import { searchCharacters } from "../useDebounce/fetchFunction";
+import LoadingScreen from "./LoadingScreen";
+import { useSelector } from "react-redux";
+import CarouselCard from "../components/CarouselCard";
+import { selectOrigin } from "../store/slices/userSlice";
 
 const SearchScreen = () => {
-
-  const navigation = useNavigation()
+  const origin = useSelector(selectOrigin);
+  const navigation = useNavigation();
   const animation = useRef(null);
 
-  const basket = useSelector(state => state.user.basket)
+  const basket = useSelector((state) => state.user.basket);
   // console.log(basket)
 
   const [searchTerm, setSearchTerm] = useState("");
   // console.log(searchTerm)
 
-  let qtyFood = 0
-  let totalMoney = 0
+  let qtyFood = 0;
+  let totalMoney = 0;
 
   if (basket.length > 0) {
     // console.log(basket, "2")
-    basket?.forEach((el) => { qtyFood += el.qty; totalMoney += el.price * el.qty })
+    basket?.forEach((el) => {
+      qtyFood += el.qty;
+      totalMoney += el.price * el.qty;
+    });
   }
 
-  const [text, setText] = useState(null)
+  const [text, setText] = useState(null);
   useEffect(() => {
     if (basket[0]?.qty === 1) {
-      setText("Item")
+      setText("Item");
     } else {
-      setText("Items")
+      setText("Items");
     }
-  }, [basket])
-
+  }, [basket]);
 
   const [results, setResults] = useState([]);
   // console.log(results, "<<< di search")
@@ -92,11 +105,11 @@ const SearchScreen = () => {
     [debouncedSearchTerm] // Only call effect if debounced search term changes
   );
 
+  
 
   return (
     <>
-      <View className='flex-1'>
-
+      <View className="flex-1">
         {/* HEADER */}
         {/* <View className='bg-red-200 h-[120] justify-between mt-[50]'>
 
@@ -136,7 +149,6 @@ const SearchScreen = () => {
         </View> */}
         {/* END HEADER */}
 
-
         {/* <ScrollView> */}
 
         {/* CAROUSEL */}
@@ -148,7 +160,6 @@ const SearchScreen = () => {
             </Text>
           </TouchableOpacity> */}
         {/* END CAROUSEL */}
-
 
         {/* CATEGORY */}
         {/* <View className='bg-green-300  mt-4 py-2 mb-5'>
@@ -198,102 +209,106 @@ const SearchScreen = () => {
           data={results}
           ListHeaderComponent={
             <>
-              <View className='bg-[#77aa9c] h-[200] justify-between'>
-                <View className=' h-[50] flex-row justify-around gap-x-[80] items-center mt-[80]'>
-
-                  <View className=''>
-                    <View className='flex-row items-center'>
-                      <Text className='mr-2'>
-                        Your Location
-                      </Text>
+              <View className="bg-[#77aa9c] h-[200] justify-between">
+                <View className=" h-[50] flex-row justify-between items-center mt-[80]">
+                  <View className="ml-4">
+                    <View className="flex-row items-center">
+                      <Text className="mr-2">Your Location</Text>
                       <AntDesign name="down" size={15} color="red" />
                     </View>
-                    <Text className='text-lg'>
-                      Jl. Alam Permai IX No.68
+                    <Text className="text-lg">
+                      {origin?.description.slice(0, 35) + "..."}
                     </Text>
                   </View>
 
-                  <View className='flex-row space-x-5'>
+                  <View className=" mr-4 flex-row space-x-5">
                     <TouchableOpacity>
                       <AntDesign name="heart" size={24} color="red" />
                     </TouchableOpacity>
                   </View>
-
-
                 </View>
 
                 <TextInput
-                  className='bg-gray-200 border border-gray-400 h-[50] text-gray-500 rounded-2xl text-left mx-4 mb-2 pl-5'
-                  placeholder='What food do you want to save today?'
+                  className="bg-gray-200 border border-gray-400 h-[50] text-gray-500 rounded-2xl text-left mx-4 mb-2 pl-5"
+                  placeholder="What food do you want to save today?"
                   onChangeText={(text) => setSearchTerm(text)}
                 />
               </View>
             </>
           }
           renderItem={({ item }) => {
-            return <RestoNFoodCard resto={item} />
+            return <RestoNFoodCard resto={item} />;
           }}
           ListEmptyComponent={() => {
-            if (isSearching) return <LottieView source={require('../lottie/skeleton.json')} autoPlay loop className='h-[220] w-[100] ' />
-            if (debouncedSearchTerm !== "" && results.length === 0) return <View className='h-[300] w-[420] mt-[100] right-5'>
-              <Image
-                source={{
-                  uri: "https://media.discordapp.net/attachments/1035762335383552128/1039850200090554378/404.png?width=1138&height=1138"
-                }}
-                className="h-full w-full"
-              />
-              <View className='self-center'>
-                <Text className="text-lg font-semibold">No result found, let's try another word!</Text>
+            if (isSearching)
+              return (
+                <LottieView
+                  source={require("../lottie/skeleton.json")}
+                  autoPlay
+                  loop
+                  className="h-[220] w-[100] "
+                />
+              );
+            if (debouncedSearchTerm !== "" && results.length === 0)
+              return (
+                <View className="h-[300] w-[420] mt-[100] right-5">
+                  <Image
+                    source={{
+                      uri: "https://media.discordapp.net/attachments/1035762335383552128/1039850200090554378/404.png?width=1138&height=1138",
+                    }}
+                    className="h-full w-full"
+                  />
+                  <View className="self-center">
+                    <Text className="text-lg font-semibold">
+                      No result found, let's try another word!
+                    </Text>
+                  </View>
+                </View>
+              );
+            return (
+              <View className="h-[300] w-[420] mt-[110]">
+                <Image
+                  source={{
+                    uri: "https://media.discordapp.net/attachments/1035762335383552128/1039850179836260383/search.png",
+                  }}
+                  className="h-full w-full"
+                />
+                <View className="w-[360] self-center mr-[34]">
+                  <Text className="text-lg font-semibold text-center">
+                    What food do you want to save today?
+                  </Text>
+                </View>
               </View>
-            </View>
-            return <View className='h-[300] w-[420] mt-[110]'>
-              <Image
-                source={{
-                  uri: "https://media.discordapp.net/attachments/1035762335383552128/1039850179836260383/search.png"
-                }}
-                className="h-full w-full"
-              />
-              <View className='w-[360] self-center mr-[34]'>
-                <Text className="text-lg font-semibold text-center">What food do you want to save today?</Text>
-              </View>
-            </View>
-          }
-          }
+            );
+          }}
           keyExtractor={(item) => item.id}
         />
 
-        {
-          basket.length > 0 ?
-            <View className='bg-red-300 h-[50] absolute inset-x-[0] bottom-[20] z-50 mx-5 rounded-lg items-start justify-center'>
-              <TouchableOpacity onPress={() => navigation.navigate("Test basket")}>
-                <View className='flex-row justify-center items-center'>
-                  <Text className='text-xl font-semibold pl-2'>
-                    Basket
-                  </Text>
-                  <View className='pl-2'>
-                    <Octicons name="dot-fill" size={14} color="black" />
-                  </View>
-                  <Text className='text-xl pl-2'>
-                    {qtyFood}
-                  </Text>
-                  <Text className='text-xl pl-1'>
-                    {text}
-                  </Text>
-                  <Text className='pl-[50] text-lg font-semibold'>
-                    {currencyFormat(totalMoney, "id-ID", "IDR")}
-                  </Text>
+        {basket.length > 0 ? (
+          <View className="bg-red-300 h-[50] absolute inset-x-[0] bottom-[20] z-50 mx-5 rounded-lg items-start justify-center">
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Test basket")}
+            >
+              <View className="flex-row justify-center items-center">
+                <Text className="text-xl font-semibold pl-2">Basket</Text>
+                <View className="pl-2">
+                  <Octicons name="dot-fill" size={14} color="black" />
                 </View>
-              </TouchableOpacity>
-            </View> : null
-        }
-
-
+                <Text className="text-xl pl-2">{qtyFood}</Text>
+                <Text className="text-xl pl-1">{text}</Text>
+                <Text className="pl-[50] text-lg font-semibold">
+                  {currencyFormat(totalMoney, "id-ID", "IDR")}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ) : null}
 
         {/* </ScrollView> */}
-      </View >
-      <StatusBar style='auto' />
+      </View>
+      <StatusBar style="auto" />
     </>
-  )
-}
+  );
+};
 
-export default SearchScreen
+export default SearchScreen;
