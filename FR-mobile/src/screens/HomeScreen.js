@@ -88,8 +88,6 @@ const HomeScreen = () => {
   //   })
   // }
   // console.log(user.access_token, "<<<<<<<<<<<<<")
-  console.log("=========================")
-  console.log("=========================");
 
   const foodList = [
     {
