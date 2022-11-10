@@ -171,8 +171,8 @@ const HomeScreen = () => {
                         source={{
                           uri: el.imageUrl
                         }}
-                        className='h-full w-full rounded-2xl'
-                        resizeMode='cover'
+                        className='h-full w-full mb-3 mt-3'
+                        resizeMode='full'
                       />
                       <Text className='self-center mt-3 text-xs font-semibold text-center'>{el.name}</Text>
                     </Pressable>
