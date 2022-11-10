@@ -1,44 +1,76 @@
-import { Button, FlatList, Image, SafeAreaView, ScrollView, Switch, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
-import { DetailsHeaderScrollView, StickyHeaderScrollView } from 'react-native-sticky-parallax-header'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { FontAwesome } from '@expo/vector-icons';
+import {
+  Button,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  Switch,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import {
+  DetailsHeaderScrollView,
+  StickyHeaderScrollView,
+} from "react-native-sticky-parallax-header";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { FontAwesome } from "@expo/vector-icons";
 
-import SelectDropdown from 'react-native-select-dropdown'
-import { Picker } from '@react-native-picker/picker';
+import SelectDropdown from "react-native-select-dropdown";
+import { Picker } from "@react-native-picker/picker";
 
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Modalize, useModalize } from 'react-native-modalize';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Modalize, useModalize } from "react-native-modalize";
 
-import { useSelector, useDispatch } from 'react-redux'
-import { dec_basket, inc_basket, addBasket, selectDelivery, setDelivery, checkOut, selectUser, selectIsPaid, clearBasket } from "../store/slices/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  dec_basket,
+  inc_basket,
+  addBasket,
+  selectDelivery,
+  setDelivery,
+  checkOut,
+  selectOrigin,
+} from "../store/slices/userSlice";
 import BasketCard from "./BasketCard";
 import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { currencyFormat } from 'simple-currency-format';
-import Success from "./Success";
-
-
+import { currencyFormat } from "simple-currency-format";
+import { Ionicons } from "@expo/vector-icons";
+import { GOOGLE_MAPS_APIKEY } from "@env";
 
 const BasketScreen = () => {
-  const navigation = useNavigation()
-  const dispatch = useDispatch()
-  const basket = useSelector(state => state.user.basket)
-
-  const delivery = useSelector(selectDelivery)
-
+  let [information, setInformation] = useState("loading...");
+  const origin = useSelector(selectOrigin);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const basket = useSelector((state) => state.user.basket);
+  console.log(basket, "basket bang");
+  const delivery = useSelector(selectDelivery);
   const { ref, open, close } = useModalize();
-
-  const isPaid = useSelector(selectIsPaid)
-
-  let total = 0
-
-  const paymentModal = useRef(null)
+  console.log(information, "??????");
+  console.log(basket[0].Restaurant.location.coordinates[0], "<<<<----get resto address");
+  let totalMoney = 0;
 
   if (basket.length > 0) {
-    basket?.forEach((el) => { total += el.price * el.qty })
+    basket?.forEach((el) => {
+      totalMoney += el.price * el.qty;
+    });
   }
 
-
+  useEffect(() => {
+    if (!origin || !basket.length) return;
+    const getTravelTime = async () => {
+      fetch(
+        `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.location.lat}%2C${origin.location.lng}&destinations=${basket[0].Restaurant.location.coordinates[0]}%2C${basket[0].Restaurant.location.coordinates[1]}&key=${GOOGLE_MAPS_APIKEY}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setInformation(data.rows[0].elements[0]);
+        });
+    };
+    getTravelTime();
+  }, [origin, GOOGLE_MAPS_APIKEY]);
   // console.log("=========================")
   // {
   //   basket.forEach((el) => {
@@ -54,13 +86,13 @@ const BasketScreen = () => {
   }, [basket])
 
   function deliveryHandler() {
-    dispatch(setDelivery("Delivery"))
-    close()
+    dispatch(setDelivery("Delivery"));
+    close();
   }
 
   function pickupHandler() {
-    dispatch(setDelivery("Pickup"))
-    close()
+    dispatch(setDelivery("Pickup"));
+    close();
   }
 
   function checkOutHanlder(total) {

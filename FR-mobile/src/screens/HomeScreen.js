@@ -1,61 +1,87 @@
-import { StatusBar } from 'expo-status-bar';
-import { FlatList, Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import FoodCard from '../components/FoodCard';
-import { AntDesign } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { useEffect, useRef, useState } from 'react';
-import { useNavigation } from '@react-navigation/native'
+import {
+  FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import * as Animatable from 'react-native-animatable';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserData, selectUser, setUser } from '../store/slices/userSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import CarouselCard from '../components/CarouselCard';
+import * as Animatable from "react-native-animatable";
+import {
+  getUserData,
+  selectUser,
+  selectUserLocation,
+  setUser,
+} from "../store/slices/userSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StatusBar } from "expo-status-bar";
+import FoodCard from "../components/FoodCard";
+import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { useEffect, useRef, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import * as Location from "expo-location";
+import Geocoder from "react-native-geocoding";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setOrigin,
+  setDestination,
+  setUserLocation,
+} from "../store/slices/userSlice";
+import CarouselCard from "../components/CarouselCard";
 
 const HomeScreen = () => {
-  const stickyHeaderShown = useRef(false)
-  const mainHeaderRef = useRef()
-  const stickyHeaderRef = useRef()
-
-  const dispatch = useDispatch()
-
-  const user = useSelector(selectUser)
-
-  const navigation = useNavigation()
-
-  const [scrollY, setSrollY] = useState(0)
-
-  const [showStickyHead, setShowStickyHead] = useState(false)
-  const [mainAnimation, setMainAnimation] = useState("slideInDown")
-  const [secondAnimation, setSecondAnimation] = useState("slideInDown")
-
-  const [categories, setCategories] = useState()
-
-  const foodList = [
-    {
-      "id": 1
-    },
-    {
-      "id": 2
-    },
-    {
-      "id": 3
-    },
-    {
-      "id": 4
-    },
-    {
-      "id": 5
-    }
-  ]
-
+  const [location, setLocation] = useState("Waiting...");
+  const userLocation = useSelector(selectUserLocation);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [latlong, setLatlong] = useState("waiting....");
+  const stickyHeaderShown = useRef(false);
+  const mainHeaderRef = useRef();
+  const stickyHeaderRef = useRef();
+  const dispatch = useDispatch();
   useEffect(() => {
-    fetch("https://savvie.herokuapp.com/categories")
-      .then(res => res.json())
-      .then(data => setCategories(data))
-  }, [])
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+      let { coords } = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = coords;
+      Geocoder.init("AIzaSyAw99RzBxkw-upCWfK5gVURlEMRzTn3pOI", {
+        language: "id",
+      });
+      Geocoder.from(latitude, longitude)
+        .then((json) => {
+          let address = json.results[0];
+          dispatch(
+            setUserLocation({
+              location: { lat: latitude, lng: longitude },
+              description: address.formatted_address,
+            })
+          );
+          setLocation(userLocation.description.slice(0, 50) + "...");
+          dispatch(setDestination(null));
+        })
+        .catch((error) => console.warn(error));
+    })();
+  }, []);
+  const navigation = useNavigation();
 
   console.log("=========================")
+  const user = useSelector(selectUser);
+
+  const [scrollY, setSrollY] = useState(0);
+
+  const [showStickyHead, setShowStickyHead] = useState(false);
+  const [mainAnimation, setMainAnimation] = useState("slideInDown");
+  const [secondAnimation, setSecondAnimation] = useState("slideInDown");
+
+  const [categories, setCategories] = useState();
+
+  console.log("=========================");
   // {
   //   categories.forEach((el) => {
   //     console.log(el.name)
@@ -63,8 +89,44 @@ const HomeScreen = () => {
   // }
   // console.log(user.access_token, "<<<<<<<<<<<<<")
   console.log("=========================")
+  console.log("=========================");
 
+  const foodList = [
+    {
+      id: 1,
+    },
+    {
+      id: 2,
+    },
+    {
+      id: 3,
+    },
+    {
+      id: 4,
+    },
+    {
+      id: 5,
+    },
+  ];
 
+  useEffect(() => {
+    fetch("https://savvie.herokuapp.com/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data));
+  }, []);
+
+  useEffect(() => {
+    dispatch(getUserData());
+  }, []);
+
+  console.log("=========================");
+  // {
+  //   categories.forEach((el) => {
+  //     console.log(el.name)
+  //   })
+  // }
+  console.log(user.access_token, "<<<<<<<<<<<<<");
+  console.log("=========================");
   return (
     <>
       <View className='flex-1 '>
@@ -99,22 +161,22 @@ const HomeScreen = () => {
 
           {!showStickyHead && <Animatable.View animation={mainAnimation} className='bg-red-200 h-[170] rounded-b-3xl'>
 
-            <View className='h-[70] mt-[40] flex-row justify-around gap-x-[150] items-center'>
-
-              <View className='justify-center items-center gap-y-1'>
-                <View className='flex-row justify-center items-center'>
-                  <Entypo name="location-pin" size={19} color="black" />
-                  <Text>
-                    Your Location
-                  </Text>
-                </View>
-                <Text className='ml-2'>
-                  Jl.pondok indah
-                </Text>
+          <View className="h-[70] mt-[40] mr-2 flex-row justify-between items-center">
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("LocationSrceen");
+                  }}
+                >
+                  <View className="gap-y-1">
+                    <View className="ml-1 flex-row items-center">
+                      <Entypo name="location-pin" size={17} color="black" />
+                      <Text className="text-sm">Your Location</Text>
+                    </View>
+                    <Text className="ml-2">{location}</Text>
+                  </View>
+                </TouchableOpacity>
+                <AntDesign name="heart" size={24} color="red" />
               </View>
-              <AntDesign name="heart" size={24} color="red" />
-
-            </View>
 
 
             <Text className='text-xl self-center absolute bottom-7'>

@@ -133,7 +133,11 @@ const ProfileScreen = ({ navigation }) => {
 
         </TouchableOpacity>
       </View>
-
+      <TouchableOpacity className='bg-red-200 mt-10 mx-10 h-10 items-center justify-center rounded-md' onPress={()=>{
+        navigation.navigate("storeDashboard")
+      }}>
+        <Text>Store Dashboard</Text>
+      </TouchableOpacity>
       <TouchableOpacity className='bg-red-200 mt-10 mx-10 h-10'
         onPress={logOutHandler}
       >
