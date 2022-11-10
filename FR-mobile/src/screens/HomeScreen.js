@@ -97,7 +97,7 @@ const HomeScreen = () => {
 
           {/* HEADERS */}
 
-          {!showStickyHead && <Animatable.View animation={mainAnimation} className='bg-red-200 h-[170] rounded-b-3xl'>
+          {!showStickyHead && <Animatable.View animation={mainAnimation} className='bg-[#77aa9c] h-[170] rounded-b-3xl'>
 
             <View className='h-[70] mt-[40] flex-row justify-around gap-x-[150] items-center'>
 
@@ -117,7 +117,7 @@ const HomeScreen = () => {
             </View>
 
 
-            <Text className='text-xl self-center absolute bottom-7'>
+            <Text className='text-xl self-center absolute bottom-7 mb-3'>
               Hi (name user)!
             </Text>
 
@@ -125,8 +125,8 @@ const HomeScreen = () => {
               className='bg-gray-100 border border-gray-400 h-[50] absolute top-[143] w-[85%] self-center rounded-3xl items-start justify-center'
               onPress={() => navigation.navigate("Search")}
             >
-              <Text className='text-lg ml-4 text-gray-600'>
-                What would you like to eat?
+              <Text className='text-md ml-4 text-gray-600'>
+                What food do you want to save today?
               </Text>
             </Pressable>
 
@@ -134,7 +134,7 @@ const HomeScreen = () => {
 
           {/* END HEADERS */}
 
-          {showStickyHead && <Animatable.View animation={secondAnimation} duration={1000} className='h-[130] bg-green-200 mb-[10] '>
+          {showStickyHead && <Animatable.View animation={secondAnimation} duration={1000} className='h-[130] bg-[#77aa9c] mb-[10] '>
 
             <Text>Bounce me!</Text>
 
@@ -144,7 +144,7 @@ const HomeScreen = () => {
 
 
           {/* CAROUSEL */}
-          <View className='h-[200] mt-[50] p-4'>
+          <View className='h-[200] mt-[40] p-4'>
             <CarouselCard />
             {/* <Text className='text-2xl m-auto'>
               CAROUSEL {showStickyHead ? "muncul" : "tidak"}
@@ -154,15 +154,11 @@ const HomeScreen = () => {
 
 
           {/* CATEGORY */}
-          <View className='bg-green-300 h-[200] mt-4 py-2'>
-            <View className='flex-row justify-between'>
-              <Text className='bg-red-300 text-2xl mt-1 ml-5'>
-                CATEGORY
-              </Text>
-            </View>
-
-
-            <ScrollView className='bg-yellow-200' horizontal showsHorizontalScrollIndicator='false'>
+          <View className='h-[205] py-2'>
+            <Text className='text-xl mt-1 ml-5 mb-3 font-bold'>
+              Category
+            </Text>
+            <ScrollView className='bg-white' horizontal showsHorizontalScrollIndicator='false'>
               {
                 categories?.map((el) => {
                   return (
@@ -183,20 +179,24 @@ const HomeScreen = () => {
                   )
                 })
               }
-
             </ScrollView>
-
           </View>
           {/* END CATEGORY */}
 
-
           {/* NEAR ME */}
-          <View className='h-[300] bg-green-300 mt-4 '>
+          <View className='h-[300] mt-4 '>
+
             {/* TITLE */}
-            <Text className='bg-red-300 text-2xl mt-1 ml-5'>
-              NEAR ME
+            <Text className='text-xl mt-1 ml-5 mb-1 font-bold'>
+              Near me
             </Text>
             {/* END TITLE */}
+
+            {/* CAPTION */}
+            <Text className='text-md ml-5 mb-3 font-bold'>
+              Explore tasty meal around you.
+            </Text>
+            {/* END CAPTION */}
 
             <FlatList
               data={foodList}
@@ -208,63 +208,48 @@ const HomeScreen = () => {
               horizontal
               showsHorizontalScrollIndicator='false'
             />
-
-            {
-              /* <ScrollView className='bg-slate-300' horizontal showsHorizontalScrollIndicator='false'>
-     
-                <View className='bg-red-200 w-[150] h-[220] ml-3 rounded-2xl self-center'>
-     
-                  <View className='bg-white h-[50%] rounded-t-2xl'>
-     
-     
-     
-                    <View className='bg-black w-[40] h-[20]'>
-     
-     
-                    </View>
-     
-                  </View>
-     
-                  <View className='bg-green-200 w-[45] h-[45] rounded-full top-[-20] left-1'>
-     
-     
-                  </View>
-     
-     
-                </View>
-     
-     
-              </ScrollView> */
-            }
           </View>
           {/* END NEARME */}
 
           {/* Resto terdekat */}
           <View className='bg-green-300 h-[200] mt-4 py-2'>
-            <Text className='bg-red-300 text-2xl mt-1 ml-5'>
-              Resto terdekat
+
+            {/* TITLE */}
+            <Text className='text-xl mt-1 ml-5 mb-1 font-bold'>
+              Restos in your area
             </Text>
+            {/* END TITLE */}
+
+            {/* CAPTION */}
+            <Text className='text-md ml-5 mb-3 font-bold'>
+              Try your area's finest eats.
+            </Text>
+            {/* END CAPTION */}
 
             <ScrollView className='bg-yellow-200 ' horizontal showsHorizontalScrollIndicator='false'>
 
               <View className='items-center justify-center bg-blue-400 ml-5'>
+
                 <View className='bg-gray-200 w-[100] h-[100] rounded-full'>
 
-
                 </View>
+
                 <Text className='mt-2'>
                   Pak gembus
                 </Text>
+
               </View>
 
               <View className='items-center justify-center bg-blue-400 ml-5'>
+
                 <View className='bg-gray-200 w-[100] h-[100] rounded-full'>
 
-
                 </View>
+
                 <Text>
                   NAMA RESTO
                 </Text>
+
               </View>
 
               <View className='items-center justify-center bg-blue-400 ml-5'>
@@ -303,19 +288,29 @@ const HomeScreen = () => {
 
           {/* BANNER */}
           <View className='bg-blue-200 h-[200] mt-4'>
-            <Text className='text-2xl m-auto'>
-              BANNER
-            </Text>
+            <Image
+              source={{
+                uri: "https://media.discordapp.net/attachments/1035762335383552128/1040049865855602738/B2C4E164-9A9C-4EE2-AB3E-026EBBF45A45.jpg"
+              }}
+              className='h-full w-full rounded-2xl'
+              resizeMode='cover'
+            />
           </View>
           {/* END BANNER */}
 
           {/* Popular Foods */}
           <View className='h-[300] bg-green-300 mt-4 '>
             {/* TITLE */}
-            <Text className='bg-red-300 text-2xl mt-1 ml-5'>
-              Popular Foods
+            <Text className='text-xl mt-1 ml-5 mb-1 font-bold'>
+              Restos on trend
             </Text>
             {/* END TITLE */}
+
+            {/* CAPTION */}
+            <Text className='text-md ml-5 mb-3 font-bold'>
+              Try these to call yourself a foodie.
+            </Text>
+            {/* END CAPTION */}
 
             <FlatList
               data={foodList}
@@ -333,11 +328,18 @@ const HomeScreen = () => {
 
           {/* Makanan Hemat */}
           <View className='h-[300] bg-green-300 mt-4 '>
+
             {/* TITLE */}
-            <Text className='bg-red-300 text-2xl mt-1 ml-5'>
-              Makanan Hemat 20Rb
+            <Text className='text-xl mt-1 ml-5 mb-1 font-bold'>
+              All prices chopped (up to 20k)
             </Text>
             {/* END TITLE */}
+
+            {/* CAPTION */}
+            <Text className='text-md ml-5 mb-3 font-bold'>
+              Eat good with no worries
+            </Text>
+            {/* END CAPTION */}
 
             <FlatList
               data={foodList}
@@ -356,10 +358,16 @@ const HomeScreen = () => {
           {/* Kamu melewatkan ini */}
           <View className='h-[300] bg-green-300 mt-4 '>
             {/* TITLE */}
-            <Text className='bg-red-300 text-2xl mt-1 ml-5'>
-              Kamu melewatkan ini
+            <Text className='text-xl mt-1 ml-5 mb-1 font-bold'>
+              You missed these
             </Text>
             {/* END TITLE */}
+
+            {/* CAPTION */}
+            <Text className='text-md ml-5 mb-3 font-bold'>
+              Keep your eye out open next time!
+            </Text>
+            {/* END CAPTION */}
 
             <FlatList
               data={foodList}
@@ -374,8 +382,6 @@ const HomeScreen = () => {
 
           </View>
           {/* END Kamu melewatkan ini */}
-
-
 
         </ScrollView>
       </View >

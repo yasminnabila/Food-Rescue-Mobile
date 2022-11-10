@@ -11,7 +11,7 @@ const initialState = {
   delivery: "Delivery",
   userData: {},
   isPaid: false,
-  registerStatus: false
+  xenditPay: null
 }
 
 export const userSlice = createSlice({
@@ -77,7 +77,10 @@ export const userSlice = createSlice({
     },
     setRegisterStatus: (state, action) => {
       state.registerStatus = action.payload
-    }
+    },
+    setXenditPay: (state, action) => {
+      state.xenditPay = action.payload
+    },
   },
 })
 
@@ -96,7 +99,8 @@ export const {
   clearUser,
   setUserData,
   setIsPaid,
-  setRegisterStatus
+  setRegisterStatus,
+  setXenditPay
 } = userSlice.actions
 
 
@@ -164,8 +168,21 @@ export const login = (data) => async dispatch => {
 export const register = (data) => async dispatch => {
   try {
     console.log(data)
-  } catch (error) {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    };
 
+    let response = await fetch(`https://savvie.herokuapp.com/signUp`, requestOptions)
+    let res = await response.json()
+
+    dispatch(login({ email: data.email, password: data.password }))
+
+  } catch (error) {
+    console.log(error)
   }
 }
 
@@ -209,7 +226,9 @@ export const topUp = (topUpAmount) => async dispatch => {
     let response = await fetch(`https://savvie.herokuapp.com/xendit/topUp`, requestOptions)
 
     let res = await response.json()
-    console.log(res)
+
+    console.log(res.data)
+    dispatch(setXenditPay(res.data))
 
   } catch (error) {
     console.log()
@@ -234,5 +253,6 @@ export const selectDelivery = (state) => state.user.delivery
 export const selectUser = (state) => state.user.user
 export const selectUserData = (state) => state.user.userData
 export const selectIsPaid = (state) => state.user.isPaid
+export const selectXenditPay = (state) => state.user.xenditPay
 
 export default userSlice.reducer

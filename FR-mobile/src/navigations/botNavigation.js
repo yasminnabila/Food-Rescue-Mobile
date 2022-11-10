@@ -13,6 +13,7 @@ import BasketScreen from '../screens/BasketScreen';
 import Login from '../screens/Login';
 import CategoryScreen from '../screens/CategoryScreen';
 import OnBoardScreen from '../screens/OnBoardScreen';
+import XenditScreen from '../screens/XenditScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -79,6 +80,10 @@ const Navigation = () => {
         }} />
         <Stack.Screen name="Category" component={CategoryScreen} options={{
           headerShown: false
+        }} />
+        <Stack.Screen name='Xendit' component={XenditScreen} options={{
+          headerShown: false,
+          presentation: "modal"
         }} />
 
       </Stack.Navigator>

@@ -17,14 +17,8 @@ const LoginRegis = () => {
   const navigation = useNavigation()
 
   const dispatch = useDispatch()
-  const modalizeRef = useRef(null);
+
   const { ref, open, close } = useModalize();
-
-  const [test, setTest] = useState([])
-
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
 
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -49,6 +43,7 @@ const LoginRegis = () => {
       phoneNumber: "",
       address: "",
     })
+    close()
   }
 
   function loginHandler() {
