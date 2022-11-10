@@ -11,7 +11,12 @@ const initialState = {
   delivery: "Delivery",
   userData: {},
   isPaid: false,
-  xenditPay: null
+  xenditPay: null,
+  registerStatus: false,
+  origin: null,
+  destination: null,
+  travelTimeInformation: null,
+  userLocation: null,
 }
 
 export const userSlice = createSlice({
@@ -81,6 +86,21 @@ export const userSlice = createSlice({
     setXenditPay: (state, action) => {
       state.xenditPay = action.payload
     },
+    setOrigin: (state, action) => {
+      state.origin = action.payload;
+    },
+    setDestination: (state, action) => {
+      state.destination = action.payload;
+    },
+    setTravelTimeInformation: (state, action) => {
+      state.travelTimeInformation = action.payload;
+    },
+    setRole: (state, action) => {
+      state.role = action.payload;
+    },
+    setUserLocation: (state, action) => {
+      state.userLocation = action.payload;
+    },
   },
 })
 
@@ -100,7 +120,12 @@ export const {
   setUserData,
   setIsPaid,
   setRegisterStatus,
-  setXenditPay
+  setXenditPay,
+  setOrigin,
+  setDestination,
+  setTravelTimeInformation,
+  setRole,
+  setUserLocation,
 } = userSlice.actions
 
 
@@ -254,5 +279,12 @@ export const selectUser = (state) => state.user.user
 export const selectUserData = (state) => state.user.userData
 export const selectIsPaid = (state) => state.user.isPaid
 export const selectXenditPay = (state) => state.user.xenditPay
+export const selectRole = (state) => state.user.role;
+export const selectOrigin = (state) => state.user.origin;
+export const selectDestination = (state) => state.user.destination;
+export const selectUserLocation = (state) => state.user.userLocation;
+export const selectTravelTimeInformation = (state) =>
+  state.user.travelTimeInformation;
+
 
 export default userSlice.reducer

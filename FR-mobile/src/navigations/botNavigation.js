@@ -14,6 +14,7 @@ import Login from '../screens/Login';
 import CategoryScreen from '../screens/CategoryScreen';
 import OnBoardScreen from '../screens/OnBoardScreen';
 import XenditScreen from '../screens/XenditScreen';
+import StoreDashboard from '../screens/StoreDashboard';
 
 
 const Stack = createNativeStackNavigator();
@@ -67,6 +68,9 @@ const Navigation = () => {
         <Stack.Screen name="MainNavigation" component={TabNavigation} options={{
           headerShown: false,
         }} />
+        <Stack.Screen name="storeDashboard" component={StoreDashboard} options={{
+          headerShown: false,
+        }}/>
         <Stack.Screen name="Test Detail Resto" component={DetailResto} options={{
           headerShown: false,
         }} />
