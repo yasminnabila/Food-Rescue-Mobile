@@ -59,7 +59,7 @@ const DetailResto = ({ route }) => {
   const [text, setText] = useState(null)
 
   useEffect(() => {
-    fetch(`https://savvie.herokuapp.com/restaurants/${id}`)
+    fetch(`https://testing-savvie.herokuapp.com/restaurants/${id}`)
       .then(res => res.json())
       .then(data => setRestoNFoods(data))
   }, [])
@@ -171,7 +171,7 @@ const DetailResto = ({ route }) => {
           <Animatable.View
             animation={secondAnimation}
             duration={1000}
-            className='h-[130] bg-gray-500 mb-[170] rounded-b-xl justify-center'>
+            className='h-[130] bg-[#77aa9c] mb-[170] rounded-b-xl justify-center shadow shadow-black'>
 
             <View className='flex-row mt-10'>
               <View className='bg-white h-[70] w-[70] ml-3 p-2 rounded-md border border-gray-100'>
@@ -186,10 +186,10 @@ const DetailResto = ({ route }) => {
 
               </View>
               <View className='flex-1'>
-                <Text className='text-2xl font-semibold ml-2'>
+                <Text className='text-2xl font-semibold ml-2 text-white'>
                   {resto.name}
                 </Text>
-                <Text className='text-[10px] mx-2'>
+                <Text className='text-[10px] mx-2 text-white'>
                   {resto.address}
                 </Text>
               </View>
@@ -199,52 +199,51 @@ const DetailResto = ({ route }) => {
         }
 
         {/* DETAIL RESTO */}
-        <Animatable.View animation={mainAnimation} className='h-[150] bg-blue-300 rounded-2xl mx-2'>
+        <Animatable.View animation={mainAnimation}
+          className='bg-white rounded-2xl mx-2 border border-gray-200 shadow'>
           <View className='ml-6'>
             <Text className='text-2xl font-semibold mt-3'>
               {resto?.name}
             </Text>
-
-            <View className='flex-row'>
-              <Ionicons name="pin" size={15} color="black" />
-
-              <Text className='mr-2'>
-                Jl.Pondok indah
-              </Text>
+            <View className='h-[1] bg-gray-200 w-[320] my-2'></View>
+            <Text>
+              {resto?.type}
+            </Text>
+            <View className='h-[1] bg-gray-200 w-[320] my-2'></View>
+            <View className='mt-1'>
+              <Text>Opening hours</Text>
+              <Text>10:00 - 22:00</Text>
             </View>
-
-            <Text>10:00 - 22:00</Text>
+            <View className='h-[1] bg-gray-200 w-[320] my-2'></View>
           </View>
 
-          <View className='flex-row mt-2 bg-red-400 space-x-6 justify-center items-center'>
+          <View className='flex-row my-2 space-x-3 justify-start center ml-6'>
 
             <View>
-              <View className='flex-row bg-gray-300 items-center'>
-                <FontAwesome name="star" size={20} color="orange" />
-                <Text className='text-lg'>{resto?.rate}</Text>
+              <View className='flex-row  items-center'>
+                <FontAwesome name="star" size={15} color="orange" />
+                <Text className=''>{resto?.rate}</Text>
               </View>
             </View>
-
             <View>
-              <View className='flex-row bg-green-300 items-center'>
-                <Feather name="thumbs-up" size={24} color="black" />
-                <Text className='text-lg'>123+</Text>
+              <View className='flex-row items-center'>
+                <Feather name="thumbs-up" size={15} color="black" />
+                <Text className=''>{resto?.review_count}+</Text>
               </View>
             </View>
-
+            <Text>|</Text>
             <View>
-              <View className='bg-green-300 items-center'>
-                <Text className='text-lg'>Restoran</Text>
-              </View>
-            </View>
-
-            <View>
-              <View className='bg-green-300 items-center'>
-                <View className='flex-row'>
-                  <Entypo name="location-pin" size={24} color="black" />
-                  <Text className='text-lg'>2.0km</Text>
+              <View className='items-center'>
+                <View className='flex-row items-center'>
+                  <Entypo name="location-pin" size={15} color="black" />
+                  <Text>2.0km</Text>
                 </View>
-                <Text>Distance</Text>
+              </View>
+            </View>
+
+            <View>
+              <View className='flex-row items-center'>
+                <Text>10 mins</Text>
               </View>
             </View>
 
@@ -253,6 +252,7 @@ const DetailResto = ({ route }) => {
         </Animatable.View>
         {/* END DETAIL RESTO */}
 
+        <Text className='text-2xl font-semibold text-red-600 ml-3 mt-5'>Today's Offer</Text>
 
         {
           foods.map((el) => {
@@ -273,22 +273,22 @@ const DetailResto = ({ route }) => {
 
       {
         basket.length > 0 ?
-          <Animatable.View animation={basketAnimation} duration={700} className='bg-red-300 h-[50] absolute inset-x-[0] bottom-[65] z-50 mx-5 rounded-lg items-start justify-center'>
+          <Animatable.View animation={basketAnimation} duration={700} className='bg-[#77aa9c] h-[50] absolute inset-x-[0] bottom-[65] z-50 mx-5 rounded-lg items-start justify-center'>
             <TouchableOpacity onPress={() => navigation.navigate("Test basket")}>
-              <View className='flex-row justify-center items-center'>
-                <Text className='text-xl font-semibold pl-2'>
+              <View className='flex-row items-center'>
+                <Text className='text-xl font-semibold pl-2 text-white ml-2'>
                   Basket
                 </Text>
                 <View className='pl-2'>
-                  <Octicons name="dot-fill" size={14} color="black" />
+                  <Octicons name="dot-fill" size={14} color="white" />
                 </View>
-                <Text className='text-xl pl-2'>
+                <Text className='text-xl pl-2 text-white'>
                   {qtyFood}
                 </Text>
-                <Text className='text-xl pl-1'>
+                <Text className='text-xl pl-1 text-white'>
                   {text}
                 </Text>
-                <Text className='pl-[50] text-lg font-semibold'>
+                <Text className='pl-[80] text-lg font-semibold text-white'>
                   {currencyFormat(totalMoney, "id-ID", "IDR")}
                 </Text>
               </View>

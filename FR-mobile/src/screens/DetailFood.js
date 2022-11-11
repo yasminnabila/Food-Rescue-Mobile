@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Octicons } from '@expo/vector-icons';
 import { currencyFormat } from 'simple-currency-format';
+import { Feather } from '@expo/vector-icons';
 
 
 
@@ -139,7 +140,7 @@ const DetailFood = ({ route }) => {
   }
 
   useEffect(() => {
-    fetch(`https://savvie.herokuapp.com/food/${id}`)
+    fetch(`https://testing-savvie.herokuapp.com/food/${id}`)
       .then(res => res.json())
       .then(data => setFood(data))
   }, [])
@@ -193,10 +194,10 @@ const DetailFood = ({ route }) => {
           <Ionicons name="chevron-back-circle-outline" size={40} color="black" />
         </TouchableOpacity>
 
-        <View className='absolute bottom-2 right-2 bg-red-400 w-[70]'>
+        <View className='absolute bottom-2 right-2 bg-white w-[70] rounded-lg'>
           <View className='flex-row items-center self-center'>
-            <FontAwesome name="star" size={25} color="orange" />
-            <Text className='text-2xl ml-1'>5</Text>
+            <FontAwesome name="star" size={20} color="orange" />
+            <Text className='text-2xl ml-1'>{food?.rate}</Text>
           </View>
         </View>
 
@@ -204,35 +205,36 @@ const DetailFood = ({ route }) => {
       {/* END IMAGE */}
 
       {/* FOOD DESC */}
-      <View className=' bg-blue-300'>
+      <View className='bg-white'>
         <View className='ml-3 my-2'>
-          <View className='flex-row items-center'>
-            <Text className='text-2xl font-semibold'>
-              {food?.name}
-            </Text>
-            <Text className='text-lg'>
-              Popular
-            </Text>
+          <View className='flex-row items-center justify-between'>
+            <View className='w-[170]'>
+              <Text className='text-2xl font-semibold'>
+                {food?.name}
+              </Text>
+            </View>
+            <View className='mr-4'>
+              <Text className='text-xl font-semibold'>
+                {food?.newPrice}
+              </Text>
+              <Text className='text-sm line-through'>
+                {food?.price}
+              </Text>
+            </View>
           </View>
           <View className='flex-row items-center mb-2'>
-            <Text className='text-lg'>
-              20
+            <Text >
+              {food?.discount}
             </Text>
-            <MaterialCommunityIcons name="sale" size={20} color="black" />
+            <View className='mr-2'>
+              <Feather name="percent" size={15} color="black" />
+            </View>
+            <Text>off</Text>
           </View>
 
-          <Text className='mb-2'>
-            DESCRIPTION kadnskjdnaksjdn kankajsndaksjn ajksnd kjndskan
+          <Text className='mb-2 text-gray-500'>
+            {food?.description}
           </Text>
-
-          <View>
-            <Text className='text-2xl font-semibold'>
-              25.000
-            </Text>
-            <Text className='text-sm line-through'>
-              {food?.price}
-            </Text>
-          </View>
         </View>
 
       </View>
@@ -242,13 +244,13 @@ const DetailFood = ({ route }) => {
         <Animatable.View animation={buttonAnimation} className='flex-row justify-center items-end h-[70] space-x-5'>
 
           <TouchableOpacity onPress={() => decHandler()}>
-            <AntDesign name="minussquareo" size={35} color="black" />
+            <AntDesign name="minussquareo" size={35} color="#77aa9c" />
           </TouchableOpacity>
 
           <Animatable.Text ref={AnimationRef} className='text-3xl'>{currentQty}</Animatable.Text>
 
           <TouchableOpacity onPress={() => incHandler()}>
-            <AntDesign name="plussquareo" size={35} color="black" />
+            <AntDesign name="plussquareo" size={35} color="#77aa9c" />
           </TouchableOpacity>
 
         </Animatable.View>
@@ -258,7 +260,7 @@ const DetailFood = ({ route }) => {
         !currentQty &&
 
         <TouchableOpacity onPress={() => addToBasket()}>
-          <Animatable.View animation={addToBasketAnimation} className='bg-green-600 h-[60] mx-[30] mt-7 rounded-lg justify-center'>
+          <Animatable.View animation={addToBasketAnimation} className='bg-[#77aa9c] h-[60] mx-[30] mt-7 rounded-lg justify-center'>
             <Text className='text-lg font-semibold self-center'>
               Add To Basket
             </Text>
@@ -272,15 +274,15 @@ const DetailFood = ({ route }) => {
             onPress={() => navigation.goBack()}
             className="absolute inset-x-[0] bottom-[65] "
           >
-            <Animatable.View animation={basketAnimation} duration={1000} className='bg-red-300 h-[50] mx-5 rounded-lg items-center justify-center'>
+            <Animatable.View animation={basketAnimation} duration={1000} className='bg-[#77aa9c] h-[50] mx-5 rounded-lg items-center justify-center'>
               <View className='flex-row justify-center items-center'>
-                <Text className='text-xl font-semibold pl-2'>
+                <Text className='text-lg font-semibold pl-2 text-white'>
                   Add To Basket
                 </Text>
                 <View className='pl-2'>
-                  <Octicons name="dash" size={15} color="black" />
+                  <Octicons name="dash" size={15} color="white" />
                 </View>
-                <Text className='pl-2 text-lg font-semibold'>
+                <Text className='pl-2 text-lg font-semibold text-white'>
                   {currencyFormat(totalPrice, "id-ID", "IDR")}
                 </Text>
               </View>

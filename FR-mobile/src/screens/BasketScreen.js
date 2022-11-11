@@ -33,6 +33,7 @@ import {
   checkOut,
   selectOrigin,
   selectIsPaid,
+  selectUserData,
 } from "../store/slices/userSlice";
 import BasketCard from "./BasketCard";
 import { useEffect, useRef, useState } from "react";
@@ -41,10 +42,14 @@ import { currencyFormat } from "simple-currency-format";
 import { Ionicons } from "@expo/vector-icons";
 import { GOOGLE_MAPS_APIKEY } from "@env";
 import Success from "./Success";
+import LoadingScreen from "./LoadingScreen";
 
 const BasketScreen = () => {
   const isPaid = useSelector(selectIsPaid)
 
+  const userData = useSelector(selectUserData)
+  // console.log(userData?.Balance?.balance, "<<<<<<<<<<< dot ")
+  let balance = userData?.Balance?.balance
   let [information, setInformation] = useState("loading...");
   const origin = useSelector(selectOrigin);
   const navigation = useNavigation();
@@ -57,6 +62,8 @@ const BasketScreen = () => {
   // console.log(basket[0].Restaurant.location.coordinates[0], "<<<<----get resto address");
   let totalMoney = 0;
   let total = 0
+
+
 
   const paymentModal = useRef(null)
 
@@ -113,7 +120,9 @@ const BasketScreen = () => {
     modalizeRef.current?.open();
   };
 
-  if (isPaid) return <Success />
+  let totalPayment = total + 10000
+
+  if (isPaid) return <LoadingScreen />
 
   return (
     <GestureHandlerRootView className='flex-1 bg-white'>
@@ -123,40 +132,48 @@ const BasketScreen = () => {
       <FlatList
         data={basket}
         ListHeaderComponent={
-          <View className='bg-red-400 h-[180]'>
+          <View className='bg-[#77aa9c] h-[250] mb-2'>
             {/* DELIVERY OPTION */}
             {
               basket.length > 0 &&
               <>
+                <View className='mb-[70]'></View>
                 <View
-                  className='h-[80] justify-between flex-row items-center border-b-2 border-gray-300'
+                  className='h-[80] justify-between flex-row items-center'
                 >
                   <View className='flex-row space-x-2 items-center ml-3'>
-                    <View className='h-[60] bg-yellow-600 w-[60] rounded-full justify-center items-center'>
+                    <View className='h-[60] bg-white w-[60] rounded-full justify-center items-center border border-gray-500'>
                       <Image
                         className='h-full w-full'
                         source={{ uri: "https://cdn.discordapp.com/attachments/1035762335383552128/1039374758552285194/Delivery.png" }} />
                     </View>
                     <View>
-                      <Text className='text-base font-semibold'>{delivery}</Text>
+                      <Text className='text-base font-semibold text-white'>{delivery}</Text>
                     </View>
                   </View>
 
                   <TouchableOpacity
                     onPress={() => open('dest')}
-                    className='h-[40] w-[95] mr-3 border-2 border-green-600 rounded-3xl items-center justify-center'>
-                    <Text className='text-base font-semibold'>
+                    className='h-[40] w-[95] mr-3 border-2 border-green-700 rounded-3xl items-center justify-center'>
+                    <Text className='text-base font-semibold text-white'>
                       Change
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <View className='bg-yellow-300'>
-                  <Text className='text-4xl'>
-                    Delivery Location
-                  </Text>
-                  <Text>
-                    user Location
-                  </Text>
+                <View className='h-[1] bg-gray-50 mx-3'></View>
+                <View className=''>
+                  <View className='ml-4'>
+                    <Text className='text-2xl font-semibold text-white'>
+                      Delivery Location
+                    </Text>
+                    <Text>
+                      {origin?.description.slice(0, 53) + "..."}
+                    </Text>
+                    <Text>
+                      {information?.distance.value / 1000} km
+                    </Text>
+                    <Text>Estimated time{information?.duration.text}</Text>
+                  </View>
                 </View>
               </>
             }
@@ -192,7 +209,7 @@ const BasketScreen = () => {
                   Delivery fee
                 </Text>
                 <Text className='text-base'>
-                  14.500
+                  {currencyFormat(10000, "id-ID", "IDR")}
                 </Text>
               </View>
 
@@ -203,7 +220,7 @@ const BasketScreen = () => {
                   Total Payment
                 </Text>
                 <Text className='font-bold text-base'>
-                  14.500
+                  {currencyFormat(totalPayment, "id-ID", "IDR")}
                 </Text>
               </View>
 
@@ -213,28 +230,28 @@ const BasketScreen = () => {
       />
 
 
-      <View className='bg-blue-300 h-[170] border-t-2 border-gray-100'>
+      <View className='bg-[#77aa9c] h-[170] border-t-2 border-gray-100'>
 
         <View className='ml-7 mt-2'>
           <Text className='text-[500]'>
             Sevvie Pay
           </Text>
           <Text className='font-bold'>
-            80.000
+            {currencyFormat(balance, "id-ID", "IDR")}
           </Text>
         </View>
-
+        {/* 
         <TouchableOpacity
           onPress={onOpen}
           className='h-[30] w-10 bg-red-200 self-center'>
           <Text>
             tet
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           onPress={() => checkOutHanlder(total)}
-          className='bg-red-200 h-[50] mx-4 rounded-3xl justify-center items-center my-3'>
+          className='bg-white h-[50] mx-4 rounded-3xl justify-center items-center my-3'>
           <Text className='text-lg font-semibold'>
             Place delivery order
           </Text>
@@ -254,11 +271,12 @@ const BasketScreen = () => {
         <View className='h-[60] flex-row justify-between my-2 mx-2'>
 
           <View className='flex-row space-x-2 items-center ml-3'>
-            <View className='h-[50] bg-yellow-600 w-[50] rounded-full'>
-
+            <View className='h-[50] w-[50] rounded-full border'>
+              <Image
+                className='h-full w-full rounded-full'
+                source={{ uri: "https://cdn.discordapp.com/attachments/1035762335383552128/1039374758552285194/Delivery.png" }} />
             </View>
             <View>
-
               <Text className='text-base font-semibold'>Delivery</Text>
             </View>
           </View>
@@ -274,8 +292,10 @@ const BasketScreen = () => {
         <View className='h-[60] flex-row justify-between mt-2  mx-2'>
 
           <View className='flex-row space-x-2 items-center ml-3'>
-            <View className='h-[50] bg-yellow-600 w-[50] rounded-full'>
-
+            <View className='h-[50] w-[50] rounded-full border '>
+              <Image
+                className='h-full w-full rounded-full'
+                source={{ uri: "https://media.discordapp.net/attachments/1035762335383552128/1039374757293998171/Cart3.png" }} />
             </View>
             <View>
               <Text className='text-base font-semibold'>PickUp</Text>

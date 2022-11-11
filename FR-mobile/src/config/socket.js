@@ -1,3 +1,3 @@
 import io from "socket.io-client";
-const socket = io("https://18a9-139-228-111-125.ap.ngrok.io");
+const socket = io("https://testing-savvie.herokuapp.com");
 export default socket;

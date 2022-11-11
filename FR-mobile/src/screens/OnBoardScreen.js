@@ -8,7 +8,7 @@ const { width, height } = Dimensions.get('screen');
 // inspiration: https://dribbble.com/shots/11164698-Onboarding-screens-animation
 // https://twitter.com/mironcatalin/status/1321180191935373312
 
-const bgs = ['#08415c', '#08415c', '#08415c', '#08415c', '#08415c'];
+const bgs = ['#77aa5c', '#77aa6c', '#77aa7c', '#77aa8c', '#77aa9c'];
 const DATA = [
 
   {
@@ -154,9 +154,9 @@ export default function OnBoardScreen() {
                 top: 34
               }}>
                 <Image
-                  source={{ uri: "https://cdn-icons-png.flaticon.com/512/3571/3571572.png" }}
+                  source={{ uri: "https://media.discordapp.net/attachments/1035762335383552128/1039816650825928704/icon.png?width=2160&height=691" }}
                   style={{
-                    width: width / 2,
+                    width: width / 0.5,
                     height: height / 2,
                     resizeMode: "contain"
                   }}
@@ -164,25 +164,32 @@ export default function OnBoardScreen() {
               </View>
             </View>
 
-            <TouchableOpacity
-              onPress={() => navigation.navigate("LOGIN_REGIS")}
-              className='bg-red-300 h-[80] w-[300] absolute top-[480] self-center'
+            <View
+              className=' h-[150] w-[300] absolute top-[480] self-center mt-[60]'
             >
               <Text
-                style={{ color: "#fff", fontWeight: "800", fontSize: 28, marginBottom: 10 }}
+                className='text-white font-bold text-lg text-center'
               >
-                Login / Regis
+                Login to join us fighting against food waste!
               </Text>
-            </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => navigation.navigate("LOGIN_REGIS")}
+                className="h-[60] w-[200] bg-yellow-500 self-center mt-[18] rounded-2xl justify-center items-center">
+                <Text className='text-lg font-semibold text-white'>
+                  LOGIN
+                </Text>
+              </TouchableOpacity>
+            </View>
 
             <TouchableOpacity
-              className='bg-yellow-300 h-[80] w-[300] absolute top-[600] self-center'
+              className='h-[80] w-[300] absolute top-[600] self-center justify-end mt-[120]'
               onPress={() => navigation.navigate("MainNavigation")}
             >
               <Text
-                style={{ color: "#fff", fontWeight: "800", fontSize: 28, marginBottom: 10 }}
+                className='text-white font-bold text-[18px] text-center'
               >
-                NEXT
+                Just let me in to see offers
               </Text>
             </TouchableOpacity>
 

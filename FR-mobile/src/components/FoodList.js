@@ -19,24 +19,29 @@ const FoodList = ({ foodFromRestoDetail, foodFromCategory }) => {
             id: foodFromRestoDetail?.id
           })}
         >
-          <View className='h-[130] bg-red-300 mt-3'>
+          <View className='h-[130] bg-white mt-3 border-y-[0.2px] border-gray-300 shadow mx-2'>
             <View className='flex-row'>
-              <View className='bg-yellow-300 h-full w-[132] p-3'>
+              <View className='h-full w-[132] p-3'>
                 <Image
                   source={{ uri: foodFromRestoDetail?.imageUrl }}
-                  className='h-full w-full rounded-lg'
+                  className='h-full w-full rounded-lg border border-gray-100'
                 />
               </View>
-              <View className='bg-green-300 flex-1'>
-                <Text className='text-lg font-semibold'>
+              <View className='flex-1'>
+                <Text className='text-lg font-semibold mt-2'>
                   {foodFromRestoDetail?.name}
                 </Text>
                 <Text className='text-xs'>
-                  Desc asdak jnaskjndaks ksandkajsnd kajsndakdn jkasndkasjndkajn kjansdkajsnd kjas dnkd njakj nas n
+                  {foodFromRestoDetail?.description}
                 </Text>
-                <Text className='font-semibold'>
-                  {foodFromRestoDetail?.price}
-                </Text>
+                <View className='flex-row gap-x-1'>
+                  <Text className='font-semibold mt-2 '>
+                    {foodFromRestoDetail?.newPrice}
+                  </Text>
+                  <Text className='font-semibold mt-2 text-xs line-through'>
+                    {foodFromRestoDetail?.price}
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
@@ -51,16 +56,16 @@ const FoodList = ({ foodFromRestoDetail, foodFromCategory }) => {
             id: foodFromCategory?.RestaurantId
           })}
         >
-          <View className='h-[130] bg-red-300 mt-3'>
+          <View className='h-[130] bg-white mt-3 border-y-[0.2px] border-gray-300 shadow mx-2'>
             <View className='flex-row'>
-              <View className='bg-yellow-300 h-full w-[132] p-3'>
+              <View className='h-full w-[132] p-3'>
                 <Image
                   source={{ uri: foodFromCategory?.imageUrl }}
                   className='h-full w-full rounded-lg'
                 />
 
               </View>
-              <View className='bg-green-300 flex-1'>
+              <View className='flex-1'>
                 <Text className='text-lg font-semibold'>
                   {foodFromCategory?.name}
                 </Text>

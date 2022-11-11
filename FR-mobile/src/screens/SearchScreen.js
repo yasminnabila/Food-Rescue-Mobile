@@ -259,22 +259,22 @@ const SearchScreen = () => {
 
         {
           basket.length > 0 ?
-            <View className='bg-red-300 h-[50] absolute inset-x-[0] bottom-[20] z-50 mx-5 rounded-lg items-start justify-center'>
+            <View className='bg-[#77aa9c] h-[50] absolute inset-x-[0] bottom-[20] z-50 mx-5 rounded-lg items-start justify-center'>
               <TouchableOpacity onPress={() => navigation.navigate("Test basket")}>
                 <View className='flex-row justify-center items-center'>
-                  <Text className='text-xl font-semibold pl-2'>
+                  <Text className='text-xl font-semibold pl-2 text-white ml-2'>
                     Basket
                   </Text>
                   <View className='pl-2'>
-                    <Octicons name="dot-fill" size={14} color="black" />
+                    <Octicons name="dot-fill" size={14} color="white" />
                   </View>
-                  <Text className='text-xl pl-2'>
+                  <Text className='text-xl pl-2 text-white'>
                     {qtyFood}
                   </Text>
-                  <Text className='text-xl pl-1'>
+                  <Text className='text-xl pl-1 text-white'>
                     {text}
                   </Text>
-                  <Text className='pl-[50] text-lg font-semibold'>
+                  <Text className='pl-[80] text-lg font-semibold text-white'>
                     {currencyFormat(totalMoney, "id-ID", "IDR")}
                   </Text>
                 </View>

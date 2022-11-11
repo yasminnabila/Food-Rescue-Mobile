@@ -1,7 +1,7 @@
-import { Text, TouchableOpacity, View } from "react-native"
+import { Image, Text, TouchableOpacity, View } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux'
-import { clearUser, getUserData, selectIsLogin, selectUserData, selectXenditPay, setIsLogin, setXenditPay, topUp } from "../store/slices/userSlice";
+import { clearUser, getUserData, selectIsLogin, selectUser, selectUserData, selectXenditPay, setIsLogin, setXenditPay, topUp } from "../store/slices/userSlice";
 import { Modalize, useModalize } from "react-native-modalize";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { currencyFormat } from 'simple-currency-format';
@@ -12,12 +12,16 @@ import { useFocusEffect } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 
 const ProfileScreen = ({ navigation }) => {
-
+  const role = useSelector(state => state.user.role);
   const xenditPay = useSelector(selectXenditPay)
+  const { access_token } = useSelector(selectUser);
 
   const userData = useSelector(selectUserData)
   const isLogin = useSelector(selectIsLogin)
-
+  const [data, setData] = useState({
+    totalFood: 0,
+    totalMoney: 0
+  })
   const dispatch = useDispatch()
 
   useFocusEffect(useCallback(() => {
@@ -30,6 +34,7 @@ const ProfileScreen = ({ navigation }) => {
 
   // console.log(userData.email)
 
+
   const clearAll = async () => {
     try {
       await AsyncStorage.clear()
@@ -41,6 +46,31 @@ const ProfileScreen = ({ navigation }) => {
   }
 
   // console.log(userData)
+
+  useEffect(() => {
+    fetch("https://testing-savvie.herokuapp.com/checkout", {
+      headers: {
+        access_token,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let temp = []
+        let total = 0
+        data.forEach(el => {
+          el.OrderItems.forEach(el => temp.push(el))
+        })
+        temp.forEach(el => {
+          total += el.quantity * el.itemPrice
+        })
+        console.log(temp, "---------temp");
+        // console.log(total, "---------total");
+        setData({
+          totalFood: temp.length,
+          totalMoney: total,
+        })
+      });
+  }, []);
 
   const { ref, open, close } = useModalize();
 
@@ -77,18 +107,20 @@ const ProfileScreen = ({ navigation }) => {
       {/* <WebView
         source={{ uri: 'https://expo.dev' }}
       /> */}
-      <View className='h-[470] bg-red-200'>
+      <View className='h-[470] bg-white'>
 
         {/* IMAGE */}
-        <View className='bg-yellow-200 mt-[100] justify-center items-center'>
-          <View className='h-[150] w-[150] rounded-full border-4 border-red-400'>
-            {/* ISI IMAGE DI SINI */}
+        <View className='mt-[100] justify-center items-center'>
+          <View className='h-[120] w-[120] rounded-full border-2 border-gray-400'>
+            <Image
+              className='h-full w-full rounded-full'
+              source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" }} />
           </View>
         </View>
         {/* IMAGE */}
 
         {/* NAME */}
-        <View className='bg-blue-300 items-center mt-5'>
+        <View className='items-center mt-5'>
           <Text className='text-2xl font-semibold'>
             {userData.fullName}
           </Text>
@@ -104,58 +136,67 @@ const ProfileScreen = ({ navigation }) => {
         <View className='flex-row justify-center space-x-4 mt-4'>
 
           <View className='h-[90] w-[170] rounded-3xl items-center justify-center border border-green-700'>
-            <Text className='font-semibold'>
+            <Text className='font-semibold text-[#77aa9c]'>
               Kamu menyelamatkan
             </Text>
-            <Text className='mt-1'>
-              0 Makanan
+            <Text className='mt-1 font-bold text-green-700'>
+              {data?.totalFood} Makanan
             </Text>
           </View>
 
           <View className='h-[90] w-[170] rounded-3xl items-center justify-center border border-green-700'>
-            <Text className='font-semibold'>
+            <Text className='font-semibold text-[#77aa9c]'>
               Total penghematan
             </Text>
-            <Text className='mt-1'>
-              Rp. 0
+            <Text className='mt-1 font-bold text-green-700'>
+              {currencyFormat(data?.totalMoney, "id-ID", "IDR")}
             </Text>
           </View>
 
         </View>
       </View>
 
-      <View className='bg-gray-300 h-2'>
+      <View className='bg-gray-300 h-[0.9]'>
 
       </View>
 
-      <View className='h-[100] bg-green-300 items-center flex-row justify-between'>
+      <View className='h-[80] bg-white items-center flex-row justify-between'>
         <View className='ml-4'>
-          <Text className='text-3xl'>
+          <Text className='text-lg'>
             Savvie pay
           </Text>
-          <Text className='text-2xl'>
+          <Text className='text-xl font-bold text-[#77aa9c]'>
             {currencyFormat(userData?.Balance?.balance, "id-ID", "IDR")}
           </Text>
         </View>
 
         <TouchableOpacity
           onPress={() => open()}
-          className='h-[50] bg-red-400 w-[100] rounded-3xl items-center justify-center mr-4'>
-          <Text>
+          className='h-[40] bg-[#77aa9c] w-[80] rounded-3xl items-center justify-center mr-4'>
+          <Text className='text-white font-bold'>
             TOP UP
           </Text>
 
         </TouchableOpacity>
       </View>
-      <TouchableOpacity className='bg-red-200 mt-10 mx-10 h-10 items-center justify-center rounded-md' onPress={()=>{
-        navigation.navigate("storeDashboard")
-      }}>
-        <Text>Store Dashboard</Text>
-      </TouchableOpacity>
-      <TouchableOpacity className='bg-red-200 mt-10 mx-10 h-10'
+
+      <View className='bg-gray-300 h-[0.9]'>
+
+      </View>
+      {
+        role === "kurir" ? <TouchableOpacity className='bg-[#77aa9c] mt-10 mx-[100] h-10 items-center justify-center rounded-2xl' onPress={() => {
+          navigation.navigate("storeDashboard")
+        }}>
+          <Text className='text-white font-bold'>
+            Store Dashboard
+          </Text>
+        </TouchableOpacity> : ""
+
+      }
+      <TouchableOpacity className='bg-[#77aa9c] mt-10 mx-[100] h-10 items-center justify-center rounded-2xl'
         onPress={logOutHandler}
       >
-        <Text>
+        <Text className='text-white font-bold '>
           LogOut
         </Text>
       </TouchableOpacity>

@@ -138,7 +138,7 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    fetch("https://savvie.herokuapp.com/categories")
+    fetch("https://testing-savvie.herokuapp.com/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data));
   }, []);
@@ -148,7 +148,7 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`https://savvie.herokuapp.com/restaurants/search?distance=4000&lat=${origin?.location?.lat}&long=${origin?.location?.lng}`)
+    fetch(`https://testing-savvie.herokuapp.com/restaurants/search?distance=4000&lat=${origin?.location?.lat}&long=${origin?.location?.lng}`)
       .then((res) => { if (!res.ok) setRestoNearMe(null); else return res.json() })
       .then(data => setRestoNearMe(data))
 
@@ -241,9 +241,18 @@ const HomeScreen = () => {
             <Animatable.View
               animation={secondAnimation}
               duration={1000}
-              className="h-[130] bg-[#77aa9c] mb-[10] "
+              className="h-[130] bg-[#77aa9c] justify-end"
             >
-              <Text>Bounce me!</Text>
+
+              <Pressable
+                onPress={() => navigation.navigate("Search")}
+                className='bg-gray-100 border border-gray-400 h-[50] mx-5 mb-2 justify-center items-center rounded-xl'>
+                <Text className="text-md  text-gray-600">
+                  What food do you want to save today?
+                </Text>
+              </Pressable>
+
+
             </Animatable.View>
           )}
 
@@ -309,7 +318,7 @@ const HomeScreen = () => {
                 return <FoodCard food={item} />;
               }}
               keyExtractor={(item) => item.id}
-              className="bg-slate-300"
+              className="bg-white"
               horizontal
               showsHorizontalScrollIndicator="false"
             />
@@ -317,7 +326,7 @@ const HomeScreen = () => {
           {/* END NEARME */}
 
           {/* Resto terdekat */}
-          <View className="bg-green-300 h-[200] mt-4 py-2">
+          <View className="h-[200] mt-4 py-2">
             {/* TITLE */}
             <Text className="text-xl mt-1 ml-5 mb-1 font-bold">
               Restos in your area
@@ -331,7 +340,7 @@ const HomeScreen = () => {
             {/* END CAPTION */}
 
             <ScrollView
-              className="bg-yellow-200 "
+              className="bg-white "
               horizontal
               showsHorizontalScrollIndicator="false"
             >
@@ -342,15 +351,15 @@ const HomeScreen = () => {
                       onPress={() => navigation.navigate('Test Detail Resto', {
                         id: el.id
                       })}
-                      className="items-center justify-center bg-blue-400 ml-5">
-                      <View className="bg-gray-200 w-[100] h-[100] rounded-full">
+                      className="items-center justify-center ml-5 ">
 
+                      <View className="bg-white w-[80] h-[80] rounded-full">
                         <Image
                           source={{
                             uri: el.logoUrl
                           }}
-                          className='w-full h-full rounded-full'
-                          resizeMode="contain"
+                          className='w-full h-full rounded-full border border-gray-200'
+                          resizeMode="center"
                         />
                       </View>
 
@@ -360,26 +369,25 @@ const HomeScreen = () => {
                 })
 
               }
-
-
             </ScrollView>
+
           </View>
           {/* END CATEGORY */}
 
           {/* BANNER */}
-          <View className="bg-blue-200 h-[200] mt-4">
+          <View className="h-[200] mt-4 ">
             <Image
               source={{
                 uri: "https://media.discordapp.net/attachments/1035762335383552128/1040049865855602738/B2C4E164-9A9C-4EE2-AB3E-026EBBF45A45.jpg",
               }}
-              className="h-full w-full rounded-2xl"
-              resizeMode="cover"
+              className="h-full w-full"
+              resizeMode="contain"
             />
           </View>
           {/* END BANNER */}
 
           {/* Popular Foods */}
-          <View className="h-[300] bg-green-300 mt-4 ">
+          <View className="h-[300] mt-4 ">
             {/* TITLE */}
             <Text className="text-xl mt-1 ml-5 mb-1 font-bold">
               Restos on trend
@@ -398,7 +406,7 @@ const HomeScreen = () => {
                 return <FoodCard food={item} />;
               }}
               keyExtractor={(item) => item.id}
-              className="bg-slate-300"
+              className="bg-white"
               horizontal
               showsHorizontalScrollIndicator="false"
             />
@@ -406,7 +414,7 @@ const HomeScreen = () => {
           {/* END Popular Foods */}
 
           {/* Makanan Hemat */}
-          <View className="h-[300] bg-green-300 mt-4 ">
+          <View className="h-[300] mt-4 ">
             {/* TITLE */}
             <Text className="text-xl mt-1 ml-5 mb-1 font-bold">
               All prices chopped (up to 20k)
@@ -425,7 +433,7 @@ const HomeScreen = () => {
                 return <FoodCard food={item} />;
               }}
               keyExtractor={(item) => item.id}
-              className="bg-slate-300"
+              className='bg-white'
               horizontal
               showsHorizontalScrollIndicator="false"
             />
@@ -433,7 +441,7 @@ const HomeScreen = () => {
           {/* END Makanan Hemat */}
 
           {/* Kamu melewatkan ini */}
-          <View className="h-[300] bg-green-300 mt-4 ">
+          <View className="h-[300] mt-4 ">
             {/* TITLE */}
             <Text className="text-xl mt-1 ml-5 mb-1 font-bold">
               You missed these
@@ -452,7 +460,7 @@ const HomeScreen = () => {
                 return <FoodCard food={item} />;
               }}
               keyExtractor={(item) => item.id}
-              className="bg-slate-300"
+              className='bg-white'
               horizontal
               showsHorizontalScrollIndicator="false"
             />

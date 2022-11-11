@@ -36,6 +36,20 @@ const TrackScreen = () => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
   useEffect(() => {
+    const getTravelTime = async () => {
+      fetch(
+        `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.description}&destinations=${destination.description}&key=${"AIzaSyBsZhvFmRckxNCDiMhcWioVP126-G9onCc"}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+
+          dispatch(setTravelTimeInformation(data.rows[0].elements[0]));
+        });
+    };
+    getTravelTime();
+  }, [origin]);
+  useEffect(() => {
     if (!origin || !destination) return;
     mapRef.current.fitToSuppliedMarkers(["origin", "destination"], {
       edgePadding: { top: 50, right: 50, left: 50, bottom: 50 },
@@ -65,17 +79,19 @@ const TrackScreen = () => {
           <Text className="text-black">arrived in 20 menit</Text>
         </View>
       </View> */}
-      <View className="bg-white mt-[16%] flex flex-row mx-20 p-2 items-center shadow-lg rounded-3xl">
-        <View className="border-r h-[30] justify-center mr-1 pr-2">
+
+      <View className="bg-white h-[50] w-[230] absolute top-[70] inset-x-0 flex flex-row mx-20 p-2 items-center shadow-lg rounded-3xl">
+        <View className="border-r h-[30] justify-center mr-1 pr-2 absolute top-2 left-2">
           <MaterialIcons name="delivery-dining" size={24} color="black" />
         </View>
-        <View className="ml-2">
-          <Text className="font-medium text-black">
+        <View className="ml-2 absolute inset-x-0 top-2 left-[45]">
+          <Text className="font-medium text-black absolute top-0">
             Delivering to your door
           </Text>
-          <Text className="text-gray-700 text-xs">arrived in 20 mins</Text>
+          <Text className="text-gray-700 text-xs top-4">arrived in 20 mins</Text>
         </View>
       </View>
+
       {origin && destination && (
         <>
           <MapViewDirections
@@ -88,9 +104,9 @@ const TrackScreen = () => {
               longitude: destination?.location.lng,
             }}
             apikey={GOOGLE_MAPS_APIKEY}
-            strokeWidth={5}
+            strokeWidth={6}
             optimizeWaypoints={true}
-            strokeColor="hotpink"
+            strokeColor="black"
           />
         </>
       )}

@@ -30,7 +30,7 @@ const AddressScreen = () => {
         });
       })
       .catch((error) => console.warn(error));
-  }, []);
+  }, [origin]);
   const navigation = useNavigation();
   return (
     <View>

@@ -20,7 +20,7 @@ const StoreDashboard = () => {
   const [resto, setResto] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
-    fetch("https://savvie.herokuapp.com/resto/order/food", {
+    fetch("https://testing-savvie.herokuapp.com/resto/order/food", {
       headers: {
         access_token,
       },
@@ -28,7 +28,7 @@ const StoreDashboard = () => {
       .then((res) => res.json())
       .then((data) => {
         setResto(data.resto);
-        data = data.order.filter((el) => el.status === "Paid");
+        data = data.order.filter((el) => el);
         setOrders(data);
       });
   }, []);
@@ -61,25 +61,55 @@ const StoreDashboard = () => {
         renderItem={({ item }) => {
           return (
             <View>
-              <TouchableOpacity
-                className="flex-row shadow-lg bg-white border-gray-200 mx-5 my-2 rounded-md"
-                onPress={() => setModalVisible(true)}
-              >
-                <View>
-                  <View className="bg-blue-100 justify-center items-center w-24 rounded-sm px-3 py-1 mt-3 ml-3 ">
-                    <Text className="text-[#1976d2]">{item.is_delivery}</Text>
+              {
+                item.status === "Delivered" ? <TouchableOpacity
+                  className="flex-row opacity-50 shadow-lg bg-white border-gray-200 mx-5 my-2 rounded-md justify-between"
+                  onPress={() => setModalVisible(true)}
+                >
+                  <View>
+                    <View className="bg-blue-100 justify-center items-center w-24 rounded-sm px-3 py-1 mt-3 ml-3 ">
+                      <Text className="text-[#1976d2]">{item.is_delivery}</Text>
+                    </View>
+                    <Text className="text-base my-2 ml-3 opacity-60">{`SAVVIE-${new Date(
+                      item.createdAt
+                    ).getTime()}`}</Text>
+                    <Text className="text-base font-semibold ml-3 mb-3">
+                      {item.User.fullName}
+                    </Text>
                   </View>
-                  <Text className="text-base my-2 ml-3 opacity-60">{`SAVVIE-${new Date(
-                    item.createdAt
-                  ).getTime()}`}</Text>
-                  <Text className="text-base font-semibold ml-3 mb-3">
-                    {item.User.fullName}
-                  </Text>
-                </View>
-                <View className="bg-emerald-100 justify-center items-center ml-24 rounded-sm px-3 py-1 mt-[22%] h-7">
-                  <Text className="text-emerald-600">{item.status}</Text>
-                </View>
-              </TouchableOpacity>
+                  <View className="justify-between my-2" >
+                    {item.status === "Paid" ? <View className="bg-[#fff0c2] justify-center items-center  rounded-sm px-3 h-7 mr-3">
+                      <Text className="text-[#a68b00]">New Order</Text>
+                    </View> : ""}
+                    <View className="bg-emerald-100 justify-center items-center  rounded-sm px-3 py-1 mt-[56%] h-7 mr-3 ">
+                      <Text className="text-emerald-600">{item.status}</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity> : <TouchableOpacity
+                  className="flex-row shadow-lg bg-white border-gray-200 mx-5 my-2 rounded-md justify-between"
+                  onPress={() => setModalVisible(true)}
+                >
+                  <View>
+                    <View className="bg-blue-100 justify-center items-center w-24 rounded-sm px-3 py-1 mt-3 ml-3 ">
+                      <Text className="text-[#1976d2]">{item.is_delivery}</Text>
+                    </View>
+                    <Text className="text-base my-2 ml-3 opacity-60">{`SAVVIE-${new Date(
+                      item.createdAt
+                    ).getTime()}`}</Text>
+                    <Text className="text-base font-semibold ml-3 mb-3">
+                      {item.User.fullName}
+                    </Text>
+                  </View>
+                  <View className="justify-between my-2" >
+                    {item.status === "Paid" ? <View className="bg-[#fff0c2] justify-center items-center  rounded-sm px-3 h-7 mr-3">
+                      <Text className="text-[#a68b00]">New Order</Text>
+                    </View> : ""}
+                    <View className="bg-emerald-100 justify-center items-center  rounded-sm px-3 py-1 mt-[56%] h-7 mr-3 ">
+                      <Text className="text-emerald-600">{item.status}</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              }
               <Modal
                 animationType="fade"
                 transparent={true}
@@ -113,7 +143,7 @@ const StoreDashboard = () => {
                             description: item.User.address,
                           })
                         );
-                        navigation.navigate("TrackKurir");
+                        navigation.navigate("Track Courier");
                       }}
                       className="justify-center items-center bg-emerald-600 mx-20 py-3 mb-3 rounded-md"
                     >

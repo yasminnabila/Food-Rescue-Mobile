@@ -14,7 +14,7 @@ const CategoryScreen = ({ route }) => {
   console.log(category)
 
   useEffect(() => {
-    fetch(`https://savvie.herokuapp.com/categories/${id}`)
+    fetch(`https://testing-savvie.herokuapp.com/categories/${id}`)
       .then(res => res.json())
       .then(data => setCategory(data))
   }, [])
@@ -24,13 +24,13 @@ const CategoryScreen = ({ route }) => {
   return (
     <View className='flex-1'>
 
-      <View className='bg-red-300 h-[270] justify-center items-center'>
+      <View className='bg-[#77aa9c] h-[270] justify-center items-center'>
         <View className='bg-blue-400 h-[150] w-[340] mt-[60] rounded-2xl'>
           <Image
             className='h-full w-full rounded-2xl'
             source={{ uri: category?.imageUrl }} />
         </View>
-        <Text className='text-xl'>
+        <Text className='text-xl font-bold text-white mt-2'>
           {category.name}
         </Text>
       </View>

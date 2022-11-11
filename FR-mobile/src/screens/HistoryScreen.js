@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Modalize, useModalize } from 'react-native-modalize';
+import { MaterialIcons } from "@expo/vector-icons";
 
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { useNavigation } from '@react-navigation/native';
@@ -41,7 +42,7 @@ const HistoryScreen = () => {
           },
         };
 
-        let response = await fetch('https://savvie.herokuapp.com/checkout', requestOptions)
+        let response = await fetch('https://testing-savvie.herokuapp.com/checkout', requestOptions)
         response = await response.json()
         setHistory(response)
 
@@ -62,15 +63,17 @@ const HistoryScreen = () => {
   return (
     <View className='flex-1'>
 
-      {/* 
-      <TouchableOpacity
-          onPress={() => navigation.navigate("screen 2")}
-          className='h-[100] bg-red-200'>
-          <Text>
-            screen 1
+      {/* <View className="bg-white h-[50] w-[230] absolute top-[70] inset-x-0 flex flex-row mx-20 p-2 items-center shadow-lg rounded-3xl">
+        <View className="border-r h-[30] justify-center mr-1 pr-2 absolute top-2 left-2">
+          <MaterialIcons name="delivery-dining" size={24} color="black" />
+        </View>
+        <View className="ml-2 absolute inset-x-0 top-2 left-[45]">
+          <Text className="font-medium text-black absolute top-0">
+            Delivering to your door
           </Text>
-      </TouchableOpacity> 
-      */}
+          <Text className="text-gray-700 text-xs top-4">arrived in 20 mins</Text>
+        </View>
+      </View> */}
 
       <View className='h-[150] bg-[#77aa9c] items-center justify-end'>
         <Text className='text-4xl'>

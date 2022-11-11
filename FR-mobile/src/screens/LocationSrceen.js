@@ -1,5 +1,6 @@
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import React, { useEffect, useState } from "react";
 import * as Location from "expo-location";
@@ -45,58 +46,96 @@ const LocationSrceen = () => {
     })();
   }, []);
   return (
-    <View className="mx-5">
-      <View className="h-[70] mt-[40] flex-row items-center">
+    <>
+      <View className="mx-5">
+        <View className="h-[70] mt-[40] flex-row items-center">
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Test1");
+            }}
+          >
+            <AntDesign name="left" size={24} color="gray" />
+          </TouchableOpacity>
+          <Text className="ml-[19%] font-bold text-xl">Set Your Location</Text>
+        </View>
+        <GooglePlacesAutocomplete
+          placeholder="Enter destination address?"
+          onPress={(data, details = null) => {
+            dispatch(
+              setOrigin({
+                location: details.geometry.location,
+                description: data.description,
+              })
+            );
+            dispatch(setUserCurrentLocation({ location: details.geometry.location }))
+            navigation.navigate("AddressScreen");
+          }}
+          styles={toInputBoxStyles}
+          fetchDetails={true}
+          returnKeyType={"search"}
+          enablePoweredByContainer={false}
+          minLength={2}
+          query={{
+            key: "AIzaSyBsZhvFmRckxNCDiMhcWioVP126-G9onCc",
+            language: "id",
+          }}
+          nearbyPlacesAPI="GooglePlacesSearch"
+          debounce={400}
+        />
         <TouchableOpacity
+          className="absolute top-40 -z-[1]"
           onPress={() => {
-            navigation.navigate("Test1");
+            dispatch(
+              setOrigin({
+                location: latlong,
+                description: location,
+              })
+            );
+            navigation.navigate("AddressScreen");
           }}
         >
-          <AntDesign name="left" size={24} color="gray" />
+          <View className="flex-row items-center pt-3">
+            <FontAwesome5 name="bookmark" size={24} color="gray" />
+            <View>
+              <Text className="ml-4">Saved Address</Text>
+              <Text className="ml-4 opacity-40">
+                Choose your address quickly
+              </Text>
+            </View>
+          </View>
         </TouchableOpacity>
-        <Text className="ml-[19%] font-bold text-xl">Set Your Location</Text>
+        <TouchableOpacity
+          className="absolute top-52 bg-gray-100 -z-[1]"
+          onPress={() => {
+            dispatch(
+              setOrigin({
+                location: latlong,
+                description: location,
+              })
+            );
+            navigation.navigate("AddressScreen");
+          }}
+        >
+          <View className="flex-row items-center pt-3">
+            <MaterialIcons name="gps-fixed" size={24} color="gray" />
+            <View>
+              <Text className="ml-4 ">Your Location</Text>
+              <Text className="ml-4 opacity-40 ">
+                Choose the address according to your current location
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
       </View>
-      <GooglePlacesAutocomplete
-        placeholder="Enter destination address?"
-        onPress={(data, details = null) => {
-          dispatch(
-            setOrigin({
-              location: details.geometry.location,
-              description: data.description,
-            })
-          );
-          dispatch(setUserCurrentLocation({ location: details.geometry.location }))
-          navigation.navigate("AddressScreen");
+      <View
+        style={{
+          marginTop: 130,
+          borderBottomColor: "gray",
+          borderBottomWidth: 3,
+          opacity: 0.4,
         }}
-        styles={toInputBoxStyles}
-        fetchDetails={true}
-        returnKeyType={"search"}
-        enablePoweredByContainer={false}
-        minLength={2}
-        query={{
-          key: "AIzaSyBsZhvFmRckxNCDiMhcWioVP126-G9onCc",
-          language: "id",
-        }}
-        nearbyPlacesAPI="GooglePlacesSearch"
-        debounce={400}
       />
-      <TouchableOpacity
-        onPress={() => {
-          dispatch(
-            setOrigin({
-              location: latlong,
-              description: location,
-            })
-          );
-          navigation.navigate("AddressScreen");
-        }}
-      >
-        <View className="flex-row items-center pt-3">
-          <MaterialIcons name="gps-fixed" size={24} color="black" />
-          <Text>Your Location</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    </>
   );
 };
 

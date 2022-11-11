@@ -22,8 +22,9 @@ const FoodCard = ({ food }) => {
   // console.log(restoFood.Food[0].name)
 
   let km = +information?.distance?.value / 1000
+
   useEffect(() => {
-    fetch(`https://savvie.herokuapp.com/restaurants/${food.id}`)
+    fetch(`https://testing-savvie.herokuapp.com/restaurants/${food.id}`)
       .then(res => res.json())
       .then(data => setRestoFood(data))
   }, [])
@@ -42,7 +43,7 @@ const FoodCard = ({ food }) => {
     getTravelTime();
   }, [origin]);
 
-  if (!restoFood) return <Text>TEST</Text>
+  if (!restoFood) return <Text> </Text>
 
   return (
 
@@ -50,7 +51,7 @@ const FoodCard = ({ food }) => {
       onPress={() => navigation.navigate('Test Detail Resto', {
         id: food.id
       })}
-      className='bg-red-500 w-[150] h-[220] ml-3 rounded-2xl self-center'>
+      className='bg-white   w-[150] h-[220] ml-3 rounded-2xl self-center mt-[7] shadow'>
 
       {/* IMAGE */}
       <View className='bg-white h-[110] rounded-t-2xl'>
@@ -60,7 +61,7 @@ const FoodCard = ({ food }) => {
         }} className='h-full w-full rounded-t-2xl' />
 
         {/* PROMO BANNER */}
-        <View className='w-[40] h-[20] bg-orange-500 absolute -left-2 top-3 rounded-lg shadow-md shadow-black'>
+        <View className='w-[40] h-[20] bg-red-400 absolute -left-2 top-3 rounded-lg '>
           <Text className='text-xs m-auto'>
             {restoFood.Food[0].discount}%
           </Text>
@@ -68,8 +69,8 @@ const FoodCard = ({ food }) => {
         {/* END PROMO BANNER */}
 
         {/* JARAK */}
-        <View className='bg-blue-300 absolute bottom-1 right-2  w-[40] h-[20] items-center justify-center flex-row'>
-          <Text className='text-[12px]'>
+        <View className='bg-white absolute bottom-1 right-2  w-[40] h-[20] items-center justify-center flex-row'>
+          <Text className='text-[9px]'>
             {km}
           </Text>
           <Text className='text-[9px]'>
@@ -102,8 +103,19 @@ const FoodCard = ({ food }) => {
       {/* END STOCK */}
 
       <View className='ml-1'>
+
+
+        {/* NAMA MAKANAN */}
+        <View className='mt-2 w-[120]'>
+          <Text className='text-[10px]'>
+            {restoFood.Food[0].name}
+          </Text>
+        </View>
+        {/* END NAMA MAKANAN */}
+
+
         {/* HARGA */}
-        <View className='-z-10 mt-2 flex-row space-x-1 items-center'>
+        <View className='-z-10 flex-row space-x-1 items-center mt-2'>
           <Text className='bg-white text-[10px] line-through text-gray-500'>
 
             {currencyFormat(restoFood.Food[0].price, "id-ID", "IDR")}
@@ -117,17 +129,9 @@ const FoodCard = ({ food }) => {
         </View>
         {/* END HARGA */}
 
-        {/* NAMA MAKANAN */}
-        <View className='bg-yellow-200'>
-          <Text className='text-xs'>
-            {restoFood.Food[0].name}
-          </Text>
-        </View>
-        {/* END NAMA MAKANAN */}
-
         {/* RATING */}
-        <View className='bg-green-300'>
-          <View className='flex-row items-center space-x-1'>
+        <View>
+          <View className='flex-row items-center space-x-1 mt-1'>
             <FontAwesome name="star" size={13} color="gold" />
             <Text className='text-xs'>{restoFood.rate}</Text>
           </View>

@@ -106,7 +106,7 @@ const LoginRegisScreen = () => {
 
 
   useEffect(() => {
-    fetch("https://savvie.herokuapp.com/signin", {
+    fetch("https://testing-savvie.herokuapp.com/signin", {
       method: "post",
       headers: {
         "Content-Type": "application/json"
@@ -227,8 +227,8 @@ const LoginRegisScreen = () => {
             <TouchableOpacity onPress={() => submitHandler(formInput)} className='text-white font-bold text-xl tracking-wider'>
               <Text>{isRegister ? "REGISTER" : "LOGIN"}</Text></TouchableOpacity>
           </View>
-              <TouchableOpacity onPress={() => submitHandler(formInput,"kurir")} className='text-white font-bold text-xl tracking-wider'>
-              <Text>Kurir</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => submitHandler(formInput, "kurir")} className='text-white font-bold text-xl tracking-wider'>
+            <Text>Kurir</Text></TouchableOpacity>
         </Animated.View>
 
 

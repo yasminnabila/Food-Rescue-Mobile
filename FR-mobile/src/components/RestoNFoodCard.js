@@ -20,7 +20,7 @@ const RestoNFoodCard = ({ resto }) => {
       {/* RESTO n FOOD CARD */}
 
       <Pressable
-        className='my-[10] mx-1 shadow-lg '
+        className='my-[3] mx-1 shadow-lg '
 
         // onPress={() => navigation.navigate('Test Detail Resto'),{
         //   id: foodFromRestoDetail?.id
