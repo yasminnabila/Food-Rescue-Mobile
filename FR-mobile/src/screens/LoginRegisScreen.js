@@ -106,7 +106,7 @@ const LoginRegisScreen = () => {
 
 
   useEffect(() => {
-    fetch("https://testing-savvie.herokuapp.com/signin", {
+    fetch("https://savvie.herokuapp.com/signin", {
       method: "post",
       headers: {
         "Content-Type": "application/json"

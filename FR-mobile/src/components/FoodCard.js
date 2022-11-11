@@ -24,7 +24,7 @@ const FoodCard = ({ food }) => {
   let km = +information?.distance?.value / 1000
 
   useEffect(() => {
-    fetch(`https://testing-savvie.herokuapp.com/restaurants/${food.id}`)
+    fetch(`https://savvie.herokuapp.com/restaurants/${food.id}`)
       .then(res => res.json())
       .then(data => setRestoFood(data))
   }, [])

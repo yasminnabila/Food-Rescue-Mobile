@@ -122,7 +122,7 @@ const BasketScreen = () => {
 
   let totalPayment = total + 10000
 
-  if (isPaid) return <LoadingScreen />
+  if (isPaid) return <Success />
 
   return (
     <GestureHandlerRootView className='flex-1 bg-white'>
@@ -170,9 +170,9 @@ const BasketScreen = () => {
                       {origin?.description.slice(0, 53) + "..."}
                     </Text>
                     <Text>
-                      {information?.distance.value / 1000} km
+                      {Math.round(information?.distance?.value / 1000)} km
                     </Text>
-                    <Text>Estimated time{information?.duration.text}</Text>
+                    <Text>Estimated time {information?.duration?.text}</Text>
                   </View>
                 </View>
               </>

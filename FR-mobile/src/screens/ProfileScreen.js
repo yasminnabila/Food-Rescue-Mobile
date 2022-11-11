@@ -17,6 +17,8 @@ const ProfileScreen = ({ navigation }) => {
   const { access_token } = useSelector(selectUser);
 
   const userData = useSelector(selectUserData)
+  console.log(userData, "<><>><><><>><");
+
   const isLogin = useSelector(selectIsLogin)
   const [data, setData] = useState({
     totalFood: 0,
@@ -48,7 +50,7 @@ const ProfileScreen = ({ navigation }) => {
   // console.log(userData)
 
   useEffect(() => {
-    fetch("https://testing-savvie.herokuapp.com/checkout", {
+    fetch("https://savvie.herokuapp.com/checkout", {
       headers: {
         access_token,
       },

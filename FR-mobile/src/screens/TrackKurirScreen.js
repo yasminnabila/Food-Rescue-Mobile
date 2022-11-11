@@ -53,7 +53,7 @@ const TrackKurirScreen = () => {
     mapRef.current.fitToSuppliedMarkers(["userLocation", "destination"], {
       edgePadding: { top: 50, right: 50, left: 50, bottom: 50 },
     });
-  }, [origin]);
+  }, [userLocation]);
   // useEffect(() => {
   //   if (!origin || !destination) return;
   //   const getTravelTime = async () => {
@@ -152,7 +152,7 @@ const TrackKurirScreen = () => {
           title="Origin"
           description={origin.description}
           identifier="origin"
-          image={require("../../assets/images/bike.png")}
+          image={require("../../assets/images/bike2.png")}
         />
       )}
       {userLocation && (

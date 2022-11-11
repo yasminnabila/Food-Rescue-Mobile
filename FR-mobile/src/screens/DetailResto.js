@@ -59,7 +59,7 @@ const DetailResto = ({ route }) => {
   const [text, setText] = useState(null)
 
   useEffect(() => {
-    fetch(`https://testing-savvie.herokuapp.com/restaurants/${id}`)
+    fetch(`https://savvie.herokuapp.com/restaurants/${id}`)
       .then(res => res.json())
       .then(data => setRestoNFoods(data))
   }, [])

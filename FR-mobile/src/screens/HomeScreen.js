@@ -138,7 +138,7 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    fetch("https://testing-savvie.herokuapp.com/categories")
+    fetch("https://savvie.herokuapp.com/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data));
   }, []);
@@ -148,7 +148,7 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`https://testing-savvie.herokuapp.com/restaurants/search?distance=4000&lat=${origin?.location?.lat}&long=${origin?.location?.lng}`)
+    fetch(`https://savvie.herokuapp.com/restaurants/search?distance=4000&lat=${origin?.location?.lat}&long=${origin?.location?.lng}`)
       .then((res) => { if (!res.ok) setRestoNearMe(null); else return res.json() })
       .then(data => setRestoNearMe(data))
 

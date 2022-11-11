@@ -56,19 +56,20 @@ const TrackScreen = () => {
     });
   }, [origin, destination]);
   return (
-    <MapView
-      ref={mapRef}
-      style={{ flex: 1 }}
-      mapType="mutedStandard"
-      initialRegion={{
-        latitude: origin.location.lat,
-        longitude: origin.location.lng,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      }}
-      showsUserLocation={true}
-    >
-      {/* <View className="bg-white mt-[120%] flex flex-row mx-1 p-5 items-center border-2 border-green-600 rounded-sm ">
+    <>
+      <MapView
+        ref={mapRef}
+        style={{ flex: 1 }}
+        mapType="mutedStandard"
+        initialRegion={{
+          latitude: origin.location.lat,
+          longitude: origin.location.lng,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        }}
+        showsUserLocation={true}
+      >
+        {/* <View className="bg-white mt-[120%] flex flex-row mx-1 p-5 items-center border-2 border-green-600 rounded-sm ">
         <View className="border-r h-[40] justify-center mr-1 pr-2">
           <MaterialIcons name="delivery-dining" size={24} color="black" />
         </View>
@@ -80,62 +81,68 @@ const TrackScreen = () => {
         </View>
       </View> */}
 
-      <View className="bg-white h-[50] w-[230] absolute top-[70] inset-x-0 flex flex-row mx-20 p-2 items-center shadow-lg rounded-3xl">
-        <View className="border-r h-[30] justify-center mr-1 pr-2 absolute top-2 left-2">
-          <MaterialIcons name="delivery-dining" size={24} color="black" />
+        <View className="bg-white h-[50] w-[230] absolute top-[70] inset-x-0 flex flex-row mx-20 p-2 items-center shadow-lg rounded-3xl">
+          <View className="border-r h-[30] justify-center mr-1 pr-2 absolute top-2 left-2">
+            <MaterialIcons name="delivery-dining" size={24} color="black" />
+          </View>
+          <View className="ml-2 absolute inset-x-0 top-2 left-[45]">
+            <Text className="font-medium text-black absolute top-0">
+              Delivering to your door
+            </Text>
+            <Text className="text-gray-700 text-xs top-4">arrived in 20 mins</Text>
+          </View>
         </View>
-        <View className="ml-2 absolute inset-x-0 top-2 left-[45]">
-          <Text className="font-medium text-black absolute top-0">
-            Delivering to your door
-          </Text>
-          <Text className="text-gray-700 text-xs top-4">arrived in 20 mins</Text>
-        </View>
-      </View>
 
-      {origin && destination && (
-        <>
-          <MapViewDirections
-            origin={{
+        {origin && destination && (
+          <>
+            <MapViewDirections
+              origin={{
+                latitude: origin.location.lat,
+                longitude: origin.location.lng,
+              }}
+              destination={{
+                latitude: destination?.location.lat,
+                longitude: destination?.location.lng,
+              }}
+              apikey={GOOGLE_MAPS_APIKEY}
+              strokeWidth={6}
+              optimizeWaypoints={true}
+              strokeColor="black"
+            />
+          </>
+        )}
+        {origin?.location && (
+          <Marker
+            draggable={true}
+            coordinate={{
               latitude: origin.location.lat,
               longitude: origin.location.lng,
             }}
-            destination={{
+            title="Origin"
+            description={origin.description}
+            identifier="origin"
+            image={require("../../assets/images/greenMarker.png")}
+          />
+        )}
+        {destination && (
+          <Marker
+            coordinate={{
               latitude: destination?.location.lat,
               longitude: destination?.location.lng,
             }}
-            apikey={GOOGLE_MAPS_APIKEY}
-            strokeWidth={6}
-            optimizeWaypoints={true}
-            strokeColor="black"
+            title="Destination"
+            description={destination.description}
+            identifier="destination"
+            image={require("../../assets/images/bike2.png")}
           />
-        </>
-      )}
-      {origin?.location && (
-        <Marker
-          draggable={true}
-          coordinate={{
-            latitude: origin.location.lat,
-            longitude: origin.location.lng,
-          }}
-          title="Origin"
-          description={origin.description}
-          identifier="origin"
-          image={require("../../assets/images/greenMarker.png")}
-        />
-      )}
-      {destination && (
-        <Marker
-          coordinate={{
-            latitude: destination?.location.lat,
-            longitude: destination?.location.lng,
-          }}
-          title="Destination"
-          description={destination.description}
-          identifier="destination"
-          image={require("../../assets/images/bike2.png")}
-        />
-      )}
-    </MapView>
+        )}
+      </MapView>
+      <View>
+        <View>
+          <Text>DONE</Text>
+        </View>
+      </View>
+    </>
   );
 };
 
