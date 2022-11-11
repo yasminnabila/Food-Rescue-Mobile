@@ -20,7 +20,7 @@ const StoreDashboard = () => {
   const [resto, setResto] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
-    fetch("https://savvie.herokuapp.com/resto/order/food", {
+    fetch("https://savvie2.herokuapp.com/resto/order/food", {
       headers: {
         access_token,
       },

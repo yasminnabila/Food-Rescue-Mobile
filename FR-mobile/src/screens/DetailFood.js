@@ -140,7 +140,7 @@ const DetailFood = ({ route }) => {
   }
 
   useEffect(() => {
-    fetch(`https://savvie.herokuapp.com/food/${id}`)
+    fetch(`https://savvie2.herokuapp.com/food/${id}`)
       .then(res => res.json())
       .then(data => setFood(data))
   }, [])
