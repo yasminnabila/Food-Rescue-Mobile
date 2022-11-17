@@ -50,7 +50,7 @@ const ProfileScreen = ({ navigation }) => {
   // console.log(userData)
 
   useEffect(() => {
-    fetch("https://savvie2.herokuapp.com/checkout", {
+    fetch("https://savvie.herokuapp.com/checkout", {
       headers: {
         access_token,
       },

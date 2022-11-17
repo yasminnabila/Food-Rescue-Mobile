@@ -138,7 +138,7 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    fetch("https://savvie2.herokuapp.com/categories")
+    fetch("https://savvie.herokuapp.com/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data));
   }, []);
@@ -148,7 +148,7 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`https://savvie2.herokuapp.com/restaurants/search?distance=4000&lat=${origin?.location?.lat}&long=${origin?.location?.lng}`)
+    fetch(`https://savvie.herokuapp.com/restaurants/search?distance=4000&lat=${origin?.location?.lat}&long=${origin?.location?.lng}`)
       .then((res) => { if (!res.ok) setRestoNearMe(null); else return res.json() })
       .then(data => setRestoNearMe(data))
 
@@ -156,7 +156,7 @@ const HomeScreen = () => {
 
   console.log("=========================");
   // {
-  //   categories.forEach((el) => {
+  //   categories.forEach((el) => {ßßßßßßßß
   //     console.log(el.name)
   //   })
   // }
@@ -352,17 +352,15 @@ const HomeScreen = () => {
                         id: el.id
                       })}
                       className="items-center justify-center ml-5 ">
-
                       <View className="bg-white w-[80] h-[80] rounded-full">
                         <Image
                           source={{
-                            uri: el.logoUrl
+                            uri: el?.logoUrl
                           }}
                           className='w-full h-full rounded-full border border-gray-200'
-                          resizeMode="center"
+                        // resizeMode="center"
                         />
                       </View>
-
                       <Text className="mt-2">{el.name}</Text>
                     </TouchableOpacity>
                   )

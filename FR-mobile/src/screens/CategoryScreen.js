@@ -14,7 +14,7 @@ const CategoryScreen = ({ route }) => {
   console.log(category)
 
   useEffect(() => {
-    fetch(`https://savvie2.herokuapp.com/categories/${id}`)
+    fetch(`https://savvie.herokuapp.com/categories/${id}`)
       .then(res => res.json())
       .then(data => setCategory(data))
   }, [])

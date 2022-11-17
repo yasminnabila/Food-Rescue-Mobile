@@ -42,7 +42,7 @@ const HistoryScreen = () => {
           },
         };
 
-        let response = await fetch('https://savvie2.herokuapp.com/checkout', requestOptions)
+        let response = await fetch('https://savvie.herokuapp.com/checkout', requestOptions)
         response = await response.json()
         setHistory(response)
 

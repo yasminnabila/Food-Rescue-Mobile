@@ -85,37 +85,38 @@ const TrackKurirScreen = () => {
   // },[]);
 
   return (
-    <MapView
-      ref={mapRef}
-      style={{ flex: 1 }}
-      mapType="mutedStandard"
-      initialRegion={{
-        latitude: origin.location.lat,
-        longitude: origin.location.lng,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      }}
-      showsUserLocation={true}
-    >
-      <View className="bg-white h-[50] w-[230] absolute top-[70] inset-x-0 flex flex-row mx-20 p-2 items-center shadow-lg rounded-3xl">
-        <View className="border-r h-[30] justify-center mr-1 pr-2 absolute top-2 left-2">
-          <MaterialIcons name="delivery-dining" size={24} color="black" />
+    <>
+      <MapView
+        ref={mapRef}
+        style={{ flex: 1 }}
+        mapType="mutedStandard"
+        initialRegion={{
+          latitude: origin.location.lat,
+          longitude: origin.location.lng,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        }}
+        showsUserLocation={true}
+      >
+        <View className="bg-white h-[50] w-[230] absolute top-[70] inset-x-0 flex flex-row mx-20 p-2 items-center shadow-lg rounded-3xl">
+          <View className="border-r h-[30] justify-center mr-1 pr-2 absolute top-2 left-2">
+            <MaterialIcons name="delivery-dining" size={24} color="black" />
+          </View>
+          <View className="ml-2 absolute inset-x-0 top-2 left-[45]">
+            <Text className="font-medium text-black absolute top-0">
+              On The Way
+            </Text>
+            <Text className="text-gray-700 text-xs top-4">arrived in 20 mins</Text>
+          </View>
         </View>
-        <View className="ml-2 absolute inset-x-0 top-2 left-[45]">
-          <Text className="font-medium text-black absolute top-0">
-            On The Way
-          </Text>
-          <Text className="text-gray-700 text-xs top-4">arrived in 20 mins</Text>
-        </View>
-      </View>
-      <View className="justify-center, items-center bg-[#77AA9C] h-[34] w-[70] absolute top-[90%] inset-x-0 p-2 shadow-emerald-xl rounded-3xl ml-[70%]">
-        <TouchableOpacity onPress={() => { clearInterval(interval); navigation.navigate("Profile") }} >
-          <Text className="font-bold text-white" >Done</Text>
-        </TouchableOpacity>
-      </View>
-      {userLocation && origin && (
-        <>
-          {/* <View className="bg-white mt-[16%] flex flex-row mx-7 p-3 items-center border-2 border-green-600 rounded-sm">
+        {/* <View className="justify-center, items-center bg-[#77AA9C] h-[34] w-[70] absolute top-[90%] inset-x-0 p-2 shadow-emerald-xl rounded-3xl ml-[70%]">
+          <TouchableOpacity onPress={() => { clearInterval(interval); navigation.navigate("Profile") }} >
+            <Text className="font-bold text-white" >Done</Text>
+          </TouchableOpacity>
+        </View> */}
+        {userLocation && origin && (
+          <>
+            {/* <View className="bg-white mt-[16%] flex flex-row mx-7 p-3 items-center border-2 border-green-600 rounded-sm">
             <View className="border-r h-[40] justify-center mr-1 pr-2">
               <MaterialIcons name="delivery-dining" size={24} color="black" />
             </View>
@@ -126,48 +127,56 @@ const TrackKurirScreen = () => {
               <Text className="text-black">arrived in 20 menit</Text>
             </View>
           </View> */}
-          <MapViewDirections
-            origin={{
-              latitude: origin?.location.lat,
-              longitude: origin?.location.lng,
+            <MapViewDirections
+              origin={{
+                latitude: origin?.location.lat,
+                longitude: origin?.location.lng,
+              }}
+              destination={{
+                latitude: "-6.2706229",
+                longitude: "106.7798747",
+              }}
+              apikey={"AIzaSyBsZhvFmRckxNCDiMhcWioVP126-G9onCc"}
+              strokeWidth={6}
+              optimizeWaypoints={true}
+              strokeColor="black"
+            />
+          </>
+        )}
+        {origin?.location && (
+          <Marker
+            draggable={true}
+            coordinate={{
+              latitude: origin.location.lat,
+              longitude: origin.location.lng,
             }}
-            destination={{
+            title="Origin"
+            description={origin.description}
+            identifier="origin"
+            image={require("../../assets/images/bike2.png")}
+          />
+        )}
+        {userLocation && (
+          <Marker
+            coordinate={{
               latitude: "-6.2706229",
               longitude: "106.7798747",
             }}
-            apikey={"AIzaSyBsZhvFmRckxNCDiMhcWioVP126-G9onCc"}
-            strokeWidth={6}
-            optimizeWaypoints={true}
-            strokeColor="black"
+            title="Destination"
+            description={userLocation.description}
+            identifier="destination"
+            image={require("../../assets/images/greenMarker.png")}
           />
-        </>
-      )}
-      {origin?.location && (
-        <Marker
-          draggable={true}
-          coordinate={{
-            latitude: origin.location.lat,
-            longitude: origin.location.lng,
-          }}
-          title="Origin"
-          description={origin.description}
-          identifier="origin"
-          image={require("../../assets/images/bike2.png")}
-        />
-      )}
-      {userLocation && (
-        <Marker
-          coordinate={{
-            latitude: "-6.2706229",
-            longitude: "106.7798747",
-          }}
-          title="Destination"
-          description={userLocation.description}
-          identifier="destination"
-          image={require("../../assets/images/greenMarker.png")}
-        />
-      )}
-    </MapView>
+        )}
+      </MapView>
+      <View className='h-[100] w-full justify-center'>
+        <TouchableOpacity onPress={() => { clearInterval(interval); navigation.navigate("Profile") }} className='mx-5 h-[60] bg-[#77aa9c] rounded-3xl justify-center items-center'>
+          <Text className='text-2xl font-bold text-white'>
+            Done
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 

@@ -159,7 +159,7 @@ export const checkOut = ({ total, basket, delivery, access_token }) => async (di
       body: JSON.stringify({ total: totalPrice, order, is_delivery: delivery })
     };
 
-    let response = await fetch(`https://savvie2.herokuapp.com/checkout`, requestOptions)
+    let response = await fetch(`https://savvie.herokuapp.com/checkout`, requestOptions)
 
     let res = await response.json()
 
@@ -183,7 +183,7 @@ export const login = (data) => dispatch => {
     body: JSON.stringify(data)
   };
 
-  return fetch(`https://savvie2.herokuapp.com/signIn`, requestOptions)
+  return fetch(`https://savvie.herokuapp.com/signIn`, requestOptions)
 
   //   let res = await response.json()
   //   console.log(res)
@@ -209,7 +209,7 @@ export const register = (data) => async dispatch => {
       body: JSON.stringify(data)
     };
 
-    let response = await fetch(`https://savvie2.herokuapp.com/signUp`, requestOptions)
+    let response = await fetch(`https://savvie.herokuapp.com/signUp`, requestOptions)
     let res = await response.json()
 
     dispatch(login({ email: data.email, password: data.password }))
@@ -225,7 +225,7 @@ export const getUserData = () => async (dispatch, getState) => {
     if (!getState().user.isLogin) return
     const { access_token } = await getData()
     // console.log(access_token, "ini di slice ")
-    const response = await fetch("https://savvie2.herokuapp.com/", {
+    const response = await fetch("https://savvie.herokuapp.com/", {
       headers: {
         access_token: access_token
       }
@@ -256,7 +256,7 @@ export const topUp = (topUpAmount) => async dispatch => {
       body: JSON.stringify({ balance: topUpAmount })
     };
 
-    let response = await fetch(`https://savvie2.herokuapp.com/xendit/topUp`, requestOptions)
+    let response = await fetch(`https://savvie.herokuapp.com/xendit/topUp`, requestOptions)
 
     let res = await response.json()
 
@@ -271,7 +271,7 @@ export const topUp = (topUpAmount) => async dispatch => {
 
 // export const getUserHistory = () => async dispatch => {
 //   try {
-//     const response = await fetch("https://savvie2.herokuapp.com/history", {
+//     const response = await fetch("https://savvie.herokuapp.com/history", {
 //       headers: {
 //         access_token: access_token
 //       }

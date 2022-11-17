@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import MapViewDirections from "react-native-maps-directions";
 import MapView, { Marker } from "react-native-maps";
 import React, { useEffect, useRef, useState } from "react";
@@ -13,8 +13,10 @@ import { GOOGLE_MAPS_APIKEY } from "@env";
 import socket from "../config/socket";
 import * as Location from "expo-location";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const TrackScreen = () => {
+  const navigation = useNavigation()
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
   useEffect(() => {
@@ -67,7 +69,7 @@ const TrackScreen = () => {
           latitudeDelta: 0.005,
           longitudeDelta: 0.005,
         }}
-        showsUserLocation={true}
+      // showsUserLocation={true}
       >
         {/* <View className="bg-white mt-[120%] flex flex-row mx-1 p-5 items-center border-2 border-green-600 rounded-sm ">
         <View className="border-r h-[40] justify-center mr-1 pr-2">
@@ -92,6 +94,11 @@ const TrackScreen = () => {
             <Text className="text-gray-700 text-xs top-4">arrived in 20 mins</Text>
           </View>
         </View>
+        {/* <View className="justify-center, items-center bg-[#77AA9C] h-[34] w-[70] absolute top-[90%] inset-x-0 p-2 shadow-emerald-xl rounded-3xl ml-[70%]">
+          <TouchableOpacity onPress={() => { navigation.navigate("Test1") }} >
+            <Text className="font-bold text-white" >Done</Text>
+          </TouchableOpacity>
+        </View> */}
 
         {origin && destination && (
           <>
@@ -137,10 +144,12 @@ const TrackScreen = () => {
           />
         )}
       </MapView>
-      <View>
-        <View>
-          <Text>DONE</Text>
-        </View>
+      <View className='h-[100] w-full justify-center'>
+        <TouchableOpacity onPress={() => { navigation.navigate("Test1") }} className='mx-5 h-[60] bg-[#77aa9c] rounded-3xl justify-center items-center'>
+          <Text className='text-2xl font-bold text-white'>
+            Done
+          </Text>
+        </TouchableOpacity>
       </View>
     </>
   );
