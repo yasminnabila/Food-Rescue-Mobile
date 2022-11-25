@@ -57,8 +57,6 @@ Here is a working [_live demo_](https://expo.dev/@yasminnabila/FR-mobile?service
 * [![React Hook Form][React-Hook-Form.com]][React-Hook-url]
 * [![Expo][Expo.dev]][Expo-url]
 * [![TailwindCSS][TailwindCSS.com]][TailwindCSS-url]
-* [![@Babel][Babel-core]][Babel-url]
-
 
 ## Authors
 
