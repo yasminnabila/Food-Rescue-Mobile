@@ -62,15 +62,16 @@ Here is a working [_live demo_](https://expo.dev/@yasminnabila/FR-mobile?service
 
 ## Authors
 
-* Aldo Marcelino - [Github Profile](https://github.com/aldomarcelino)
-* Annashka Gioia - [Github Profile](https://github.com/gioiaswndr)
-* Alwan Wicaksono - [Github Profile](https://github.com/alwanWicaksono)
-* Raven - [Github Profile](https://github.com/Tjravenn)
-* Muhammad Adibwafi - [Github Profile](https://github.com/adibwafi)
+* Aldo Marcelino - [Github](https://github.com/aldomarcelino) [LinkedIn](https://www.linkedin.com/in/aldo-marcelino-791bb5211/)
+* Annashka Gioia - [Github](https://github.com/gioiaswndr) - [LinkedIn](https://www.linkedin.com/in/annashkagioia/)
+* Alwan Wicaksono - [Github](https://github.com/alwanWicaksono) -  [LinkedIn](https://www.linkedin.com/in/alwan-wicaksono-853574249/)
+* Raven - [Github](https://github.com/Tjravenn) - [LinkedIn](https://www.linkedin.com/in/raven-raven-362290235/)
+* Muhamad Adibwafi - [Github](https://github.com/adibwafi) - [LinkedIn](https://www.linkedin.com/in/adibwafi/)
+* Yasmin Nabila - [Github](https://github.com/yasminnabila) - [LinkedIn](https://www.linkedin.com/in/yasminnabila/)
 
 ## License
 
-This project is licensed under Hacktiv8.
+This project is licensed under [Hacktiv8 - Full Stack Javascript program](https://hacktiv8.com/)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [ReactNative.dev]: https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB
