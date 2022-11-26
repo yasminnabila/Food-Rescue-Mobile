@@ -39,16 +39,9 @@ With our location-based mobile service, our partners can progressively reduce th
 
 Here is a working [_live demo_](https://expo.dev/@yasminnabila/FR-mobile?serviceType=classic&distribution=expo-go)
 
-## App
+## App 
 
-### Home Screen
-<img src="https://user-images.githubusercontent.com/108170309/203874242-65aeb6a2-0ca2-4f80-9a8e-04932b01c2a2.png" width=30% height=30%>
- 
-### Search Screen
-<img src="https://user-images.githubusercontent.com/108170309/203874249-a210a2ea-cb96-413c-9ef7-97291c08dfee.png" width=30% height=30%>
- 
-### Tracking Screen
-<img src="https://user-images.githubusercontent.com/108170309/203874255-e2fe4faa-2865-4aea-8a5a-6cf6635ad612.png" width=30% height=30%>
+https://user-images.githubusercontent.com/108170309/204081626-ffd94c50-6012-41e3-8366-aeb7bb9b82ea.mp4
 
 ## Built With
 
